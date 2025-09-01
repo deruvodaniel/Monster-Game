@@ -15,6 +15,7 @@ const app = Vue.createApp({
 			isPlayerHit: false,
 			isMonsterHit: false,
 			isPlayerDefending: false,
+			isMonsterTurn: false,
 			started: false,
 			lang: 'es',
 			theme: 'light',
