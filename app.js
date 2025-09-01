@@ -180,6 +180,7 @@ const app = Vue.createApp({
 		
 		attackPlayer () {
 			this.sound('hit');
+			this.isMonsterTurn = true;
 			let attackValue = getRandomValue(8 ,15);
 			if (this.isPlayerDefending) {
 				attackValue = Math.floor(attackValue / 2);
