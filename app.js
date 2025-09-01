@@ -47,6 +47,8 @@ const app = Vue.createApp({
 					specialDeals: 'unleashes a SPECIAL ATTACK 💥 and deals',
 					attacksDeals: 'attacks 👊 and deals',
 					themeToggle: 'Toggle Theme',
+					soundToggle: 'Toggle Sound',
+					changeMonster: 'Change Monster Image',
 					turnMonster: "Monster's turn...",
 					turnPlayer: 'Your turn!',
 					welcome: 'Monster Slayer',
