@@ -293,12 +293,25 @@ button:disabled {
 .log-move {
   transition: all 0.25s ease;
 }
+.log-list { display:flex; flex-direction:column; gap:0.5rem; position:relative; }
 .log-list .log-entry {
-  display: inline-flex;
-  gap: 0.35rem;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  position: relative;
+  padding-left: 1.25rem;
 }
+.log-list .log-entry::before {
+  content: '';
+  position: absolute;
+  left: 0.4rem;
+  top: 0.6rem;
+  width: 8px;
+  height: 8px;
+  background: currentColor;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+}
+.log-list .log-entry + .log-entry { border-left: 2px solid rgba(0,0,0,0.08); margin-left: 0.75rem; }
+body[data-theme="dark"] .log-list .log-entry + .log-entry { border-color: rgba(255,255,255,0.12); }
 .log-list .log-entry:first-child .log--damage,
 .log-list .log-entry:first-child .log--heal {
   animation: ping 0.6s ease;
