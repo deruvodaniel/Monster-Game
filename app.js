@@ -29,6 +29,7 @@ const app = Vue.createApp({
 			musicTimer: null,
 			musicOsc: null,
 			musicGain: null,
+			musicMode: 'off',
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
