@@ -266,7 +266,7 @@ button:disabled {
 .fighter.is-active {
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.25), 0 0 18px rgba(255, 215, 0, 0.45);
 }
-.fighter.is-active .avatar svg {
+.fighter.is-active .avatar svg, .fighter.is-active .avatar-img {
   animation: bob 1.2s ease-in-out infinite;
 }
 @keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-4px);} }
