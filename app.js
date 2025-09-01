@@ -377,24 +377,28 @@ const app = Vue.createApp({
 			}
 		},
 
-		startMusic() {
+		startMusic(mode = 'normal') {
 			this.initAudio();
 			const ctx = this.audioCtx;
 			if (this.musicOsc) return;
 			this.musicOsc = ctx.createOscillator();
 			this.musicGain = ctx.createGain();
-			this.musicOsc.type = 'square';
-			this.musicGain.gain.value = 0.03;
+			const cfg = mode === 'danger'
+				? { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] }
+				: { type: 'square', gain: 0.03, step: 220, pattern: [329.63, 392.0, 523.25, 392.0, 349.23, 440.0, 587.33, 440.0] };
+			this.musicOsc.type = cfg.type;
+			this.musicGain.gain.value = cfg.gain;
 			this.musicOsc.connect(this.musicGain);
 			this.musicGain.connect(ctx.destination);
 			this.musicOsc.start();
-			const pattern = [329.63, 392.0, 523.25, 392.0, 349.23, 440.0, 587.33, 440.0];
+			const pattern = cfg.pattern;
 			let step = 0;
 			this.musicTimer = setInterval(() => {
 				if (!this.musicOsc) return;
 				this.musicOsc.frequency.setValueAtTime(pattern[step % pattern.length], ctx.currentTime);
 				step++;
-			}, 220);
+			}, cfg.step);
+			this.musicMode = mode;
 		},
 
 		stopMusic() {
