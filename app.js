@@ -405,6 +405,7 @@ const app = Vue.createApp({
 			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
 			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
 			if (this.musicGain) { try { this.musicGain.disconnect(); } catch(e) {} this.musicGain = null; }
+			this.musicMode = 'off';
 		},
 
 		changeMonsterImage() {
