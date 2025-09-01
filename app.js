@@ -205,7 +205,8 @@ const app = Vue.createApp({
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'special-attack', attackValue);
 			this.isMonsterHit = true;
-			setTimeout(() => { this.isMonsterHit = false; }, 350);
+			this.slashMonster = true;
+			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
 			this.attackPlayer();
 		},
 
