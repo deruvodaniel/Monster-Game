@@ -90,6 +90,9 @@ const app = Vue.createApp({
 	},
 
 	computed: {
+			controlsDisabled() {
+				return this.isMonsterTurn;
+			},
 		monsterBarStyles(){
 			if ( this.monsterHealth < 0) {
 				return {
