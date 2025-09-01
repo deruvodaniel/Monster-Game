@@ -11,7 +11,10 @@ const app = Vue.createApp({
 			currentRound: 0,
 			fullHealth: null,
 			winner: null,
-			logMsgs: []
+			logMsgs: [],
+			isPlayerHit: false,
+			isMonsterHit: false,
+			isPlayerDefending: false
 		};
 	},
 
@@ -78,34 +81,40 @@ const app = Vue.createApp({
 		attackMonster () {
 			this.currentRound++;
 			const attackValue = getRandomValue(5, 12);
-			this.monsterHealth -= attackValue;
+			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'attack', attackValue);
+			this.isMonsterHit = true;
+			setTimeout(() => { this.isMonsterHit = false; }, 350);
 			this.attackPlayer();
 		
 		},
 		
 		attackPlayer () {
-			const attackValue = getRandomValue(8 ,15);
-			this.playerHealth -= attackValue;
+			let attackValue = getRandomValue(8 ,15);
+			if (this.isPlayerDefending) {
+				attackValue = Math.floor(attackValue / 2);
+				this.isPlayerDefending = false;
+			}
+			this.playerHealth = Math.max(this.playerHealth - attackValue, 0);
 			this.addLogMessage('monster', 'attack', attackValue);
+			this.isPlayerHit = true;
+			setTimeout(() => { this.isPlayerHit = false; }, 350);
 		},
 
 		specialAttackMonster() {
 			this.currentRound++;
 			const attackValue = getRandomValue(10, 25);
-			this.monsterHealth -= attackValue;
+			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'special-attack', attackValue);
+			this.isMonsterHit = true;
+			setTimeout(() => { this.isMonsterHit = false; }, 350);
 			this.attackPlayer();
 		},
 
 		healPLayer() {
 			this.currentRound++;
 			const healValue = getRandomValue(8, 20);
-			if (this.playerHealth + healValue > 100) {
-				this.playerHealth = 100;
-			} else {
-				this.playerHealth += healValue;
-			}
+			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
 			this.addLogMessage('player', 'heal', healValue);
 			this.attackPlayer();
 		},
@@ -119,7 +128,10 @@ const app = Vue.createApp({
 			this.monsterHealth = 100;
 			this.currentRound = 0;
 			this.winner = null;
-			this.logMsgs = []
+			this.logMsgs = [];
+			this.isPlayerHit = false;
+			this.isMonsterHit = false;
+			this.isPlayerDefending = false;
 		},
 
 		addLogMessage(who, what, value) {
@@ -128,6 +140,12 @@ const app = Vue.createApp({
 				actionType: what,
 				actionValue: value
 			});
+		},
+
+		defend() {
+			this.currentRound++;
+			this.isPlayerDefending = true;
+			this.addLogMessage('player', 'defend', 0);
 		}
 	},
 });
