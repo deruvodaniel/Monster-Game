@@ -76,8 +76,8 @@
 				<h3 v-else>{{ t('draw') }}</h3>
 				<button @click="restart">{{ t('startNew') }}</button>
 			</section>
-      <p class="turn-indicator" v-else>{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
-      <section v-else id="controls" :class="{ 'is-locked': controlsDisabled }">
+      <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
+      <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
         <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
