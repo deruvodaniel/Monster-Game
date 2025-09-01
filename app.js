@@ -331,6 +331,32 @@ const app = Vue.createApp({
 			}
 		},
 
+		startMusic() {
+			this.initAudio();
+			const ctx = this.audioCtx;
+			if (this.musicOsc) return;
+			this.musicOsc = ctx.createOscillator();
+			this.musicGain = ctx.createGain();
+			this.musicOsc.type = 'square';
+			this.musicGain.gain.value = 0.03;
+			this.musicOsc.connect(this.musicGain);
+			this.musicGain.connect(ctx.destination);
+			this.musicOsc.start();
+			const pattern = [329.63, 392.0, 523.25, 392.0, 349.23, 440.0, 587.33, 440.0];
+			let step = 0;
+			this.musicTimer = setInterval(() => {
+				if (!this.musicOsc) return;
+				this.musicOsc.frequency.setValueAtTime(pattern[step % pattern.length], ctx.currentTime);
+				step++;
+			}, 220);
+		},
+
+		stopMusic() {
+			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
+			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
+			if (this.musicGain) { try { this.musicGain.disconnect(); } catch(e) {} this.musicGain = null; }
+		},
+
 		changeMonsterImage() {
 			const url = prompt(this.t('changeMonster'));
 			if (url) this.monsterImg = url;
