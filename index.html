@@ -9,7 +9,7 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
@@ -17,13 +17,13 @@
       <h1>Monster Slayer</h1>
     </header>
     <div id="game">
-      <section id="monster" class="container">
+      <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit}">
         <h2>Monster Health</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="monsterBarStyles"></div>
         </div>
       </section>
-      <section id="player" class="container">
+      <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending}">
         <h2>Your Health</h2>
         <div class="healthbar">
           <div class="healthbar__value" :style="playerBarStyles"></div>
@@ -37,22 +37,31 @@
 				<button @click="restart">Start New Game</button>
 			</section>
       <section v-else id="controls">
-        <button @click="attackMonster">ATTACK</button>
-        <button :disabled="mayUseSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
-        <button :disabled="mayUseHeal" @click="healPLayer">HEAL</button>
-        <button @click="surrender">SURRENDER</button>
+        <button @click="attackMonster">⚔�� ATTACK</button>
+        <button :disabled="mayUseSpecialAttack" @click="specialAttackMonster">💥 SPECIAL</button>
+        <button :disabled="mayUseHeal" @click="healPLayer">💚 HEAL</button>
+        <button :disabled="isPlayerDefending" @click="defend">🛡️ DEFEND</button>
+        <button @click="surrender">🏳️ SURRENDER</button>
       </section>
       <section id="log" class="container">
         <h2>Battle Log</h2>
-        <ul>
-					<li v-for="logMsg in logMsgs">
-						<span :class="{'log--player': logMsg.actionBy === 'player', 'log--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? 'Player 🌝' : 'Monster 🐲'}}</span>
-
-						<span v-if="logMsg.actionType === 'heal'"> heals 💚 himself for <span class="log--heal">{{ logMsg.actionValue }}</span> </span>
-
-						<span v-else> attacks 👊 and deals <span class="log--damage">{{ logMsg.actionValue }}</span></span>
-					</li>
-				</ul>
+        <transition-group name="log" tag="ul" class="log-list">
+          <li v-for="(logMsg, index) in logMsgs" :key="index" class="log-entry">
+            <span class="log-who" :class="{'log--player': logMsg.actionBy === 'player', 'log--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? 'Player 🌝' : 'Monster 🐲' }}</span>
+            <template v-if="logMsg.actionType === 'heal'">
+              <span> heals 💚 for <span class="log--heal">{{ logMsg.actionValue }}</span></span>
+            </template>
+            <template v-else-if="logMsg.actionType === 'defend'">
+              <span> raises a shield 🛡️ reducing next damage</span>
+            </template>
+            <template v-else-if="logMsg.actionType === 'special-attack'">
+              <span> unleashes a SPECIAL ATTACK 💥 and deals <span class="log--damage">{{ logMsg.actionValue }}</span></span>
+            </template>
+            <template v-else>
+              <span> attacks 👊 and deals <span class="log--damage">{{ logMsg.actionValue }}</span></span>
+            </template>
+          </li>
+        </transition-group>
       </section>
     </div>
   </body>
