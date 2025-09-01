@@ -25,6 +25,12 @@ const app = Vue.createApp({
 			theme: 'light',
 			audioCtx: null,
 			soundEnabled: true,
+			slashMonster: false,
+			slashMonsterSpecial: false,
+			slashPlayer: false,
+			musicTimer: null,
+			musicOsc: null,
+			musicGain: null,
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
@@ -45,7 +51,7 @@ const app = Vue.createApp({
 					healsFor: 'heals 💚 for',
 					raisesShield: 'raises a shield 🛡️ reducing next damage',
 					specialDeals: 'unleashes a SPECIAL ATTACK 💥 and deals',
-					attacksDeals: 'attacks 👊 and deals',
+					attacksDeals: 'attacks �� and deals',
 					themeToggle: 'Toggle Theme',
 					soundToggle: 'Toggle Sound',
 					changeMonster: 'Change Monster Image',
