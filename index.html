@@ -16,16 +16,17 @@
     <div id="game">
       <header class="app-header">
         <h1>Monster Slayer</h1>
-        <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
-      </header>
-      <section id="topbar" class="container topbar">
-        <div class="left">
-          <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
-          <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
+        <div class="header-actions">
+          <div class="lang-group">
+            <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
+            <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
+          </div>
+          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
         </div>
-      </section>
+      </header>
       <section v-if="!started" id="landing" class="container">
         <h2>{{ t('welcome') }}</h2>
+        <p class="welcome-msg">{{ t('welcomeMsg') }}</p>
         <p class="rules-intro">{{ t('rulesIntro') }}</p>
         <ul class="rules-list">
           <li>{{ t('rule1') }}</li>
