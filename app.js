@@ -11,11 +11,102 @@ const app = Vue.createApp({
 			currentRound: 0,
 			fullHealth: null,
 			winner: null,
-			logMsgs: []
+			logMsgs: [],
+			isPlayerHit: false,
+			isMonsterHit: false,
+			isPlayerDefending: false,
+			isMonsterTurn: false,
+			playerImg: 'https://images.pexels.com/photos/10068851/pexels-photo-10068851.jpeg',
+			monsterImg: 'https://www.cinemascomics.com/wp-content/uploads/2025/02/Tiamat-Dragon-mas-poderoso-de-toda-la-literatura-fantastica-poster.jpg',
+			started: false,
+			lang: 'es',
+			theme: 'light',
+			audioCtx: null,
+			soundEnabled: true,
+			slashMonster: false,
+			slashMonsterSpecial: false,
+			slashPlayer: false,
+			musicTimer: null,
+			musicOsc: null,
+			musicGain: null,
+			musicMode: 'off',
+			messages: {
+				en: {
+					monsterHealth: 'Monster Health',
+					yourHealth: 'Your Health',
+					gameOver: 'Game Over!',
+					youLost: 'You lost!',
+					youWon: 'You won!',
+					draw: "It's a Draw!",
+					startNew: 'Start New Game',
+					attack: 'ATTACK',
+					special: 'SPECIAL',
+					heal: 'HEAL',
+					defend: 'DEFEND',
+					surrender: 'SURRENDER',
+					battleLog: 'Battle Log',
+					player: 'Player',
+					monster: 'Monster',
+					healsFor: 'heals 💚 for',
+					raisesShield: 'raises a shield 🛡️ reducing next damage',
+					specialDeals: 'unleashes a SPECIAL ATTACK 💥 and deals',
+					attacksDeals: 'attacks 👊 and deals',
+					themeToggle: 'Toggle Theme',
+					soundToggle: 'Toggle Sound',
+					changeMonster: 'Change Monster Image',
+					turnMonster: "Monster's turn...",
+					turnPlayer: 'Your turn!',
+					welcome: 'Monster Slayer',
+					welcomeMsg: 'Welcome, hero! Prepare your strategy and good luck.',
+					rulesIntro: 'Defeat the monster before it defeats you. Each round you can attack, special attack (every 3 rounds), heal, or defend.',
+					rule1: 'Attack deals 5–12 damage.',
+					rule2: 'Special Attack deals 10–25 damage (every 3 rounds).',
+					rule3: 'Heal restores 8–20 health (max 100).',
+					rule4: 'Defend halves the next damage you take.',
+					start: 'START'
+				},
+				es: {
+					monsterHealth: 'Salud del Monstruo',
+					yourHealth: 'Tu Salud',
+					gameOver: '¡Fin del Juego!',
+					youLost: '¡Perdiste!',
+					youWon: '¡Ganaste!',
+					draw: '¡Empate!',
+					startNew: 'Comenzar de Nuevo',
+					attack: 'ATACAR',
+					special: 'ESPECIAL',
+					heal: 'CURAR',
+					defend: 'DEFENDER',
+					surrender: 'RENDIRSE',
+					battleLog: 'Registro de Batalla',
+					player: 'Jugador',
+					monster: 'Monstruo',
+					healsFor: 'se cura 💚 por',
+					raisesShield: 'levanta un escudo 🛡️ y reduce el próximo daño',
+					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
+					attacksDeals: 'ataca 👊 y causa',
+					themeToggle: 'Cambiar Tema',
+					soundToggle: 'Sonido',
+					changeMonster: 'Cambiar imagen del monstruo',
+					turnMonster: 'Turno del monstruo...',
+					turnPlayer: '¡Tu turno!',
+					welcome: 'Cazador de Monstruos',
+					welcomeMsg: '¡Bienvenido, héroe! Prepara tu estrategia y mucha suerte.',
+					rulesIntro: 'Derrota al monstruo antes de que te derrote. En cada ronda puedes atacar, usar especial (cada 3 rondas), curarte o defenderte.',
+					rule1: 'El ataque hace 5–12 de daño.',
+					rule2: 'Especial hace 10–25 de daño (cada 3 rondas).',
+					rule3: 'Curar restaura 8–20 de vida (máx 100).',
+					rule4: 'Defender reduce a la mitad el próximo daño.',
+					start: 'EMPEZAR'
+				}
+			}
 		};
 	},
 
 	computed: {
+			controlsDisabled() {
+				return this.isMonsterTurn;
+			},
 		monsterBarStyles(){
 			if ( this.monsterHealth < 0) {
 				return {
@@ -74,44 +165,82 @@ const app = Vue.createApp({
 		},
 	},
 
+	mounted() {
+		try {
+			const savedLang = localStorage.getItem('lang');
+			if (savedLang) this.lang = savedLang;
+			const savedTheme = localStorage.getItem('theme');
+			if (savedTheme) this.theme = savedTheme;
+			document.body.setAttribute('data-theme', this.theme);
+			this.$watch('winner', (value) => {
+				if (!value) return;
+				this.stopMusic();
+				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
+				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
+			});
+			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
+				if (w) return;
+				const lowHealth = p <= 35; // 35% or less
+				const behind = p < m; // losing compared to monster
+				const losing = lowHealth || behind;
+				this.setMusicMode(losing ? 'danger' : 'normal');
+			});
+		} catch (e) {}
+	},
+
 	methods: {
 		attackMonster () {
+			this.sound('attack');
 			this.currentRound++;
 			const attackValue = getRandomValue(5, 12);
-			this.monsterHealth -= attackValue;
+			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'attack', attackValue);
+			this.isMonsterHit = true;
+			this.slashMonster = true;
+			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
 			this.attackPlayer();
 		
 		},
 		
 		attackPlayer () {
-			const attackValue = getRandomValue(8 ,15);
-			this.playerHealth -= attackValue;
+			this.sound('hit');
+			this.isMonsterTurn = true;
+			this.slashPlayer = true;
+			let attackValue = getRandomValue(8 ,15);
+			if (this.isPlayerDefending) {
+				attackValue = Math.floor(attackValue / 2);
+				this.isPlayerDefending = false;
+			}
+			this.playerHealth = Math.max(this.playerHealth - attackValue, 0);
 			this.addLogMessage('monster', 'attack', attackValue);
+			this.isPlayerHit = true;
+			setTimeout(() => { this.isPlayerHit = false; this.isMonsterTurn = false; this.slashPlayer = false; }, 400);
 		},
 
 		specialAttackMonster() {
+			this.sound('special');
 			this.currentRound++;
 			const attackValue = getRandomValue(10, 25);
-			this.monsterHealth -= attackValue;
+			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'special-attack', attackValue);
+			this.isMonsterHit = true;
+			this.slashMonster = true;
+			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
 			this.attackPlayer();
 		},
 
 		healPLayer() {
 			this.currentRound++;
 			const healValue = getRandomValue(8, 20);
-			if (this.playerHealth + healValue > 100) {
-				this.playerHealth = 100;
-			} else {
-				this.playerHealth += healValue;
-			}
+			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
 			this.addLogMessage('player', 'heal', healValue);
+			this.sound('heal');
 			this.attackPlayer();
 		},
 
 		surrender() {
 			this.winner = 'monster';
+			this.sound('lose');
 		},
 
 		restart() {
@@ -119,7 +248,11 @@ const app = Vue.createApp({
 			this.monsterHealth = 100;
 			this.currentRound = 0;
 			this.winner = null;
-			this.logMsgs = []
+			this.logMsgs = [];
+			this.isPlayerHit = false;
+			this.isMonsterHit = false;
+			this.isPlayerDefending = false;
+			this.isMonsterTurn = false;
 		},
 
 		addLogMessage(who, what, value) {
@@ -127,6 +260,185 @@ const app = Vue.createApp({
 				actionBy: who,
 				actionType: what,
 				actionValue: value
+			});
+			if (this.logMsgs.length > 12) this.logMsgs.splice(12);
+		},
+
+		defend() {
+			this.currentRound++;
+			this.isPlayerDefending = true;
+			this.addLogMessage('player', 'defend', 0);
+			this.sound('defend');
+		},
+
+		startGame() {
+			this.started = true;
+			this.restart();
+			this.sound('start');
+			if (this.soundEnabled) this.startMusic('normal');
+		},
+
+		setLang(lang) {
+			this.lang = lang;
+			try { localStorage.setItem('lang', lang); } catch(e) {}
+		},
+
+		toggleTheme() {
+			this.theme = this.theme === 'dark' ? 'light' : 'dark';
+			document.body.setAttribute('data-theme', this.theme);
+			try { localStorage.setItem('theme', this.theme); } catch(e) {}
+		},
+
+		t(key) {
+			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
+		},
+
+		initAudio() {
+			if (!this.audioCtx) {
+				const AC = window.AudioContext || window.webkitAudioContext;
+				this.audioCtx = new AC();
+			}
+		},
+
+		sound(name) {
+			if (!this.soundEnabled) return;
+			this.initAudio();
+			const ctx = this.audioCtx;
+			if (ctx.state === 'suspended') ctx.resume();
+			const now = ctx.currentTime;
+			const play = (freq, type = 'sine', dur = 0.14, vol = 0.1, delay = 0) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = type;
+				o.frequency.setValueAtTime(freq, now + delay);
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				o.connect(g);
+				g.connect(ctx.destination);
+				o.start(now + delay);
+				o.stop(now + delay + dur + 0.05);
+			};
+			const sweep = (startF, endF, dur = 0.25, type = 'square', vol = 0.14, delay = 0) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = type;
+				o.frequency.setValueAtTime(startF, now + delay);
+				o.frequency.exponentialRampToValueAtTime(Math.max(endF, 1), now + delay + dur);
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				o.connect(g);
+				g.connect(ctx.destination);
+				o.start(now + delay);
+				o.stop(now + delay + dur + 0.05);
+			};
+			const noiseBurst = (dur = 0.1, vol = 0.12, delay = 0) => {
+				const frames = Math.max(1, Math.floor(ctx.sampleRate * dur));
+				const buffer = ctx.createBuffer(1, frames, ctx.sampleRate);
+				const data = buffer.getChannelData(0);
+				for (let i = 0; i < frames; i++) data[i] = Math.random() * 2 - 1;
+				const src = ctx.createBufferSource();
+				const g = ctx.createGain();
+				src.buffer = buffer;
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				src.connect(g);
+				g.connect(ctx.destination);
+				src.start(now + delay);
+			};
+			switch (name) {
+				case 'attack':
+					play(220, 'square', 0.1, 0.14);
+					play(660, 'square', 0.08, 0.08, 0.02);
+					noiseBurst(0.09, 0.12);
+					break;
+				case 'hit':
+					play(180, 'sawtooth', 0.12, 0.12);
+					noiseBurst(0.08, 0.12);
+					break;
+				case 'special':
+					sweep(330, 880, 0.25, 'square', 0.14);
+					noiseBurst(0.14, 0.16, 0.04);
+					break;
+				case 'heal': play(523.25, 'sine', 0.18, 0.06); break;
+				case 'defend': play(261.63, 'triangle', 0.14, 0.06); break;
+				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
+				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
+				case 'start': play(329.63, 'sine', 0.12, 0.06); play(392, 'sine', 0.12, 0.06, 0.08); break;
+			}
+		},
+
+		toggleSound() {
+			this.soundEnabled = !this.soundEnabled;
+			if (this.soundEnabled) this.startMusic(this.musicMode === 'off' ? 'normal' : this.musicMode); else this.stopMusic();
+			if (this.audioCtx) {
+				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
+				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
+			}
+		},
+
+		startMusic(mode = 'normal') {
+			this.initAudio();
+			const ctx = this.audioCtx;
+			if (this.musicOsc) return;
+			this.musicOsc = ctx.createOscillator();
+			this.musicGain = ctx.createGain();
+			const cfg = mode === 'danger'
+				? { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] }
+				: { type: 'square', gain: 0.03, step: 220, pattern: [329.63, 392.0, 523.25, 392.0, 349.23, 440.0, 587.33, 440.0] };
+			this.musicOsc.type = cfg.type;
+			this.musicGain.gain.value = cfg.gain;
+			this.musicOsc.connect(this.musicGain);
+			this.musicGain.connect(ctx.destination);
+			this.musicOsc.start();
+			const pattern = cfg.pattern;
+			let step = 0;
+			this.musicTimer = setInterval(() => {
+				if (!this.musicOsc) return;
+				this.musicOsc.frequency.setValueAtTime(pattern[step % pattern.length], ctx.currentTime);
+				step++;
+			}, cfg.step);
+			this.musicMode = mode;
+		},
+
+		stopMusic() {
+			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
+			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
+			if (this.musicGain) { try { this.musicGain.disconnect(); } catch(e) {} this.musicGain = null; }
+			this.musicMode = 'off';
+		},
+
+		changeMonsterImage() {
+			const url = prompt(this.t('changeMonster'));
+			if (url) this.monsterImg = url;
+		},
+
+		setMusicMode(mode) {
+			if (!this.soundEnabled) { this.musicMode = mode; return; }
+			if (this.musicMode === mode) return;
+			this.stopMusic();
+			this.startMusic(mode);
+		},
+
+		playEndJingle(type) {
+			this.initAudio();
+			const ctx = this.audioCtx;
+			const notes = type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : [392.0, 349.23, 261.63, 174.61];
+			let t = 0;
+			notes.forEach((f) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = 'square';
+				o.frequency.setValueAtTime(f, ctx.currentTime + t);
+				g.gain.setValueAtTime(0, ctx.currentTime + t);
+				g.gain.linearRampToValueAtTime(0.1, ctx.currentTime + t + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.25);
+				o.connect(g); g.connect(ctx.destination);
+				o.start(ctx.currentTime + t);
+				o.stop(ctx.currentTime + t + 0.3);
+				t += 0.25;
 			});
 		}
 	},

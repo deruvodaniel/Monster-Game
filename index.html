@@ -9,51 +9,90 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
-    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js" defer></script>
     <script src="app.js" defer></script>
   </head>
   <body>
-    <header>
-      <h1>Monster Slayer</h1>
-    </header>
     <div id="game">
-      <section id="monster" class="container">
-        <h2>Monster Health</h2>
-        <div class="healthbar">
-          <div class="healthbar__value" :style="monsterBarStyles"></div>
+      <header class="app-header">
+        <h1>Monster Slayer</h1>
+        <div class="header-actions">
+          <div class="lang-group">
+            <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
+            <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
+          </div>
+          <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
+          <button class="icon-button" @click="changeMonsterImage" :aria-label="t('changeMonster')">🖼️</button>
+          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
         </div>
+      </header>
+      <section v-if="!started" id="landing" class="container">
+        <h2>{{ t('welcome') }}</h2>
+        <p class="welcome-msg">{{ t('welcomeMsg') }}</p>
+        <p class="rules-intro">{{ t('rulesIntro') }}</p>
+        <ul class="rules-list">
+          <li>{{ t('rule1') }}</li>
+          <li>{{ t('rule2') }}</li>
+          <li>{{ t('rule3') }}</li>
+          <li>{{ t('rule4') }}</li>
+        </ul>
+        <button @click="startGame">{{ t('start') }}</button>
       </section>
-      <section id="player" class="container">
-        <h2>Your Health</h2>
-        <div class="healthbar">
-          <div class="healthbar__value" :style="playerBarStyles"></div>
-        </div>
+      <template v-else>
+      <section class="board">
+        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
+          <h2>{{ t('monsterHealth') }}</h2>
+          <div class="avatar" aria-hidden="true">
+            <img :src="monsterImg" alt="monster" class="avatar-img" />
+            <span class="slash" v-if="slashMonster"></span>
+            <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
+          </div>
+          <div class="healthbar">
+            <div class="healthbar__value" :style="monsterBarStyles"></div>
+          </div>
+        </section>
+        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
+          <h2>{{ t('yourHealth') }}</h2>
+          <div class="avatar" aria-hidden="true">
+            <img :src="playerImg" alt="player" class="avatar-img" />
+            <span class="slash slash--enemy" v-if="slashPlayer"></span>
+          </div>
+          <div class="healthbar">
+            <div class="healthbar__value" :style="playerBarStyles"></div>
+          </div>
+        </section>
       </section>
 			<section v-if="winner" class="container">
-				<h2>Game Over!</h2>
-				<h3 v-if="winner === 'monster'">You lost!</h3>
-				<h3 v-else-if="winner === 'player'">You won!</h3>
-				<h3 v-else>It's a Draw!</h3>
-				<button @click="restart">Start New Game</button>
+				<h2>{{ t('gameOver') }}</h2>
+				<h3 v-if="winner === 'monster'">{{ t('youLost') }}</h3>
+				<h3 v-else-if="winner === 'player'">{{ t('youWon') }}</h3>
+				<h3 v-else>{{ t('draw') }}</h3>
+				<button @click="restart">{{ t('startNew') }}</button>
 			</section>
-      <section v-else id="controls">
-        <button @click="attackMonster">ATTACK</button>
-        <button :disabled="mayUseSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
-        <button :disabled="mayUseHeal" @click="healPLayer">HEAL</button>
-        <button @click="surrender">SURRENDER</button>
+      <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
+      <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
+        <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
+        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
+        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
+        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
+        <button :disabled="controlsDisabled" @click="surrender">🏳️ {{ t('surrender') }}</button>
       </section>
       <section id="log" class="container">
-        <h2>Battle Log</h2>
-        <ul>
-					<li v-for="logMsg in logMsgs">
-						<span :class="{'log--player': logMsg.actionBy === 'player', 'log--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? 'Player 🌝' : 'Monster 🐲'}}</span>
-
-						<span v-if="logMsg.actionType === 'heal'"> heals 💚 himself for <span class="log--heal">{{ logMsg.actionValue }}</span> </span>
-
-						<span v-else> attacks 👊 and deals <span class="log--damage">{{ logMsg.actionValue }}</span></span>
-					</li>
-				</ul>
+        <h2>{{ t('battleLog') }}</h2>
+        <transition-group name="log" tag="ul" class="log-list">
+          <li v-for="(logMsg, index) in logMsgs" :key="logMsg.id || index" class="log-entry">
+            <span class="chip who" :class="{'chip--player': logMsg.actionBy === 'player', 'chip--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? t('player') : t('monster') }}</span>
+            <span v-if="logMsg.actionType === 'heal'" class="chip type type--heal">{{ t('heal') }}</span>
+            <span v-else-if="logMsg.actionType === 'defend'" class="chip type type--defend">{{ t('defend') }}</span>
+            <span v-else-if="logMsg.actionType === 'special-attack'" class="chip type type--special">{{ t('special') }}</span>
+            <span v-else class="chip type type--attack">{{ t('attack') }}</span>
+            <span class="detail" v-if="logMsg.actionType === 'heal'">+<span class="log--heal">{{ logMsg.actionValue }}</span></span>
+            <span class="detail" v-else-if="logMsg.actionType !== 'defend'">-<span class="log--damage">{{ logMsg.actionValue }}</span></span>
+            <span class="time" v-if="logMsg.time">· {{ new Date(logMsg.time).toLocaleTimeString() }}</span>
+          </li>
+        </transition-group>
       </section>
+      </template>
     </div>
   </body>
 </html>
