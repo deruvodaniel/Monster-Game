@@ -10,6 +10,11 @@ body {
   margin: 0;
 }
 
+/* Smooth theme transition */
+body, header, .container, .healthbar, .healthbar__value, button {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
 /* Dark theme overrides without changing the base styles */
 body[data-theme="dark"] {
   background-color: #0f1115;
@@ -47,6 +52,13 @@ header {
   color: white;
   text-align: center;
   margin-bottom: 2rem;
+  position: relative;
+}
+.app-header .theme-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 section {
@@ -104,6 +116,20 @@ section {
   margin: 0.5rem 0 0.75rem;
   opacity: 0.9;
 }
+
+/* Icon button overrides */
+.icon-button {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0.25rem 0.5rem;
+  width: auto;
+  color: inherit;
+}
+.icon-button:hover {
+  filter: brightness(1.1);
+}
 .rules-list {
   text-align: left;
   max-width: 32rem;
@@ -121,6 +147,7 @@ button {
   width: 12rem;
   cursor: pointer;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.26);
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 button:focus {
@@ -152,12 +179,22 @@ button:disabled {
 .log-enter-from,
 .log-leave-to {
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(-6px) scale(0.98);
 }
 .log-enter-active,
 .log-leave-active,
 .log-move {
   transition: all 0.25s ease;
+}
+.log-list .log-entry {
+  display: inline-flex;
+  gap: 0.35rem;
+  align-items: center;
+  justify-content: center;
+}
+.log-list .log-entry:first-child .log--damage,
+.log-list .log-entry:first-child .log--heal {
+  animation: ping 0.6s ease;
 }
 
 /* Fighter hit and defend visuals */
@@ -184,6 +221,19 @@ button:disabled {
   60% { transform: translateX(-4px); }
   80% { transform: translateX(4px); }
   100% { transform: translateX(0); }
+}
+@keyframes ping {
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(1.12); filter: brightness(1.3); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.log--damage {
+  color: red;
+  font-weight: 700;
+}
+.log--heal {
+  color: green;
+  font-weight: 700;
 }
 
 #log li {
