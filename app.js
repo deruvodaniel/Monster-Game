@@ -24,6 +24,7 @@ const app = Vue.createApp({
 			lang: 'es',
 			theme: 'light',
 			audioCtx: null,
+			soundEnabled: true,
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
