@@ -19,7 +19,7 @@ const app = Vue.createApp({
 			slashMonster: false,
 			slashPlayer: false,
 			playerImg: 'https://images.pexels.com/photos/10068851/pexels-photo-10068851.jpeg',
-			monsterImg: 'https://images.pexels.com/photos/29366683/pexels-photo-29366683.jpeg',
+			monsterImg: 'https://images.pexels.com/photos/20379682/pexels-photo-20379682.jpeg',
 			started: false,
 			lang: 'es',
 			theme: 'light',
