@@ -306,6 +306,19 @@ const app = Vue.createApp({
 				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
 				case 'start': play(329.63, 'sine', 0.12, 0.06); play(392, 'sine', 0.12, 0.06, 0.08); break;
 			}
+		},
+
+		toggleSound() {
+			this.soundEnabled = !this.soundEnabled;
+			if (this.audioCtx) {
+				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
+				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
+			}
+		},
+
+		changeMonsterImage() {
+			const url = prompt(this.t('changeMonster'));
+			if (url) this.monsterImg = url;
 		}
 	},
 });
