@@ -324,6 +324,7 @@ const app = Vue.createApp({
 
 		toggleSound() {
 			this.soundEnabled = !this.soundEnabled;
+			if (this.soundEnabled) this.startMusic(); else this.stopMusic();
 			if (this.audioCtx) {
 				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
 				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
