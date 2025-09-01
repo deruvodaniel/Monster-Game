@@ -21,6 +21,8 @@
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
+          <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
+          <button class="icon-button" @click="changeMonsterImage" :aria-label="t('changeMonster')">🖼️</button>
           <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
         </div>
       </header>
@@ -77,20 +79,15 @@
       <section id="log" class="container">
         <h2>{{ t('battleLog') }}</h2>
         <transition-group name="log" tag="ul" class="log-list">
-          <li v-for="(logMsg, index) in logMsgs" :key="index" class="log-entry">
-            <span class="log-who" :class="{'log--player': logMsg.actionBy === 'player', 'log--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? t('player') + ' 🌝' : t('monster') + ' 🐲' }}</span>
-            <template v-if="logMsg.actionType === 'heal'">
-              <span> {{ t('healsFor') }} <span class="log--heal">{{ logMsg.actionValue }}</span></span>
-            </template>
-            <template v-else-if="logMsg.actionType === 'defend'">
-              <span> {{ t('raisesShield') }}</span>
-            </template>
-            <template v-else-if="logMsg.actionType === 'special-attack'">
-              <span> {{ t('specialDeals') }} <span class="log--damage">{{ logMsg.actionValue }}</span></span>
-            </template>
-            <template v-else>
-              <span> {{ t('attacksDeals') }} <span class="log--damage">{{ logMsg.actionValue }}</span></span>
-            </template>
+          <li v-for="(logMsg, index) in logMsgs" :key="logMsg.id || index" class="log-entry">
+            <span class="chip who" :class="{'chip--player': logMsg.actionBy === 'player', 'chip--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? t('player') : t('monster') }}</span>
+            <span v-if="logMsg.actionType === 'heal'" class="chip type type--heal">{{ t('heal') }}</span>
+            <span v-else-if="logMsg.actionType === 'defend'" class="chip type type--defend">{{ t('defend') }}</span>
+            <span v-else-if="logMsg.actionType === 'special-attack'" class="chip type type--special">{{ t('special') }}</span>
+            <span v-else class="chip type type--attack">{{ t('attack') }}</span>
+            <span class="detail" v-if="logMsg.actionType === 'heal'">+<span class="log--heal">{{ logMsg.actionValue }}</span></span>
+            <span class="detail" v-else-if="logMsg.actionType !== 'defend'">-<span class="log--damage">{{ logMsg.actionValue }}</span></span>
+            <span class="time" v-if="logMsg.time">· {{ new Date(logMsg.time).toLocaleTimeString() }}</span>
           </li>
         </transition-group>
       </section>
