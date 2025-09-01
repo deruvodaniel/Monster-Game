@@ -37,6 +37,7 @@ section {
   background-color: #00a876;
   width: 100%;
   height: 100%;
+  transition: width 0.3s ease;
 }
 
 .container {
@@ -96,6 +97,44 @@ button:disabled {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/* Transitions for log list */
+.log-enter-from,
+.log-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
+}
+.log-enter-active,
+.log-leave-active,
+.log-move {
+  transition: all 0.25s ease;
+}
+
+/* Fighter hit and defend visuals */
+.fighter {
+  position: relative;
+}
+.fighter.is-hit {
+  animation: shake 0.35s ease;
+}
+.fighter.is-defending {
+  box-shadow: 0 0 0 3px rgba(0, 168, 118, 0.2), 0 0 10px rgba(0, 168, 118, 0.6);
+}
+.fighter.is-defending::after {
+  content: '🛡️';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  100% { transform: translateX(0); }
 }
 
 #log li {
