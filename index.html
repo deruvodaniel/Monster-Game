@@ -37,14 +37,34 @@
         <button @click="startGame">{{ t('start') }}</button>
       </section>
       <template v-else>
-      <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit}">
+      <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
         <h2>{{ t('monsterHealth') }}</h2>
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="72" height="72">
+            <circle cx="32" cy="32" r="28" fill="#da8d00" opacity="0.2"/>
+            <path d="M14 40 Q20 28 30 28 Q38 28 44 40" fill="#8b4513"/>
+            <path d="M26 26 l-8 -10 l10 2 z" fill="#2e7d32"/>
+            <path d="M42 26 l8 -10 l-10 2 z" fill="#2e7d32"/>
+            <circle cx="24" cy="26" r="2" fill="#111"/>
+            <circle cx="40" cy="26" r="2" fill="#111"/>
+            <path d="M22 46 h20" stroke="#880017" stroke-width="3"/>
+          </svg>
+        </div>
         <div class="healthbar">
           <div class="healthbar__value" :style="monsterBarStyles"></div>
         </div>
       </section>
-      <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending}">
+      <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
         <h2>{{ t('yourHealth') }}</h2>
+        <div class="avatar" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="72" height="72">
+            <circle cx="32" cy="32" r="28" fill="#7700ff" opacity="0.2"/>
+            <rect x="28" y="16" width="8" height="18" fill="#555"/>
+            <path d="M16 40 l16 -8 l0 12 l-16 8 z" fill="#00a876"/>
+            <path d="M40 18 l10 -6 l-2 12 l-8 -6 z" fill="#c62828"/>
+            <circle cx="32" cy="14" r="6" fill="#888"/>
+          </svg>
+        </div>
         <div class="healthbar">
           <div class="healthbar__value" :style="playerBarStyles"></div>
         </div>
@@ -56,12 +76,13 @@
 				<h3 v-else>{{ t('draw') }}</h3>
 				<button @click="restart">{{ t('startNew') }}</button>
 			</section>
-      <section v-else id="controls">
-        <button @click="attackMonster">⚔️ {{ t('attack') }}</button>
-        <button :disabled="mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
-        <button :disabled="mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
-        <button :disabled="isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
-        <button @click="surrender">🏳️ {{ t('surrender') }}</button>
+      <p class="turn-indicator" v-else>{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
+      <section v-else id="controls" :class="{ 'is-locked': controlsDisabled }">
+        <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
+        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
+        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
+        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
+        <button :disabled="controlsDisabled" @click="surrender">🏳️ {{ t('surrender') }}</button>
       </section>
       <section id="log" class="container">
         <h2>{{ t('battleLog') }}</h2>
