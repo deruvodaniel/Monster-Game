@@ -173,8 +173,15 @@ const app = Vue.createApp({
 			if (savedTheme) this.theme = savedTheme;
 			document.body.setAttribute('data-theme', this.theme);
 			this.$watch('winner', (value) => {
-				if (value === 'player') this.sound('win');
-				else if (value === 'monster') this.sound('lose');
+				if (!value) return;
+				this.stopMusic();
+				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
+				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
+			});
+			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
+				if (w) return;
+				const losing = p < m && (p / Math.max(1, m)) < 0.8;
+				this.setMusicMode(losing ? 'danger' : 'normal');
 			});
 		} catch (e) {}
 	},
