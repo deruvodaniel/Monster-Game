@@ -81,6 +81,8 @@ const app = Vue.createApp({
 					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
+					soundToggle: 'Sonido',
+					changeMonster: 'Cambiar imagen del monstruo',
 					turnMonster: 'Turno del monstruo...',
 					turnPlayer: '¡Tu turno!',
 					welcome: 'Cazador de Monstruos',
