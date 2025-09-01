@@ -74,6 +74,8 @@ const app = Vue.createApp({
 					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
+					turnMonster: 'Turno del monstruo...',
+					turnPlayer: '¡Tu turno!',
 					welcome: 'Cazador de Monstruos',
 					welcomeMsg: '¡Bienvenido, héroe! Prepara tu estrategia y mucha suerte.',
 					rulesIntro: 'Derrota al monstruo antes de que te derrote. En cada ronda puedes atacar, usar especial (cada 3 rondas), curarte o defenderte.',
