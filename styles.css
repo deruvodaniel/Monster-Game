@@ -129,6 +129,7 @@ section {
 #player h2 {
   margin: 0.25rem;
 }
+.avatar { display:flex; justify-content:center; margin-top: 0.5rem; }
 
 #controls {
   display: flex;
@@ -137,6 +138,8 @@ section {
   align-items: center;
   justify-content: center;
 }
+#controls.is-locked { opacity: 0.7; filter: grayscale(0.1); }
+.turn-indicator { text-align:center; font-weight:700; opacity:0.9; margin-top: -0.5rem; }
 
 /* Topbar and landing */
 .topbar {
@@ -239,6 +242,13 @@ button:disabled {
 .fighter.is-defending {
   box-shadow: 0 0 0 3px rgba(0, 168, 118, 0.2), 0 0 10px rgba(0, 168, 118, 0.6);
 }
+.fighter.is-active {
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.25), 0 0 18px rgba(255, 215, 0, 0.45);
+}
+.fighter.is-active .avatar svg {
+  animation: bob 1.2s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-4px);} }
 .fighter.is-defending::after {
   content: '🛡️';
   position: absolute;
