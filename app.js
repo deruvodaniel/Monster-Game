@@ -411,6 +411,33 @@ const app = Vue.createApp({
 		changeMonsterImage() {
 			const url = prompt(this.t('changeMonster'));
 			if (url) this.monsterImg = url;
+		},
+
+		setMusicMode(mode) {
+			if (!this.soundEnabled) { this.musicMode = mode; return; }
+			if (this.musicMode === mode) return;
+			this.stopMusic();
+			this.startMusic(mode);
+		},
+
+		playEndJingle(type) {
+			this.initAudio();
+			const ctx = this.audioCtx;
+			const notes = type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : [392.0, 349.23, 261.63, 174.61];
+			let t = 0;
+			notes.forEach((f) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = 'square';
+				o.frequency.setValueAtTime(f, ctx.currentTime + t);
+				g.gain.setValueAtTime(0, ctx.currentTime + t);
+				g.gain.linearRampToValueAtTime(0.1, ctx.currentTime + t + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.25);
+				o.connect(g); g.connect(ctx.destination);
+				o.start(ctx.currentTime + t);
+				o.stop(ctx.currentTime + t + 0.3);
+				t += 0.25;
+			});
 		}
 	},
 });
