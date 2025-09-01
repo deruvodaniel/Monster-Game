@@ -16,8 +16,6 @@ const app = Vue.createApp({
 			isMonsterHit: false,
 			isPlayerDefending: false,
 			isMonsterTurn: false,
-			slashMonster: false,
-			slashPlayer: false,
 			playerImg: 'https://images.pexels.com/photos/10068851/pexels-photo-10068851.jpeg',
 			monsterImg: 'https://www.cinemascomics.com/wp-content/uploads/2025/02/Tiamat-Dragon-mas-poderoso-de-toda-la-literatura-fantastica-poster.jpg',
 			started: false,
