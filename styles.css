@@ -129,7 +129,28 @@ section {
 #player h2 {
   margin: 0.25rem;
 }
-.avatar { display:flex; justify-content:center; margin-top: 0.5rem; }
+.avatar { position: relative; display:flex; justify-content:center; margin-top: 0.5rem; }
+.avatar-img { width: 120px; height: 120px; object-fit: cover; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.26); }
+
+/* Sword slash effect */
+.slash {
+  position: absolute;
+  pointer-events: none;
+  top: 10%;
+  left: 5%;
+  width: 90%;
+  height: 0;
+  border-top: 4px solid rgba(255,255,255,0.9);
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+  transform: rotate(-20deg) translateX(-120%);
+  animation: slash-diagonal 300ms ease-out;
+}
+.slash--enemy { transform: rotate(200deg) translateX(-120%); }
+@keyframes slash-diagonal {
+  0% { opacity: 0; transform: rotate(-20deg) translateX(-130%); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(-20deg) translateX(50%); }
+}
 
 #controls {
   display: flex;
