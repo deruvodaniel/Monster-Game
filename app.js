@@ -217,6 +217,7 @@ const app = Vue.createApp({
 			this.isPlayerHit = false;
 			this.isMonsterHit = false;
 			this.isPlayerDefending = false;
+			this.isMonsterTurn = false;
 		},
 
 		addLogMessage(who, what, value) {
