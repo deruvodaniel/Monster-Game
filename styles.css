@@ -198,17 +198,29 @@ section {
 
 /* Icon button overrides */
 .icon-button {
-  background: transparent;
-  border: none;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
   box-shadow: none;
   margin: 0;
   padding: 0.25rem 0.5rem;
   width: auto;
   color: inherit;
+  border-radius: 10px;
 }
-.icon-button:hover {
-  filter: brightness(1.1);
-}
+.icon-button:hover { filter: brightness(1.1); }
+body[data-theme="dark"] .icon-button { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
+
+/* Battle log chips */
+.chip { display:inline-flex; align-items:center; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.85rem; }
+.chip.who { font-weight:700; }
+.chip--player { background: rgba(119,0,255,0.1); color:#7700ff; }
+.chip--monster { background: rgba(218,141,0,0.12); color:#da8d00; }
+.type--attack { background: rgba(255,0,0,0.08); }
+.type--special { background: rgba(255,0,128,0.1); }
+.type--heal { background: rgba(0,168,118,0.12); }
+.type--defend { background: rgba(0,140,255,0.12); }
+.detail { margin-left: 0.35rem; }
+.time { opacity: 0.6; margin-left: 0.35rem; }
 .rules-list {
   text-align: left;
   max-width: 32rem;
