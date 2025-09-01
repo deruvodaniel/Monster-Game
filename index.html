@@ -37,25 +37,27 @@
         <button @click="startGame">{{ t('start') }}</button>
       </section>
       <template v-else>
-      <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
-        <h2>{{ t('monsterHealth') }}</h2>
-        <div class="avatar" aria-hidden="true">
-          <img :src="monsterImg" alt="monster" class="avatar-img" />
-          <span class="slash" v-if="slashMonster"></span>
-        </div>
-        <div class="healthbar">
-          <div class="healthbar__value" :style="monsterBarStyles"></div>
-        </div>
-      </section>
-      <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
-        <h2>{{ t('yourHealth') }}</h2>
-        <div class="avatar" aria-hidden="true">
-          <img :src="playerImg" alt="player" class="avatar-img" />
-          <span class="slash slash--enemy" v-if="slashPlayer"></span>
-        </div>
-        <div class="healthbar">
-          <div class="healthbar__value" :style="playerBarStyles"></div>
-        </div>
+      <section class="board">
+        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
+          <h2>{{ t('monsterHealth') }}</h2>
+          <div class="avatar" aria-hidden="true">
+            <img :src="monsterImg" alt="monster" class="avatar-img" />
+            <span class="slash" v-if="slashMonster"></span>
+          </div>
+          <div class="healthbar">
+            <div class="healthbar__value" :style="monsterBarStyles"></div>
+          </div>
+        </section>
+        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
+          <h2>{{ t('yourHealth') }}</h2>
+          <div class="avatar" aria-hidden="true">
+            <img :src="playerImg" alt="player" class="avatar-img" />
+            <span class="slash slash--enemy" v-if="slashPlayer"></span>
+          </div>
+          <div class="healthbar">
+            <div class="healthbar__value" :style="playerBarStyles"></div>
+          </div>
+        </section>
       </section>
 			<section v-if="winner" class="container">
 				<h2>{{ t('gameOver') }}</h2>
