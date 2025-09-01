@@ -280,8 +280,10 @@ const app = Vue.createApp({
 		},
 
 		sound(name) {
+			if (!this.soundEnabled) return;
 			this.initAudio();
 			const ctx = this.audioCtx;
+			if (ctx.state === 'suspended') ctx.resume();
 			const now = ctx.currentTime;
 			const play = (freq, type = 'sine', dur = 0.12, vol = 0.06, delay = 0) => {
 				const o = ctx.createOscillator();
