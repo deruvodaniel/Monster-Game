@@ -42,6 +42,8 @@ const app = Vue.createApp({
 					specialDeals: 'unleashes a SPECIAL ATTACK 💥 and deals',
 					attacksDeals: 'attacks 👊 and deals',
 					themeToggle: 'Toggle Theme',
+					turnMonster: "Monster's turn...",
+					turnPlayer: 'Your turn!',
 					welcome: 'Monster Slayer',
 					welcomeMsg: 'Welcome, hero! Prepare your strategy and good luck.',
 					rulesIntro: 'Defeat the monster before it defeats you. Each round you can attack, special attack (every 3 rounds), heal, or defend.',
