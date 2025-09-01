@@ -169,6 +169,15 @@ section {
   animation: slash-diagonal 300ms ease-out;
 }
 .slash--enemy { transform: rotate(200deg) translateX(-120%); }
+.slash--special { border-top-width: 6px; border-top-color: rgba(255, 20, 147, 0.9); filter: drop-shadow(0 0 10px rgba(255,20,147,0.8)); }
+.slash--special::after {
+  content: '✷';
+  position: absolute;
+  right: -6px;
+  top: -6px;
+  font-size: 14px;
+  color: #ff1493;
+}
 @keyframes slash-diagonal {
   0% { opacity: 0; transform: rotate(-20deg) translateX(-130%); }
   40% { opacity: 1; }
