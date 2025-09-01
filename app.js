@@ -180,7 +180,9 @@ const app = Vue.createApp({
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
 				if (w) return;
-				const losing = p < m && (p / Math.max(1, m)) < 0.8;
+				const lowHealth = p <= 35; // 35% or less
+				const behind = p < m; // losing compared to monster
+				const losing = lowHealth || behind;
 				this.setMusicMode(losing ? 'danger' : 'normal');
 			});
 		} catch (e) {}
