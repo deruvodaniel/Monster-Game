@@ -45,6 +45,7 @@
           <div class="avatar" aria-hidden="true">
             <img :src="monsterImg" alt="monster" class="avatar-img" />
             <span class="slash" v-if="slashMonster"></span>
+            <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
           </div>
           <div class="healthbar">
             <div class="healthbar__value" :style="monsterBarStyles"></div>
