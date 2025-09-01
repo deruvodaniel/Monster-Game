@@ -251,6 +251,7 @@ const app = Vue.createApp({
 				actionType: what,
 				actionValue: value
 			});
+			if (this.logMsgs.length > 12) this.logMsgs.splice(12);
 		},
 
 		defend() {
@@ -295,7 +296,7 @@ const app = Vue.createApp({
 			const ctx = this.audioCtx;
 			if (ctx.state === 'suspended') ctx.resume();
 			const now = ctx.currentTime;
-			const play = (freq, type = 'sine', dur = 0.12, vol = 0.06, delay = 0) => {
+			const play = (freq, type = 'sine', dur = 0.14, vol = 0.1, delay = 0) => {
 				const o = ctx.createOscillator();
 				const g = ctx.createGain();
 				o.type = type;
@@ -308,10 +309,49 @@ const app = Vue.createApp({
 				o.start(now + delay);
 				o.stop(now + delay + dur + 0.05);
 			};
+			const sweep = (startF, endF, dur = 0.25, type = 'square', vol = 0.14, delay = 0) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = type;
+				o.frequency.setValueAtTime(startF, now + delay);
+				o.frequency.exponentialRampToValueAtTime(Math.max(endF, 1), now + delay + dur);
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				o.connect(g);
+				g.connect(ctx.destination);
+				o.start(now + delay);
+				o.stop(now + delay + dur + 0.05);
+			};
+			const noiseBurst = (dur = 0.1, vol = 0.12, delay = 0) => {
+				const frames = Math.max(1, Math.floor(ctx.sampleRate * dur));
+				const buffer = ctx.createBuffer(1, frames, ctx.sampleRate);
+				const data = buffer.getChannelData(0);
+				for (let i = 0; i < frames; i++) data[i] = Math.random() * 2 - 1;
+				const src = ctx.createBufferSource();
+				const g = ctx.createGain();
+				src.buffer = buffer;
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				src.connect(g);
+				g.connect(ctx.destination);
+				src.start(now + delay);
+			};
 			switch (name) {
-				case 'attack': play(440, 'square'); break;
-				case 'hit': play(220, 'sawtooth'); break;
-				case 'special': play(660, 'square', 0.18, 0.08); break;
+				case 'attack':
+					play(220, 'square', 0.1, 0.14);
+					play(660, 'square', 0.08, 0.08, 0.02);
+					noiseBurst(0.09, 0.12);
+					break;
+				case 'hit':
+					play(180, 'sawtooth', 0.12, 0.12);
+					noiseBurst(0.08, 0.12);
+					break;
+				case 'special':
+					sweep(330, 880, 0.25, 'square', 0.14);
+					noiseBurst(0.14, 0.16, 0.04);
+					break;
 				case 'heal': play(523.25, 'sine', 0.18, 0.06); break;
 				case 'defend': play(261.63, 'triangle', 0.14, 0.06); break;
 				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
