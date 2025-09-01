@@ -51,7 +51,7 @@ const app = Vue.createApp({
 					healsFor: 'heals 💚 for',
 					raisesShield: 'raises a shield 🛡️ reducing next damage',
 					specialDeals: 'unleashes a SPECIAL ATTACK 💥 and deals',
-					attacksDeals: 'attacks �� and deals',
+					attacksDeals: 'attacks 👊 and deals',
 					themeToggle: 'Toggle Theme',
 					soundToggle: 'Toggle Sound',
 					changeMonster: 'Change Monster Image',
@@ -266,6 +266,7 @@ const app = Vue.createApp({
 			this.started = true;
 			this.restart();
 			this.sound('start');
+			if (this.soundEnabled) this.startMusic();
 		},
 
 		setLang(lang) {
