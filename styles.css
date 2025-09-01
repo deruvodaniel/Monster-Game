@@ -278,8 +278,6 @@ button:disabled {
   width: 90%;
   max-width: 80rem;
   margin: 0 auto 1rem;
-  max-height: 260px;
-  overflow: auto;
 }
 
 /* Transitions for log list */
@@ -299,19 +297,9 @@ button:disabled {
   position: relative;
   padding-left: 1.25rem;
 }
-.log-list .log-entry::before {
-  content: '';
-  position: absolute;
-  left: 0.4rem;
-  top: 0.6rem;
-  width: 8px;
-  height: 8px;
-  background: currentColor;
-  border-radius: 50%;
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
-}
-.log-list .log-entry + .log-entry { border-left: 2px solid rgba(0,0,0,0.08); margin-left: 0.75rem; }
-body[data-theme="dark"] .log-list .log-entry + .log-entry { border-color: rgba(255,255,255,0.12); }
+.log-list .log-entry::before { content: none; }
+.log-list .log-entry + .log-entry { border-left: 0; margin-left: 0; }
+body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
 .log-list .log-entry:first-child .log--damage,
 .log-list .log-entry:first-child .log--heal {
   animation: ping 0.6s ease;
