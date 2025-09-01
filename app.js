@@ -266,7 +266,7 @@ const app = Vue.createApp({
 			this.started = true;
 			this.restart();
 			this.sound('start');
-			if (this.soundEnabled) this.startMusic();
+			if (this.soundEnabled) this.startMusic('normal');
 		},
 
 		setLang(lang) {
