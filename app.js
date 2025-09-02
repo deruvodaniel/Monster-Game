@@ -281,6 +281,7 @@ const app = Vue.createApp({
 				const losing = lowHealth || behind;
 				this.setMusicMode(losing ? 'danger' : 'normal');
 			});
+			this.$watch(() => [this.started, this.showCredits], () => this.updateStageBg());
 		} catch (e) {}
 	},
 
