@@ -89,6 +89,7 @@
           </div>
         </section>
       </section>
+      <div class="center-bubble" v-if="centerBubbleText" :class="centerBubbleClass">{{ centerBubbleText }}</div>
 			<section v-if="winner" class="container">
 				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
 					<h2>{{ t('congratsTitle') }}</h2>
