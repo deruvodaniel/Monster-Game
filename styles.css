@@ -386,7 +386,7 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
 .monster-name { margin: 0.15rem 0 0.25rem; font-weight: 700; opacity: 0.95; }
 
 /* Character selection */
-.landing-root { width: 95%; max-width: 90rem; margin: 0 auto 1rem; }
+.landing-root { width: 95%; max-width: 90rem; margin: 0 auto 1rem; text-align: center; }
 .character-select { margin: 0.75rem auto 0.5rem; }
 .select-title { margin: 0.25rem 0 0.5rem; }
 .characters-grid {
