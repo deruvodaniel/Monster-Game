@@ -416,6 +416,7 @@ const app = Vue.createApp({
 			this.started = true;
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
+			this.playerHealth = 100;
 			this.currentLevel = 0;
 			this.loadLevel(0);
 			this.sound('start');
