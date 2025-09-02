@@ -65,7 +65,7 @@
       </section>
       <template v-else>
       <section class="board">
-        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
+        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn, 'is-critical': isMonsterCritical}">
           <h2>{{ t('monsterHealth') }}</h2>
           <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
