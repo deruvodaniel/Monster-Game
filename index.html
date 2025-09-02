@@ -77,7 +77,7 @@
             <div class="healthbar__value" :style="monsterBarStyles"></div>
           </div>
         </section>
-        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
+        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn, 'is-critical': isPlayerCritical}">
           <h2>{{ t('yourHealth') }}</h2>
           <p class="player-name" v-if="selectedCharacter">{{ selectedCharacter.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
