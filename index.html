@@ -92,6 +92,14 @@
         </section>
       </section>
       <div class="center-bubble" v-if="centerBubbleText" :class="centerBubbleClass">{{ centerBubbleText }}</div>
+      <div class="win-fanfare" v-if="winner==='player'">
+        <span class="fanfare-trumpet fanfare-trumpet--left">🎺</span>
+        <span class="fanfare-trumpet fanfare-trumpet--right">🎺</span>
+        <span class="note note--1">♪</span>
+        <span class="note note--2">♫</span>
+        <span class="note note--3">♪</span>
+        <span class="note note--4">♫</span>
+      </div>
 			<section v-if="winner" class="container">
 				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
 					<h2>{{ t('congratsTitle') }}</h2>
@@ -103,7 +111,7 @@
 					<h2 v-else>{{ t('gameOver') }}</h2>
 					<template v-if="winner === 'monster'">
 						<h3>{{ t('youLost') }}</h3>
-						<p class="lives-left">❤️ × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+						<p class="lives-left">❤�� × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
 						<div class="win-actions">
 							<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
 							<button v-else @click="goToLanding">Volver al inicio</button>
