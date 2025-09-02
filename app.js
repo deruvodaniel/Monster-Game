@@ -30,6 +30,8 @@ const app = Vue.createApp({
 			musicOsc: null,
 			musicGain: null,
 			musicMode: 'off',
+			centerBubbleText: null,
+			centerBubbleClass: '',
 			// Run lives
 			lives: 3,
 			maxLives: 3,
