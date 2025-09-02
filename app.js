@@ -302,11 +302,12 @@ const app = Vue.createApp({
 			else attackValue = getRandomValue(5, 12);
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.damageMonster = attackValue;
-			setTimeout(() => { this.damageMonster = null; }, 650);
+			this.showCenterBubble('-' + attackValue, 'bubble--to-monster');
+			setTimeout(() => { this.damageMonster = null; }, 900);
 			this.isMonsterHit = true;
 			this.slashMonster = true;
-			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
-			this.attackPlayer();
+			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 500);
+			setTimeout(() => { this.attackPlayer(); }, 900);
 		
 		},
 		
