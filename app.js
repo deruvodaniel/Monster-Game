@@ -595,9 +595,12 @@ const app = Vue.createApp({
 		loseLifeAndRetry() {
 			if (this.lives > 0) this.lives -= 1;
 			if (this.lives > 0) {
+				// Continue same level preserving monster health
 				this.playerHealth = 100;
 				this.winner = null;
-				this.loadLevel(this.currentLevel);
+				this.isMonsterTurn = false;
+				this.isPlayerHit = false;
+				this.isMonsterHit = false;
 				return;
 			}
 			this.goToLanding();
