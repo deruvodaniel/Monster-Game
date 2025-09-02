@@ -23,7 +23,6 @@
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
           <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
-          <button class="icon-button" @click="changeMonsterImage" :aria-label="t('changeMonster')">🖼️</button>
           <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
         </div>
       </header>
@@ -42,16 +41,20 @@
               :class="{ 'is-selected': selectedCharacterId === char.id }"
               @click="selectCharacter(char.id)"
             >
-              <div class="char-avatar" aria-hidden="true">
-                <img :src="char.image" :alt="char.name[lang]" class="char-img" />
+              <div class="flip-inner">
+                <div class="card-face card-face--front">
+                  <h4 class="char-name">{{ char.icon }} {{ char.name[lang] }}</h4>
+                  <ul class="char-stats">
+                    <li>⚔️ {{ t('attack') }}: {{ char.stats.attack }}</li>
+                    <li>🛡️ {{ t('defend') }}: {{ char.stats.defend }}</li>
+                    <li>💚 {{ t('heal') }}: {{ char.stats.heal }}</li>
+                    <li>💥 {{ t('special') }}: {{ char.stats.special }}</li>
+                  </ul>
+                </div>
+                <div class="card-face card-face--back" aria-hidden="true">
+                  <img :src="char.image" :alt="char.name[lang]" class="char-img char-img--full" />
+                </div>
               </div>
-              <h4 class="char-name">{{ char.icon }} {{ char.name[lang] }}</h4>
-              <ul class="char-stats">
-                <li>⚔️ {{ t('attack') }}: {{ char.stats.attack }}</li>
-                <li>🛡️ {{ t('defend') }}: {{ char.stats.defend }}</li>
-                <li>💚 {{ t('heal') }}: {{ char.stats.heal }}</li>
-                <li>💥 {{ t('special') }}: {{ char.stats.special }}</li>
-              </ul>
             </button>
           </div>
         </div>
