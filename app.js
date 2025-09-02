@@ -39,6 +39,8 @@ const app = Vue.createApp({
 			// Run lives
 			lives: 3,
 			maxLives: 3,
+			isLevelTransitioning: false,
+			lastLeveledTo: -1,
 			// Floating damage
 			damageMonster: null,
 			damagePlayer: null,
@@ -416,15 +418,19 @@ const app = Vue.createApp({
 			this.isMonsterTurn = false;
 			this.isMonsterHit = false;
 			this.isPlayerHit = false;
+			this.isLevelTransitioning = false;
 		},
 
 		nextLevel() {
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
-				// Guard against double triggering
+				if (this.isLevelTransitioning) return;
+				this.isLevelTransitioning = true;
+				// Guard against double triggering and repeated same target
 				const now = Date.now();
-				if (now - this.lastLevelUpAt < 1500) { this.loadLevel(next); return; }
+				if (now - this.lastLevelUpAt < 1500 || this.lastLeveledTo === next) { this.loadLevel(next); return; }
 				this.lastLevelUpAt = now;
+				this.lastLeveledTo = next;
 				// Level-up buffs
 				let atk=0, sp=0, heal=0, def=0, hp=0;
 				if (this.playerStats) {
@@ -449,6 +455,8 @@ const app = Vue.createApp({
 			this.monsterHealth = 100;
 			this.logMsgs = [];
 			this.lives = this.maxLives;
+			this.isLevelTransitioning = false;
+			this.lastLeveledTo = -1;
 		},
 
 		addLogMessage() {
@@ -637,8 +645,9 @@ const app = Vue.createApp({
 		loseLifeAndRetry() {
 			if (this.lives > 0) this.lives -= 1;
 			if (this.lives > 0) {
-				// Continue same level preserving monster health
-				this.playerHealth = 100;
+				// Continue same level preserving monster health, restore to full for current level
+				const pmax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
+				this.playerHealth = pmax;
 				this.winner = null;
 				this.isMonsterTurn = false;
 				this.isPlayerHit = false;
