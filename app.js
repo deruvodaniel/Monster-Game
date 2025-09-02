@@ -151,7 +151,7 @@ const app = Vue.createApp({
 					player: 'Jugador',
 					monster: 'Monstruo',
 					healsFor: 'se cura 💚 por',
-					raisesShield: 'levanta un escudo 🛡️ y reduce el próximo daño',
+					raisesShield: 'levanta un escudo 🛡️ y reduce el pr��ximo daño',
 					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
@@ -410,14 +410,17 @@ const app = Vue.createApp({
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
 				// Level-up buffs
+				let atk=0, sp=0, heal=0, def=0, hp=0;
 				if (this.playerStats) {
-					this.playerStats.attack += 3;
-					this.playerStats.special += 5;
-					this.playerStats.heal += 2;
-					this.playerStats.defend += 1;
+					this.playerStats.attack += (atk = 3);
+					this.playerStats.special += (sp = 5);
+					this.playerStats.heal += (heal = 2);
+					this.playerStats.defend += (def = 1);
 				}
 				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
-				this.playerHealth = Math.min(newMax, this.playerHealth + 20);
+				const prev = this.playerHealth;
+				this.playerHealth = Math.min(newMax, this.playerHealth + (hp = 20));
+				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 1400);
 				this.loadLevel(next);
 			}
 		},
