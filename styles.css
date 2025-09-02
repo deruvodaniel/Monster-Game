@@ -219,6 +219,17 @@ section {
 .icon-button:hover { filter: brightness(1.1); }
 body[data-theme="dark"] .icon-button { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
 
+/* Lives badge */
+.lives-badge { display:inline-flex; align-items:center; gap: 0.25rem; padding: 0.2rem 0.5rem; border-radius: 999px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); }
+body[data-theme="dark"] .lives-badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); }
+.lives-left { margin: 0.25rem 0; font-weight: 700; }
+
+/* Damage numbers */
+.damage-bubble { position: absolute; left: 50%; transform: translateX(-50%) translateY(0); top: 0; padding: 0.15rem 0.4rem; border-radius: 8px; font-weight: 700; font-size: 1rem; color: #fff; background: rgba(220,0,0,0.85); box-shadow: 0 2px 8px rgba(0,0,0,0.25); animation: float-up 650ms ease-out; pointer-events: none; }
+.dmg--player { background: rgba(220,0,0,0.9); }
+.dmg--monster { background: rgba(255,80,80,0.95); }
+@keyframes float-up { 0% { opacity:0; transform: translateX(-50%) translateY(6px) scale(0.95);} 20% {opacity:1;} 100% { opacity:0; transform: translateX(-50%) translateY(-24px) scale(1.05);} }
+
 /* Battle log chips */
 .chip { display:inline-flex; align-items:center; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.85rem; }
 .chip.who { font-weight:700; }
