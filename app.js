@@ -30,6 +30,12 @@ const app = Vue.createApp({
 			musicOsc: null,
 			musicGain: null,
 			musicMode: 'off',
+			// Run lives
+			lives: 3,
+			maxLives: 3,
+			// Floating damage
+			damageMonster: null,
+			damagePlayer: null,
 			// Character selection
 			characters: [
 				{
@@ -287,7 +293,8 @@ const app = Vue.createApp({
 			if (this.playerStats) attackValue = this.rollValue(this.playerStats.attack);
 			else attackValue = getRandomValue(5, 12);
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
-			this.addLogMessage('player', 'attack', attackValue);
+			this.damageMonster = attackValue;
+			setTimeout(() => { this.damageMonster = null; }, 650);
 			this.isMonsterHit = true;
 			this.slashMonster = true;
 			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
@@ -312,7 +319,8 @@ const app = Vue.createApp({
 				this.defenseReductionActive = 0;
 			}
 			this.playerHealth = Math.max(this.playerHealth - attackValue, 0);
-			this.addLogMessage('monster', 'attack', attackValue);
+			this.damagePlayer = attackValue;
+			setTimeout(() => { this.damagePlayer = null; }, 700);
 			this.isPlayerHit = true;
 			setTimeout(() => { this.isPlayerHit = false; this.isMonsterTurn = false; this.slashPlayer = false; }, 400);
 		},
@@ -324,7 +332,8 @@ const app = Vue.createApp({
 			if (this.playerStats) attackValue = this.rollValue(this.playerStats.special, 0.18);
 			else attackValue = getRandomValue(10, 25);
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
-			this.addLogMessage('player', 'special-attack', attackValue);
+			this.damageMonster = attackValue;
+			setTimeout(() => { this.damageMonster = null; }, 650);
 			this.isMonsterHit = true;
 			this.slashMonster = true;
 			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 350);
@@ -337,7 +346,6 @@ const app = Vue.createApp({
 			if (this.playerStats) healValue = this.rollValue(this.playerStats.heal, 0.15);
 			else healValue = getRandomValue(8, 20);
 			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
-			this.addLogMessage('player', 'heal', healValue);
 			this.sound('heal');
 			this.attackPlayer();
 		},
@@ -389,15 +397,11 @@ const app = Vue.createApp({
 			this.playerHealth = 100;
 			this.monsterHealth = 100;
 			this.logMsgs = [];
+			this.lives = this.maxLives;
 		},
 
-		addLogMessage(who, what, value) {
-			this.logMsgs.unshift({
-				actionBy: who,
-				actionType: what,
-				actionValue: value
-			});
-			if (this.logMsgs.length > 12) this.logMsgs.splice(12);
+		addLogMessage() {
+			// log removed
 		},
 
 		defend() {
@@ -415,6 +419,7 @@ const app = Vue.createApp({
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
 			this.playerHealth = 100;
+			this.lives = this.maxLives;
 			this.currentLevel = 0;
 			this.loadLevel(0);
 			this.sound('start');
@@ -563,6 +568,17 @@ const app = Vue.createApp({
 			if (this.musicMode === mode) return;
 			this.stopMusic();
 			this.startMusic(mode);
+		},
+
+		loseLifeAndRetry() {
+			if (this.lives > 0) this.lives -= 1;
+			if (this.lives > 0) {
+				this.playerHealth = 100;
+				this.winner = null;
+				this.loadLevel(this.currentLevel);
+				return;
+			}
+			this.goToLanding();
 		},
 
 		playEndJingle(type) {
