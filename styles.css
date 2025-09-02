@@ -452,7 +452,7 @@ body[data-theme="dark"] .character-card.is-selected { box-shadow: 0 0 0 3px rgba
 .center-bubble.bubble--to-monster { background: linear-gradient(135deg, #ff4d6d, #d1004c); }
 .center-bubble.bubble--to-player { background: linear-gradient(135deg, #ff3b3b, #b30000); }
 .center-bubble.bubble--heal { background: linear-gradient(135deg, #00c389, #009c6b); }
-.center-bubble.bubble--level { background: linear-gradient(135deg, #ffd700, #ff9f1a); color: #4b2c00; text-shadow: none; }
+.center-bubble.bubble--level { background: linear-gradient(135deg, #ffd700, #ff9f1a); color: #4b2c00; text-shadow: none; animation-duration: 2.4s; }
 @keyframes pop-center { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8);} 20% { opacity: 1; transform: translate(-50%, -50%) scale(1);} 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.05);} }
 
 /* Stronger active pulse */
