@@ -427,7 +427,7 @@ const app = Vue.createApp({
 				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
 				const prev = this.playerHealth;
 				this.playerHealth = Math.min(newMax, this.playerHealth + (hp = 20));
-				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 1400);
+				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 2400);
 				this.loadLevel(next);
 			}
 		},
