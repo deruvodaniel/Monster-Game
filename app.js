@@ -623,6 +623,16 @@ const app = Vue.createApp({
 			this.musicMode = mode;
 		},
 
+		goToCredits() { this.showCredits = true; this.updateStageBg(); },
+
+		updateStageBg() {
+			let stage = 'landing';
+			if (this.started && !this.winner) stage = 'battle';
+			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
+			if (this.showCredits) stage = 'credits';
+			document.body.setAttribute('data-stage', stage);
+		},
+
 		stopMusic() {
 			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
 			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
