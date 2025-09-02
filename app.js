@@ -460,6 +460,8 @@ const app = Vue.createApp({
 			this.lives = this.maxLives;
 			this.isLevelTransitioning = false;
 			this.lastLeveledTo = -1;
+			this.showCredits = false;
+			this.updateStageBg();
 		},
 
 		addLogMessage() {
