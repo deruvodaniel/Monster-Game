@@ -539,20 +539,33 @@ const app = Vue.createApp({
 			};
 			switch (name) {
 				case 'attack':
-					play(220, 'square', 0.1, 0.14);
-					play(660, 'square', 0.08, 0.08, 0.02);
-					noiseBurst(0.09, 0.12);
+					// fast whoosh + impact
+					sweep(600, 180, 0.12, 'sawtooth', 0.12);
+					play(120, 'square', 0.08, 0.12, 0.12);
+					noiseBurst(0.07, 0.14, 0.12);
 					break;
 				case 'hit':
-					play(180, 'sawtooth', 0.12, 0.12);
-					noiseBurst(0.08, 0.12);
+					play(120, 'sine', 0.08, 0.1);
+					play(90, 'triangle', 0.09, 0.08, 0.04);
+					noiseBurst(0.06, 0.1, 0.02);
 					break;
 				case 'special':
-					sweep(330, 880, 0.25, 'square', 0.14);
-					noiseBurst(0.14, 0.16, 0.04);
+					// charge up + sparkle + big impact
+					sweep(220, 1200, 0.32, 'square', 0.12);
+					play(1567.98, 'sine', 0.1, 0.06, 0.32); // sparkle
+					play(1318.51, 'sine', 0.1, 0.06, 0.38);
+					noiseBurst(0.18, 0.2, 0.34);
+					play(196, 'square', 0.14, 0.12, 0.36); // thump
 					break;
-				case 'heal': play(523.25, 'sine', 0.18, 0.06); break;
-				case 'defend': play(261.63, 'triangle', 0.14, 0.06); break;
+				case 'heal':
+					play(392.0, 'sine', 0.12, 0.06);
+					play(523.25, 'sine', 0.12, 0.06, 0.08);
+					play(659.25, 'sine', 0.16, 0.06, 0.16);
+					break;
+				case 'defend':
+					play(329.63, 'triangle', 0.12, 0.06);
+					play(415.30, 'triangle', 0.12, 0.06, 0.06);
+					break;
 				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
 				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
 				case 'start': play(329.63, 'sine', 0.12, 0.06); play(392, 'sine', 0.12, 0.06, 0.08); break;
