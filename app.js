@@ -351,10 +351,11 @@ const app = Vue.createApp({
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.damageMonster = attackValue;
 			this.showCenterBubble('-' + attackValue, 'bubble--to-monster');
+			this.burstMonsterSpecial = true;
 			setTimeout(() => { this.damageMonster = null; }, 900);
 			this.isMonsterHit = true;
 			this.slashMonster = true;
-			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; }, 500);
+			setTimeout(() => { this.isMonsterHit = false; this.slashMonster = false; this.burstMonsterSpecial = false; }, 550);
 			setTimeout(() => { this.attackPlayer(); }, 900);
 		},
 
