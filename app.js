@@ -179,13 +179,11 @@ const app = Vue.createApp({
 			},
 		monsterBarStyles(){
 			if ( this.monsterHealth < 0) {
-				return {
-					width: '0%'
-				}
+				return { width: '0%' }
 			}
-			return {
-				width: this.monsterHealth + '%'
-			}
+			const max = typeof this.getMonsterMaxHealth === 'function' ? this.getMonsterMaxHealth(this.currentLevel) : 100;
+			const pct = Math.max(0, Math.min(100, Math.round((this.monsterHealth / max) * 100)));
+			return { width: pct + '%' }
 		},
 
 		playerBarStyles(){
