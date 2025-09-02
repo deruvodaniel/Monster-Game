@@ -196,13 +196,11 @@ const app = Vue.createApp({
 
 		playerBarStyles(){
 			if ( this.playerHealth < 0) {
-				return {
-					width: '0%'
-				}
+				return { width: '0%' }
 			}
-			return {
-				width: this.playerHealth + '%'
-			}
+			const pmax = typeof this.getPlayerMaxHealth === 'function' ? this.getPlayerMaxHealth(this.currentLevel) : 100;
+			const pct = Math.max(0, Math.min(100, Math.round((this.playerHealth / pmax) * 100)));
+			return { width: pct + '%' }
 		},
 
 		mayUseSpecialAttack(){
@@ -210,11 +208,8 @@ const app = Vue.createApp({
 		},
 
 		mayUseHeal(){
-			if(this.playerHealth === 100) {
-				this.fullHealth = true;
-			} else {
-				this.fullHealth = false;
-			}
+			const pmax = typeof this.getPlayerMaxHealth === 'function' ? this.getPlayerMaxHealth(this.currentLevel) : 100;
+			this.fullHealth = this.playerHealth >= pmax;
 			return this.fullHealth;
 		},
 
@@ -366,7 +361,8 @@ const app = Vue.createApp({
 			let healValue;
 			if (this.playerStats) healValue = this.rollValue(this.playerStats.heal, 0.15);
 			else healValue = getRandomValue(8, 20);
-			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
+			const pmax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
+			this.playerHealth = Math.min(this.playerHealth + healValue, pmax);
 			this.sound('heal');
 			this.showCenterBubble('+' + healValue, 'bubble--heal');
 			setTimeout(() => { this.attackPlayer(); }, 900);
@@ -393,6 +389,10 @@ const app = Vue.createApp({
 			return 120 + level * 30;
 		},
 
+		getPlayerMaxHealth(level) {
+			return 100 + level * 15;
+		},
+
 		loadLevel(idx) {
 			if (idx < 0 || idx >= this.monsters.length) return;
 			this.currentLevel = idx;
@@ -408,7 +408,18 @@ const app = Vue.createApp({
 
 		nextLevel() {
 			const next = this.currentLevel + 1;
-			if (next < this.monsters.length) this.loadLevel(next);
+			if (next < this.monsters.length) {
+				// Level-up buffs
+				if (this.playerStats) {
+					this.playerStats.attack += 3;
+					this.playerStats.special += 5;
+					this.playerStats.heal += 2;
+					this.playerStats.defend += 1;
+				}
+				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
+				this.playerHealth = Math.min(newMax, this.playerHealth + 20);
+				this.loadLevel(next);
+			}
 		},
 
 		goToLanding() {
