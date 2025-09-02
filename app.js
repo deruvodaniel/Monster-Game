@@ -36,6 +36,7 @@ const app = Vue.createApp({
 			centerBubbleClass: '',
 			centerBubbleTimer: null,
 			lastLevelUpAt: 0,
+			showCredits: false,
 			// Run lives
 			lives: 3,
 			maxLives: 3,
