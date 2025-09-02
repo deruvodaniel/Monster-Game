@@ -278,10 +278,8 @@ const app = Vue.createApp({
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
 				if (w) return;
-				const lowHealth = p <= 35; // 35% or less
-				const behind = p < m; // losing compared to monster
-				const losing = lowHealth || behind;
-				this.setMusicMode(losing ? 'danger' : 'normal');
+				// Always use danger track during battle regardless of health
+				this.setMusicMode('danger');
 			});
 			this.$watch(() => [this.started, this.showCredits], () => this.updateStageBg());
 		} catch (e) {}
@@ -489,7 +487,7 @@ const app = Vue.createApp({
 			this.currentLevel = 0;
 			this.loadLevel(0);
 			this.sound('start');
-			if (this.soundEnabled) this.startMusic('normal');
+			if (this.soundEnabled) this.startMusic('danger');
 			this.updateStageBg();
 		},
 
