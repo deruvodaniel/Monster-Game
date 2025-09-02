@@ -70,6 +70,7 @@
           <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
             <img :src="monsterImg" alt="monster" class="avatar-img" />
+            <span class="damage-bubble dmg--monster" v-if="damageMonster">-{{ damageMonster }}</span>
             <span class="slash" v-if="slashMonster"></span>
             <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
           </div>
