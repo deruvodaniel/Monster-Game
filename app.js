@@ -225,6 +225,14 @@ const app = Vue.createApp({
 		currentMonster() {
 			return this.monsters[this.currentLevel] || null;
 		},
+
+		isPlayerCritical() {
+			return this.playerHealth <= 15;
+		},
+		isMonsterCritical() {
+			const max = typeof this.getMonsterMaxHealth === 'function' ? this.getMonsterMaxHealth(this.currentLevel) : 100;
+			return (this.monsterHealth / max) * 100 <= 15;
+		},
 	},
 
 	watch: {
