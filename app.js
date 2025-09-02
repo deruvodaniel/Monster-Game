@@ -288,6 +288,12 @@ const app = Vue.createApp({
 			return r;
 		},
 
+		showCenterBubble(text, css, dur = 1000) {
+			this.centerBubbleText = text;
+			this.centerBubbleClass = css;
+			setTimeout(() => { this.centerBubbleText = null; this.centerBubbleClass = ''; }, dur);
+		},
+
 		attackMonster () {
 			this.sound('attack');
 			this.currentRound++;
