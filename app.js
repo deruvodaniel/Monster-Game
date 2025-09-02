@@ -268,10 +268,11 @@ const app = Vue.createApp({
 			if (savedTheme) this.theme = savedTheme;
 			document.body.setAttribute('data-theme', this.theme);
 			this.$watch('winner', (value) => {
-				if (!value) return;
+				if (!value) { this.updateStageBg(); return; }
 				this.stopMusic();
 				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
 				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
+				this.updateStageBg();
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
 				if (w) return;
