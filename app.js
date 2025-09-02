@@ -35,6 +35,7 @@ const app = Vue.createApp({
 			centerBubbleText: null,
 			centerBubbleClass: '',
 			centerBubbleTimer: null,
+			lastLevelUpAt: 0,
 			// Run lives
 			lives: 3,
 			maxLives: 3,
@@ -420,6 +421,10 @@ const app = Vue.createApp({
 		nextLevel() {
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
+				// Guard against double triggering
+				const now = Date.now();
+				if (now - this.lastLevelUpAt < 1500) { this.loadLevel(next); return; }
+				this.lastLevelUpAt = now;
 				// Level-up buffs
 				let atk=0, sp=0, heal=0, def=0, hp=0;
 				if (this.playerStats) {
@@ -429,7 +434,6 @@ const app = Vue.createApp({
 					this.playerStats.defend += (def = 1);
 				}
 				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
-				const prev = this.playerHealth;
 				this.playerHealth = Math.min(newMax, this.playerHealth + (hp = 20));
 				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 2400);
 				this.loadLevel(next);
