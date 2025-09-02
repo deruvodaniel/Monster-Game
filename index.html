@@ -73,6 +73,7 @@
             <span class="slash" v-if="slashMonster"></span>
             <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
             <span class="burst burst--special" v-if="burstMonsterSpecial"></span>
+            <span class="shockwave" v-if="burstMonsterSpecial"></span>
           </div>
           <div class="healthbar">
             <div class="healthbar__value" :style="monsterBarStyles"></div>
@@ -98,7 +99,8 @@
 					<button @click="goToLanding">{{ t('backToStart') }}</button>
 				</template>
 				<template v-else>
-					<h2>{{ t('gameOver') }}</h2>
+					<h2 v-if="winner==='player' && currentLevel < monsters.length - 1">{{ t('levelCleared') }}</h2>
+					<h2 v-else>{{ t('gameOver') }}</h2>
 					<template v-if="winner === 'monster'">
 						<h3>{{ t('youLost') }}</h3>
 						<p class="lives-left">❤️ × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
@@ -119,7 +121,7 @@
 			</section>
       <div class="turn-wrap" v-if="!winner"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
       <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
-        <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
+        <button :disabled="controlsDisabled" @click="attackMonster">���️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
         <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
