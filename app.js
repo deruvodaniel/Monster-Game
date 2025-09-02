@@ -133,12 +133,12 @@ const app = Vue.createApp({
 					start: 'START',
 					chooseCharacter: 'Choose your character',
 					nextLevel: 'Next Level',
-					congratsTitle: 'Congratulations, warrior! 🎉',
-					congratsMsg: 'You defeated all monsters. Peace returns... for now.',
+					congratsTitle: 'Glory is yours, warrior! 🏆',
+					congratsMsg: 'You’ve conquered every foe. The realm sings your name—rest, celebrate, then seek new adventures.',
 					backToStart: 'Back to Start',
 					nextLevel: 'Next Level',
-					congratsTitle: 'Congratulations, warrior! 🎉',
-					congratsMsg: 'You defeated all monsters. Peace returns... for now.',
+					congratsTitle: 'Glory is yours, warrior! 🏆',
+					congratsMsg: 'You’ve conquered every foe. The realm sings your name—rest, celebrate, then seek new adventures.',
 					backToStart: 'Back to Start'
 				},
 				es: {
@@ -177,12 +177,12 @@ const app = Vue.createApp({
 					start: 'EMPEZAR',
 					chooseCharacter: 'Elige tu personaje',
 					nextLevel: 'Siguiente nivel',
-					congratsTitle: '¡Felicitaciones, guerrero! 🎉',
-					congratsMsg: 'Has derrotado a todos los monstruos. El reino está a salvo... por ahora.',
+					congratsTitle: '¡Gloria para ti, guerrero! 🏆',
+					congratsMsg: 'Has vencido a todos los enemigos. El reino canta tu nombre: descansa, celebra y prepárate para nuevas gestas.',
 					backToStart: 'Volver al inicio',
 					nextLevel: 'Siguiente nivel',
-					congratsTitle: '¡Felicitaciones, guerrero! 🎉',
-					congratsMsg: 'Has derrotado a todos los monstruos. El reino está a salvo... por ahora.',
+					congratsTitle: '¡Gloria para ti, guerrero! 🏆',
+					congratsMsg: 'Has vencido a todos los enemigos. El reino canta tu nombre: descansa, celebra y prepárate para nuevas gestas.',
 					backToStart: 'Volver al inicio'
 				}
 			}
