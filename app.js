@@ -120,6 +120,10 @@ const app = Vue.createApp({
 					nextLevel: 'Next Level',
 					congratsTitle: 'Congratulations, warrior! 🎉',
 					congratsMsg: 'You defeated all monsters. Peace returns... for now.',
+					backToStart: 'Back to Start',
+					nextLevel: 'Next Level',
+					congratsTitle: 'Congratulations, warrior! 🎉',
+					congratsMsg: 'You defeated all monsters. Peace returns... for now.',
 					backToStart: 'Back to Start'
 				},
 				es: {
@@ -139,7 +143,7 @@ const app = Vue.createApp({
 					player: 'Jugador',
 					monster: 'Monstruo',
 					healsFor: 'se cura 💚 por',
-					raisesShield: 'levanta un escudo 🛡️ y reduce el pr��ximo daño',
+					raisesShield: 'levanta un escudo 🛡️ y reduce el próximo daño',
 					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
