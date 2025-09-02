@@ -205,13 +205,6 @@ body[data-theme="dark"] .fighter.is-critical::after { background: rgba(0,0,0,0.6
 /* Center start button */
 .landing-root > button { display: inline-block; margin: 1rem auto; }
 
-/* Center bubble (already defined above, ensure presence) */
-.center-bubble { position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; font-weight: 900; letter-spacing: 0.5px; color: #fff; padding: 0.4rem 1rem; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.35); animation: pop-center 900ms ease-out; font-size: clamp(2rem, 7vw, 4rem); text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
-.center-bubble.bubble--to-monster { background: linear-gradient(135deg, #ff4d6d, #d1004c); }
-.center-bubble.bubble--to-player { background: linear-gradient(135deg, #ff3b3b, #b30000); }
-.center-bubble.bubble--heal { background: linear-gradient(135deg, #00c389, #009c6b); }
-.center-bubble.bubble--level { background: linear-gradient(135deg, #ffd700, #ff9f1a); color: #4b2c00; text-shadow: none; }
-@keyframes pop-center { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8);} 20% { opacity: 1; transform: translate(-50%, -50%) scale(1);} 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.05);} }
 
 /* Fun micro-animations on main controls */
 #controls button { transition: transform 0.2s ease; }
