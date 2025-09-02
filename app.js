@@ -34,6 +34,7 @@ const app = Vue.createApp({
 			musicMode: 'off',
 			centerBubbleText: null,
 			centerBubbleClass: '',
+			centerBubbleTimer: null,
 			// Run lives
 			lives: 3,
 			maxLives: 3,
@@ -296,9 +297,12 @@ const app = Vue.createApp({
 		},
 
 		showCenterBubble(text, css, dur = 1000) {
+			// Prevent duplicate Level Up bubble showing twice
+			if (css.includes('bubble--level') && this.centerBubbleText && this.centerBubbleClass.includes('bubble--level')) return;
 			this.centerBubbleText = text;
 			this.centerBubbleClass = css;
-			setTimeout(() => { this.centerBubbleText = null; this.centerBubbleClass = ''; }, dur);
+			if (this.centerBubbleTimer) { clearTimeout(this.centerBubbleTimer); this.centerBubbleTimer = null; }
+			this.centerBubbleTimer = setTimeout(() => { this.centerBubbleText = null; this.centerBubbleClass = ''; this.centerBubbleTimer = null; }, dur);
 		},
 
 		attackMonster () {
@@ -376,8 +380,8 @@ const app = Vue.createApp({
 		},
 
 		surrender() {
-			this.winner = 'monster';
 			this.sound('lose');
+			this.goToLanding();
 		},
 
 		restart() {
@@ -591,7 +595,7 @@ const app = Vue.createApp({
 			this.musicGain = ctx.createGain();
 			const cfg = mode === 'danger'
 				? { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] }
-				: { type: 'square', gain: 0.03, step: 220, pattern: [329.63, 392.0, 523.25, 392.0, 349.23, 440.0, 587.33, 440.0] };
+				: { type: 'square', gain: 0.035, step: 160, pattern: [392.0, 523.25, 659.25, 784.0, 659.25, 523.25, 440.0, 523.25, 392.0, 440.0, 523.25, 659.25] };
 			this.musicOsc.type = cfg.type;
 			this.musicGain.gain.value = cfg.gain;
 			this.musicOsc.connect(this.musicGain);
@@ -643,7 +647,41 @@ const app = Vue.createApp({
 		playEndJingle(type) {
 			this.initAudio();
 			const ctx = this.audioCtx;
-			const notes = type === 'win' ? [523.25, 659.25, 783.99, 1046.5] : [392.0, 349.23, 261.63, 174.61];
+			if (type === 'win') {
+				// Trumpet-like fanfare
+				const chords = [
+					[392.0, 523.25], // G4 + C5
+					[440.0, 587.33], // A4 + D5
+					[523.25, 659.25], // C5 + E5
+					[587.33, 784.0]  // D5 + G5
+				];
+				let t = 0;
+				const trumpet = (freq, start) => {
+					const o = ctx.createOscillator();
+					const f = ctx.createBiquadFilter();
+					const g = ctx.createGain();
+					o.type = 'sawtooth';
+					o.frequency.setValueAtTime(freq, start);
+					f.type = 'bandpass';
+					f.frequency.setValueAtTime(1200, start);
+					f.Q.value = 6;
+					g.gain.setValueAtTime(0, start);
+					g.gain.linearRampToValueAtTime(0.12, start + 0.04);
+					g.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+					o.connect(f); f.connect(g); g.connect(ctx.destination);
+					o.start(start);
+					o.stop(start + 0.4);
+				};
+				chords.forEach(([a,b]) => {
+					const start = ctx.currentTime + t;
+					trumpet(a, start);
+					trumpet(b, start);
+					t += 0.28;
+				});
+				return;
+			}
+			// Lose jingle
+			const notes = [392.0, 349.23, 261.63, 174.61];
 			let t = 0;
 			notes.forEach((f) => {
 				const o = ctx.createOscillator();
