@@ -116,7 +116,7 @@
 					</template>
 				</template>
 			</section>
-      <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
+      <div class="turn-wrap" v-if="!winner"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
       <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
         <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
