@@ -477,6 +477,7 @@ const app = Vue.createApp({
 		startGame() {
 			if (!this.selectedCharacter) return;
 			this.started = true;
+			this.showCredits = false;
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
 			this.playerHealth = 100;
@@ -485,6 +486,7 @@ const app = Vue.createApp({
 			this.loadLevel(0);
 			this.sound('start');
 			if (this.soundEnabled) this.startMusic('normal');
+			this.updateStageBg();
 		},
 
 		setLang(lang) {
