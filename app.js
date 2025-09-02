@@ -320,6 +320,7 @@ const app = Vue.createApp({
 		},
 		
 		attackPlayer () {
+			if (this.monsterHealth <= 0 || this.winner === 'player') { this.isMonsterTurn = false; return; }
 			this.sound('hit');
 			this.isMonsterTurn = true;
 			this.slashPlayer = true;
