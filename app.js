@@ -361,11 +361,21 @@ const app = Vue.createApp({
 			this.isMonsterTurn = false;
 		},
 
+		getMonsterMaxHealth(level) {
+			return 120 + level * 30;
+		},
+
 		loadLevel(idx) {
 			if (idx < 0 || idx >= this.monsters.length) return;
 			this.currentLevel = idx;
 			if (this.currentMonster) this.monsterImg = this.currentMonster.image;
-			this.restart();
+			this.monsterHealth = this.getMonsterMaxHealth(idx);
+			this.currentRound = 0;
+			this.winner = null;
+			this.logMsgs = [];
+			this.isMonsterTurn = false;
+			this.isMonsterHit = false;
+			this.isPlayerHit = false;
 		},
 
 		nextLevel() {
