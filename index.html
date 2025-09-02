@@ -17,42 +17,78 @@
       <header class="app-header">
         <h1>Monster Slayer</h1>
         <div class="header-actions">
+          <span class="lives-badge" aria-label="lives">❤️ × {{ lives }}</span>
           <div class="lang-group">
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
           <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
-          <button class="icon-button" @click="changeMonsterImage" :aria-label="t('changeMonster')">🖼️</button>
           <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
         </div>
       </header>
-      <section v-if="!started" id="landing" class="container">
+      <section v-if="!started" id="landing" class="landing-root">
         <h2>{{ t('welcome') }}</h2>
         <p class="welcome-msg">{{ t('welcomeMsg') }}</p>
         <p class="rules-intro">{{ t('rulesIntro') }}</p>
+        <div class="character-select">
+          <h3 class="select-title">{{ t('chooseCharacter') }}</h3>
+          <div class="characters-grid">
+            <button
+              v-for="char in characters"
+              :key="char.id"
+              type="button"
+              class="character-card"
+              :class="{ 'is-selected': selectedCharacterId === char.id }"
+              @click="selectCharacter(char.id)"
+            >
+              <div class="flip-inner">
+                <div class="card-face card-face--front">
+                  <img :src="char.image" :alt="char.name[lang]" class="char-img char-img--full gray-image" />
+                  <div class="card-title-overlay">{{ char.icon }} {{ char.name[lang] }}</div>
+                </div>
+                <div class="card-face card-face--back" aria-hidden="true">
+                  <img :src="char.image" :alt="char.name[lang]" class="char-img char-img--full" />
+                  <div class="skills-overlay">
+                    <h4 class="char-name">{{ char.icon }} {{ char.name[lang] }}</h4>
+                    <ul class="char-stats">
+                      <li>⚔️ {{ t('attack') }}: {{ char.stats.attack }}</li>
+                      <li>🛡️ {{ t('defend') }}: {{ char.stats.defend }}</li>
+                      <li>💚 {{ t('heal') }}: {{ char.stats.heal }}</li>
+                      <li>💥 {{ t('special') }}: {{ char.stats.special }}</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+        </div>
         <ul class="rules-list">
           <li>{{ t('rule1') }}</li>
           <li>{{ t('rule2') }}</li>
           <li>{{ t('rule3') }}</li>
           <li>{{ t('rule4') }}</li>
         </ul>
-        <button @click="startGame">{{ t('start') }}</button>
+        <button :disabled="!selectedCharacterId" @click="startGame">{{ t('start') }}</button>
       </section>
       <template v-else>
-      <section class="board">
-        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn}">
+      <section class="board" v-if="!(winner==='player' && currentLevel === monsters.length - 1) && !showCredits">
+        <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn, 'is-critical': isMonsterCritical}">
           <h2>{{ t('monsterHealth') }}</h2>
+          <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
             <img :src="monsterImg" alt="monster" class="avatar-img" />
             <span class="slash" v-if="slashMonster"></span>
             <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
+            <span class="burst burst--special" v-if="burstMonsterSpecial"></span>
+            <span class="shockwave" v-if="burstMonsterSpecial"></span>
           </div>
           <div class="healthbar">
             <div class="healthbar__value" :style="monsterBarStyles"></div>
           </div>
         </section>
-        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
+        <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-healing': isHealing, 'is-active': !isMonsterTurn, 'is-critical': isPlayerCritical}">
           <h2>{{ t('yourHealth') }}</h2>
+          <p class="player-name" v-if="selectedCharacter">{{ selectedCharacter.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
             <img :src="playerImg" alt="player" class="avatar-img" />
             <span class="slash slash--enemy" v-if="slashPlayer"></span>
@@ -62,35 +98,55 @@
           </div>
         </section>
       </section>
-			<section v-if="winner" class="container">
-				<h2>{{ t('gameOver') }}</h2>
-				<h3 v-if="winner === 'monster'">{{ t('youLost') }}</h3>
-				<h3 v-else-if="winner === 'player'">{{ t('youWon') }}</h3>
-				<h3 v-else>{{ t('draw') }}</h3>
-				<button @click="restart">{{ t('startNew') }}</button>
+      <div class="center-bubble" v-if="centerBubbleText" :class="centerBubbleClass">{{ centerBubbleText }}</div>
+			<section v-if="winner && !showCredits" class="container">
+				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
+					<h2>{{ t('congratsTitle') }}</h2>
+					<p>{{ t('congratsMsg') }}</p>
+					<div class="winner-hero" v-if="selectedCharacter">
+						<img :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="winner-img" />
+						<h3 class="winner-name">{{ selectedCharacter.icon }} {{ selectedCharacter.name[lang] }}</h3>
+					</div>
+					<div class="win-actions">
+						<button @click="goToCredits">Ver créditos</button>
+						<button @click="goToLanding">{{ t('backToStart') }}</button>
+					</div>
+				</template>
+				<template v-else>
+					<h2 v-if="winner==='player' && currentLevel < monsters.length - 1">{{ t('levelCleared') }}</h2>
+					<h2 v-else>{{ t('gameOver') }}</h2>
+					<template v-if="winner === 'monster'">
+						<h3>{{ t('youLost') }}</h3>
+						<p class="lives-left">&#10084;&#65039; × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+						<div class="win-actions">
+							<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
+							<button v-else @click="goToLanding">Volver al inicio</button>
+						</div>
+					</template>
+					<template v-else>
+						<h3 v-if="winner === 'player'">{{ t('youWon') }}</h3>
+						<h3 v-else>{{ t('draw') }}</h3>
+						<div class="win-actions">
+							<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
+							<button v-else @click="restart">{{ t('startNew') }}</button>
+						</div>
+					</template>
+				</template>
 			</section>
-      <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
-      <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
-        <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
+      <section v-if="showCredits" class="container credits-screen">
+        <img src="https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7" alt="Credits" class="credits-img" />
+        <h2>Créditos</h2>
+        <p>Diseño y desarrollo: <a href="https://github.com/deruvodaniel" target="_blank" rel="noopener">Daniel De Ruvo</a></p>
+        <p>Gracias por jugar.</p>
+        <button @click="goToLanding">Volver al inicio</button>
+      </section>
+      <div class="turn-wrap" v-if="!winner && !showCredits"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
+      <section v-if="!winner && !showCredits" id="controls" :class="{ 'is-locked': controlsDisabled }">
+        <button :disabled="controlsDisabled" @click="attackMonster">🗡️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
         <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
         <button :disabled="controlsDisabled" @click="surrender">🏳️ {{ t('surrender') }}</button>
-      </section>
-      <section id="log" class="container">
-        <h2>{{ t('battleLog') }}</h2>
-        <transition-group name="log" tag="ul" class="log-list">
-          <li v-for="(logMsg, index) in logMsgs" :key="logMsg.id || index" class="log-entry">
-            <span class="chip who" :class="{'chip--player': logMsg.actionBy === 'player', 'chip--monster': logMsg.actionBy === 'monster'}">{{ logMsg.actionBy === 'player' ? t('player') : t('monster') }}</span>
-            <span v-if="logMsg.actionType === 'heal'" class="chip type type--heal">{{ t('heal') }}</span>
-            <span v-else-if="logMsg.actionType === 'defend'" class="chip type type--defend">{{ t('defend') }}</span>
-            <span v-else-if="logMsg.actionType === 'special-attack'" class="chip type type--special">{{ t('special') }}</span>
-            <span v-else class="chip type type--attack">{{ t('attack') }}</span>
-            <span class="detail" v-if="logMsg.actionType === 'heal'">+<span class="log--heal">{{ logMsg.actionValue }}</span></span>
-            <span class="detail" v-else-if="logMsg.actionType !== 'defend'">-<span class="log--damage">{{ logMsg.actionValue }}</span></span>
-            <span class="time" v-if="logMsg.time">· {{ new Date(logMsg.time).toLocaleTimeString() }}</span>
-          </li>
-        </transition-group>
       </section>
       </template>
     </div>
