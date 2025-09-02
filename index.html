@@ -79,9 +79,9 @@
         </section>
         <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-active': !isMonsterTurn}">
           <h2>{{ t('yourHealth') }}</h2>
+          <p class="player-name" v-if="selectedCharacter">{{ selectedCharacter.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
             <img :src="playerImg" alt="player" class="avatar-img" />
-            <span class="damage-bubble dmg--player" v-if="damagePlayer">-{{ damagePlayer }}</span>
             <span class="slash slash--enemy" v-if="slashPlayer"></span>
           </div>
           <div class="healthbar">
@@ -119,7 +119,7 @@
       <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
         <button :disabled="controlsDisabled" @click="attackMonster">⚔️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
-        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">�� {{ t('heal') }}</button>
+        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
         <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
         <button :disabled="controlsDisabled" @click="surrender">🏳️ {{ t('surrender') }}</button>
       </section>
