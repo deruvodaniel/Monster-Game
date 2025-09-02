@@ -98,13 +98,22 @@
 				</template>
 				<template v-else>
 					<h2>{{ t('gameOver') }}</h2>
-					<h3 v-if="winner === 'monster'">{{ t('youLost') }}</h3>
-					<h3 v-else-if="winner === 'player'">{{ t('youWon') }}</h3>
-					<h3 v-else>{{ t('draw') }}</h3>
-					<div class="win-actions">
-						<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
-						<button v-else @click="restart">{{ t('startNew') }}</button>
-					</div>
+					<template v-if="winner === 'monster'">
+						<h3>{{ t('youLost') }}</h3>
+						<p class="lives-left">❤️ × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+						<div class="win-actions">
+							<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
+							<button v-else @click="goToLanding">Volver al inicio</button>
+						</div>
+					</template>
+					<template v-else>
+						<h3 v-if="winner === 'player'">{{ t('youWon') }}</h3>
+						<h3 v-else>{{ t('draw') }}</h3>
+						<div class="win-actions">
+							<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
+							<button v-else @click="restart">{{ t('startNew') }}</button>
+						</div>
+					</template>
 				</template>
 			</section>
       <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
