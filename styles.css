@@ -383,7 +383,7 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
   color: green;
 }
 
-.monster-name { margin: 0.15rem 0 0.25rem; font-weight: 600; opacity: 0.9; }
+.monster-name { margin: 0.15rem 0 0.25rem; font-weight: 700; opacity: 0.95; }
 
 /* Character selection */
 .landing-root { width: 95%; max-width: 90rem; margin: 0 auto 1rem; }
@@ -421,6 +421,20 @@ body[data-theme="dark"] .character-card.is-selected { box-shadow: 0 0 0 2px rgba
 .char-name { margin: 0.15rem 0; }
 .char-stats { list-style: none; padding: 0; margin: 0.25rem 0 0; font-size: 0.9rem; opacity: 0.95; }
 .char-stats li { margin: 0.1rem 0; }
+
+/* Player name */
+.player-name { margin: 0.15rem 0 0.25rem; font-weight: 700; opacity: 0.95; }
+
+/* Center bubble */
+.center-bubble { position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; font-weight: 900; letter-spacing: 0.5px; color: #fff; padding: 0.4rem 1rem; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.35); animation: pop-center 900ms ease-out; font-size: clamp(2rem, 7vw, 4rem); text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+.center-bubble.bubble--to-monster { background: linear-gradient(135deg, #ff4d6d, #d1004c); }
+.center-bubble.bubble--to-player { background: linear-gradient(135deg, #ff3b3b, #b30000); }
+.center-bubble.bubble--heal { background: linear-gradient(135deg, #00c389, #009c6b); }
+@keyframes pop-center { 0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8);} 20% { opacity: 1; transform: translate(-50%, -50%) scale(1);} 100% { opacity: 0; transform: translate(-50%, -60%) scale(1.05);} }
+
+/* Stronger active pulse */
+.fighter.is-active { box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.28), 0 0 24px rgba(255, 215, 0, 0.5); animation: pulse-active 1.2s ease-in-out infinite; }
+@keyframes pulse-active { 0%,100% { box-shadow: 0 0 0 4px rgba(255,215,0,0.2), 0 0 18px rgba(255,215,0,0.4);} 50% { box-shadow: 0 0 0 6px rgba(255,215,0,0.32), 0 0 28px rgba(255,215,0,0.6);} }
 
 /* Extra feedback when monster hits player */
 .fighter.is-hit::before {
