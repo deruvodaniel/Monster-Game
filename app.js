@@ -367,7 +367,9 @@ const app = Vue.createApp({
 			const pmax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
 			this.playerHealth = Math.min(this.playerHealth + healValue, pmax);
 			this.sound('heal');
+			this.isHealing = true;
 			this.showCenterBubble('+' + healValue, 'bubble--heal');
+			setTimeout(() => { this.isHealing = false; }, 1000);
 			setTimeout(() => { this.attackPlayer(); }, 900);
 		},
 
