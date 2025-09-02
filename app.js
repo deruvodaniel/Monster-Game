@@ -163,6 +163,10 @@ const app = Vue.createApp({
 					nextLevel: 'Siguiente nivel',
 					congratsTitle: '¡Felicitaciones, guerrero! 🎉',
 					congratsMsg: 'Has derrotado a todos los monstruos. El reino está a salvo... por ahora.',
+					backToStart: 'Volver al inicio',
+					nextLevel: 'Siguiente nivel',
+					congratsTitle: '¡Felicitaciones, guerrero! 🎉',
+					congratsMsg: 'Has derrotado a todos los monstruos. El reino está a salvo... por ahora.',
 					backToStart: 'Volver al inicio'
 				}
 			}
