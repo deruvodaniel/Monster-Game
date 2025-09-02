@@ -630,10 +630,6 @@ const app = Vue.createApp({
 			this.musicMode = 'off';
 		},
 
-		changeMonsterImage() {
-			const url = prompt(this.t('changeMonster'));
-			if (url) this.monsterImg = url;
-		},
 
 		setMusicMode(mode) {
 			if (!this.soundEnabled) { this.musicMode = mode; return; }
