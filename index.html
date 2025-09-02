@@ -67,7 +67,7 @@
         <button :disabled="!selectedCharacterId" @click="startGame">{{ t('start') }}</button>
       </section>
       <template v-else>
-      <section class="board">
+      <section class="board" v-if="!(winner==='player' && currentLevel === monsters.length - 1) && !showCredits">
         <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn, 'is-critical': isMonsterCritical}">
           <h2>{{ t('monsterHealth') }}</h2>
           <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
@@ -107,7 +107,14 @@
 				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
 					<h2>{{ t('congratsTitle') }}</h2>
 					<p>{{ t('congratsMsg') }}</p>
-					<button @click="goToLanding">{{ t('backToStart') }}</button>
+					<div class="winner-hero" v-if="selectedCharacter">
+						<img :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="winner-img" />
+						<h3 class="winner-name">{{ selectedCharacter.icon }} {{ selectedCharacter.name[lang] }}</h3>
+					</div>
+					<div class="win-actions">
+						<button @click="goToCredits">Ver créditos</button>
+						<button @click="goToLanding">{{ t('backToStart') }}</button>
+					</div>
 				</template>
 				<template v-else>
 					<h2 v-if="winner==='player' && currentLevel < monsters.length - 1">{{ t('levelCleared') }}</h2>
@@ -130,8 +137,14 @@
 					</template>
 				</template>
 			</section>
-      <div class="turn-wrap" v-if="!winner"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
-      <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
+      <section v-if="showCredits" class="container credits-screen">
+        <img src="https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7" alt="Credits" class="credits-img" />
+        <h2>Créditos</h2>
+        <p>Diseño, sonidos y código en esta demo. Gracias por jugar.</p>
+        <button @click="goToLanding">Volver al inicio</button>
+      </section>
+      <div class="turn-wrap" v-if="!winner && !showCredits"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
+      <section v-if="!winner && !showCredits" id="controls" :class="{ 'is-locked': controlsDisabled }">
         <button :disabled="controlsDisabled" @click="attackMonster">🗡️ {{ t('attack') }}</button>
         <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
