@@ -26,6 +26,8 @@ const app = Vue.createApp({
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
+			isHealing: false,
+			burstMonsterSpecial: false,
 			musicTimer: null,
 			musicOsc: null,
 			musicGain: null,
