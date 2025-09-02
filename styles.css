@@ -371,7 +371,7 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
   color: green;
 }
 
-.monster-name { margin: 0.15rem 0 0; font-weight: 600; opacity: 0.9; }
+.monster-name { margin: 0.15rem 0 0.25rem; font-weight: 600; opacity: 0.9; }
 
 /* Character selection */
 .landing-root { width: 95%; max-width: 90rem; margin: 0 auto 1rem; }
