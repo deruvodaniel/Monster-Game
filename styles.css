@@ -416,6 +416,8 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
 }
 @media (max-width: 520px) {
   .characters-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  /* On touch, keep stats visible */
+  .char-stats { opacity: 1; transform: none; }
 }
 .character-card {
   position: relative;
