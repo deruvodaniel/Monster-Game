@@ -408,6 +408,7 @@ const app = Vue.createApp({
 			this.defenseReductionActive = this.playerStats ? this.getDefenseReduction(this.playerStats.defend) : 0.5;
 			this.addLogMessage('player', 'defend', 0);
 			this.sound('defend');
+			this.attackPlayer();
 		},
 
 		startGame() {
