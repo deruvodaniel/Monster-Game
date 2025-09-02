@@ -99,15 +99,7 @@
         </section>
       </section>
       <div class="center-bubble" v-if="centerBubbleText" :class="centerBubbleClass">{{ centerBubbleText }}</div>
-      <div class="win-fanfare" v-if="winner==='player'">
-        <span class="fanfare-trumpet fanfare-trumpet--left">🎺</span>
-        <span class="fanfare-trumpet fanfare-trumpet--right">🎺</span>
-        <span class="note note--1">♪</span>
-        <span class="note note--2">♫</span>
-        <span class="note note--3">♪</span>
-        <span class="note note--4">♫</span>
-      </div>
-			<section v-if="winner" class="container">
+			<section v-if="winner && !showCredits" class="container">
 				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
 					<h2>{{ t('congratsTitle') }}</h2>
 					<p>{{ t('congratsMsg') }}</p>
@@ -144,7 +136,8 @@
       <section v-if="showCredits" class="container credits-screen">
         <img src="https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7" alt="Credits" class="credits-img" />
         <h2>Créditos</h2>
-        <p>Diseño, sonidos y código en esta demo. Gracias por jugar.</p>
+        <p>Diseño y desarrollo: <a href="https://github.com/deruvodaniel" target="_blank" rel="noopener">Daniel De Ruvo</a></p>
+        <p>Gracias por jugar.</p>
         <button @click="goToLanding">Volver al inicio</button>
       </section>
       <div class="turn-wrap" v-if="!winner && !showCredits"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
