@@ -73,6 +73,15 @@ const app = Vue.createApp({
 				{ id: 'death-angel', name: { es: 'Ángel de la muerte', en: 'Angel of Death' }, image: 'https://i.pinimg.com/736x/80/84/5a/80845aba50bdf5256357713bfb682f86.jpg', stats: { attack: 30 } }
 			],
 			currentLevel: 0,
+			// Levels / monsters
+			monsters: [
+				{ id: 'ghost-entity', name: { es: 'Ente Fantasmal', en: 'Ghost Entity' }, image: 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg', stats: { attack: 10 } },
+				{ id: 'blood-tiger', name: { es: 'Tigre sangriento', en: 'Blood Tiger' }, image: 'https://i.pinimg.com/1200x/a2/ae/15/a2ae15542cbf18fc808e16f8e2592762.jpg', stats: { attack: 14 } },
+				{ id: 'forest-spirit', name: { es: 'Espíritu del bosque', en: 'Forest Spirit' }, image: 'https://i.pinimg.com/736x/83/0b/07/830b07a8ee78c3751404c14fdfcea0dd.jpg', stats: { attack: 18 } },
+				{ id: 'apoc-colossus', name: { es: 'Coloso apocalíptico', en: 'Apocalyptic Colossus' }, image: 'https://i.pinimg.com/1200x/47/29/31/4729319b7a8d14fcbaba715d970e2bc6.jpg', stats: { attack: 24 } },
+				{ id: 'death-angel', name: { es: 'Ángel de la muerte', en: 'Angel of Death' }, image: 'https://i.pinimg.com/736x/80/84/5a/80845aba50bdf5256357713bfb682f86.jpg', stats: { attack: 30 } }
+			],
+			currentLevel: 0,
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
@@ -130,7 +139,7 @@ const app = Vue.createApp({
 					player: 'Jugador',
 					monster: 'Monstruo',
 					healsFor: 'se cura 💚 por',
-					raisesShield: 'levanta un escudo 🛡️ y reduce el próximo daño',
+					raisesShield: 'levanta un escudo 🛡️ y reduce el pr��ximo daño',
 					specialDeals: 'lanza un ATAQUE ESPECIAL 💥 y causa',
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
