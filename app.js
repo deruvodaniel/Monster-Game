@@ -268,6 +268,7 @@ const app = Vue.createApp({
 			const savedTheme = localStorage.getItem('theme');
 			if (savedTheme) this.theme = savedTheme;
 			document.body.setAttribute('data-theme', this.theme);
+			this.updateStageBg();
 			this.$watch('winner', (value) => {
 				if (!value) { this.updateStageBg(); return; }
 				this.stopMusic();
