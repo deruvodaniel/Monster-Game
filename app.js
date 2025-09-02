@@ -64,6 +64,15 @@ const app = Vue.createApp({
 			selectedCharacterId: null,
 			playerStats: null,
 			defenseReductionActive: 0,
+			// Levels / monsters
+			monsters: [
+				{ id: 'ghost-entity', name: { es: 'Ente Fantasmal', en: 'Ghost Entity' }, image: 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg', stats: { attack: 10 } },
+				{ id: 'blood-tiger', name: { es: 'Tigre sangriento', en: 'Blood Tiger' }, image: 'https://i.pinimg.com/1200x/a2/ae/15/a2ae15542cbf18fc808e16f8e2592762.jpg', stats: { attack: 14 } },
+				{ id: 'forest-spirit', name: { es: 'Espíritu del bosque', en: 'Forest Spirit' }, image: 'https://i.pinimg.com/736x/83/0b/07/830b07a8ee78c3751404c14fdfcea0dd.jpg', stats: { attack: 18 } },
+				{ id: 'apoc-colossus', name: { es: 'Coloso apocalíptico', en: 'Apocalyptic Colossus' }, image: 'https://i.pinimg.com/1200x/47/29/31/4729319b7a8d14fcbaba715d970e2bc6.jpg', stats: { attack: 24 } },
+				{ id: 'death-angel', name: { es: 'Ángel de la muerte', en: 'Angel of Death' }, image: 'https://i.pinimg.com/736x/80/84/5a/80845aba50bdf5256357713bfb682f86.jpg', stats: { attack: 30 } }
+			],
+			currentLevel: 0,
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
@@ -98,7 +107,11 @@ const app = Vue.createApp({
 					rule3: 'Heal restores 8–20 health (max 100).',
 					rule4: 'Defend halves the next damage you take.',
 					start: 'START',
-					chooseCharacter: 'Choose your character'
+					chooseCharacter: 'Choose your character',
+					nextLevel: 'Next Level',
+					congratsTitle: 'Congratulations, warrior! 🎉',
+					congratsMsg: 'You defeated all monsters. Peace returns... for now.',
+					backToStart: 'Back to Start'
 				},
 				es: {
 					monsterHealth: 'Salud del Monstruo',
@@ -133,7 +146,11 @@ const app = Vue.createApp({
 					rule3: 'Curar restaura 8–20 de vida (máx 100).',
 					rule4: 'Defender reduce a la mitad el próximo daño.',
 					start: 'EMPEZAR',
-					chooseCharacter: 'Elige tu personaje'
+					chooseCharacter: 'Elige tu personaje',
+					nextLevel: 'Siguiente nivel',
+					congratsTitle: '¡Felicitaciones, guerrero! 🎉',
+					congratsMsg: 'Has derrotado a todos los monstruos. El reino está a salvo... por ahora.',
+					backToStart: 'Volver al inicio'
 				}
 			}
 		};
@@ -180,6 +197,10 @@ const app = Vue.createApp({
 
 		selectedCharacter() {
 			return this.characters.find(c => c.id === this.selectedCharacterId) || null;
+		},
+
+		currentMonster() {
+			return this.monsters[this.currentLevel] || null;
 		},
 	},
 
@@ -263,7 +284,12 @@ const app = Vue.createApp({
 			this.sound('hit');
 			this.isMonsterTurn = true;
 			this.slashPlayer = true;
-			let attackValue = getRandomValue(8 ,15);
+			let attackValue;
+			if (this.currentMonster && this.currentMonster.stats && this.currentMonster.stats.attack) {
+				attackValue = this.rollValue(this.currentMonster.stats.attack, 0.18);
+			} else {
+				attackValue = getRandomValue(8 ,15);
+			}
 			if (this.isPlayerDefending) {
 				const reduction = this.defenseReductionActive || 0.5;
 				attackValue = Math.floor(attackValue * (1 - reduction));
@@ -318,6 +344,28 @@ const app = Vue.createApp({
 			this.isMonsterTurn = false;
 		},
 
+		loadLevel(idx) {
+			if (idx < 0 || idx >= this.monsters.length) return;
+			this.currentLevel = idx;
+			if (this.currentMonster) this.monsterImg = this.currentMonster.image;
+			this.restart();
+		},
+
+		nextLevel() {
+			const next = this.currentLevel + 1;
+			if (next < this.monsters.length) this.loadLevel(next);
+		},
+
+		goToLanding() {
+			this.stopMusic();
+			this.started = false;
+			this.currentLevel = 0;
+			this.winner = null;
+			this.playerHealth = 100;
+			this.monsterHealth = 100;
+			this.logMsgs = [];
+		},
+
 		addLogMessage(who, what, value) {
 			this.logMsgs.unshift({
 				actionBy: who,
@@ -340,7 +388,8 @@ const app = Vue.createApp({
 			this.started = true;
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
-			this.restart();
+			this.currentLevel = 0;
+			this.loadLevel(0);
 			this.sound('start');
 			if (this.soundEnabled) this.startMusic('normal');
 		},
