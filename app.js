@@ -336,6 +336,7 @@ const app = Vue.createApp({
 				this.isPlayerDefending = false;
 				this.defenseReductionActive = 0;
 			}
+			if (this.monsterHealth <= 0 || this.winner === 'player') { this.isMonsterTurn = false; return; }
 			this.playerHealth = Math.max(this.playerHealth - attackValue, 0);
 			this.damagePlayer = attackValue;
 			this.showCenterBubble('-' + attackValue, 'bubble--to-player');
