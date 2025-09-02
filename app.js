@@ -271,13 +271,12 @@ const app = Vue.createApp({
 			this.updateStageBg();
 			this.$watch('winner', (value) => {
 				if (!value) { this.updateStageBg(); return; }
-				this.stopMusic();
 				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
 				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
 				this.updateStageBg();
 			});
-			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner], ([p, m, w]) => {
-				if (w) return;
+			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner, this.started], ([p, m, w, s]) => {
+				if (w || !s) return;
 				// Always use danger track during battle regardless of health
 				this.setMusicMode('danger');
 			});
@@ -611,9 +610,14 @@ const app = Vue.createApp({
 			if (this.musicOsc) return;
 			this.musicOsc = ctx.createOscillator();
 			this.musicGain = ctx.createGain();
-			const cfg = mode === 'danger'
-				? { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] }
-				: { type: 'square', gain: 0.035, step: 160, pattern: [392.0, 523.25, 659.25, 784.0, 659.25, 523.25, 440.0, 523.25, 392.0, 440.0, 523.25, 659.25] };
+			let cfg;
+			if (mode === 'danger') {
+				cfg = { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] };
+			} else if (mode === 'medieval') {
+				cfg = { type: 'triangle', gain: 0.035, step: 220, pattern: [392.0, 440.0, 523.25, 587.33, 659.25, 587.33, 523.25, 440.0] };
+			} else {
+				cfg = { type: 'square', gain: 0.035, step: 160, pattern: [392.0, 523.25, 659.25, 784.0, 659.25, 523.25, 440.0, 523.25, 392.0, 440.0, 523.25, 659.25] };
+			}
 			this.musicOsc.type = cfg.type;
 			this.musicGain.gain.value = cfg.gain;
 			this.musicOsc.connect(this.musicGain);
@@ -637,6 +641,7 @@ const app = Vue.createApp({
 			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
 			if (this.showCredits) stage = 'credits';
 			document.body.setAttribute('data-stage', stage);
+			if (stage === 'battle') this.setMusicMode('danger'); else this.setMusicMode('medieval');
 		},
 
 		stopMusic() {
