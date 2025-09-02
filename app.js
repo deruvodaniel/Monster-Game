@@ -358,7 +358,8 @@ const app = Vue.createApp({
 			else healValue = getRandomValue(8, 20);
 			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
 			this.sound('heal');
-			this.attackPlayer();
+			this.showCenterBubble('+' + healValue, 'bubble--heal');
+			setTimeout(() => { this.attackPlayer(); }, 900);
 		},
 
 		surrender() {
