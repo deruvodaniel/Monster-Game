@@ -30,6 +30,40 @@ const app = Vue.createApp({
 			musicOsc: null,
 			musicGain: null,
 			musicMode: 'off',
+			// Character selection
+			characters: [
+				{
+					id: 'warrior',
+					icon: '⚔️',
+					name: { es: 'Guerrero', en: 'Warrior' },
+					image: 'https://guerrerosdelahistoria.com/wp-content/uploads/2017/07/guerrero-medieval.jpeg',
+					stats: { attack: 25, defend: 20, heal: 5, special: 40 }
+				},
+				{
+					id: 'elf',
+					icon: '🏹',
+					name: { es: 'Elfo', en: 'Elf' },
+					image: 'https://orbedosdragoes.com/wp-content/uploads/2022/01/PF2-elfo-03-405x600.png',
+					stats: { attack: 18, defend: 10, heal: 15, special: 35 }
+				},
+				{
+					id: 'mage',
+					icon: '🔮',
+					name: { es: 'Mago', en: 'Mage' },
+					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3F5j9KRQOC1I-BAQPiqrmkUN0OcT5bS0zeCuRbAyIuw&s',
+					stats: { attack: 15, defend: 8, heal: 25, special: 45 }
+				},
+				{
+					id: 'dwarf',
+					icon: '⛏️',
+					name: { es: 'Enano', en: 'Dwarf' },
+					image: 'https://preview.redd.it/4rrgn1wet4u61.jpg?width=1080&crop=smart&auto=webp&s=27f2825b584010c46b9e1c65766f5248823b0162',
+					stats: { attack: 22, defend: 25, heal: 8, special: 30 }
+				}
+			],
+			selectedCharacterId: null,
+			playerStats: null,
+			defenseReductionActive: 0,
 			messages: {
 				en: {
 					monsterHealth: 'Monster Health',
@@ -63,7 +97,8 @@ const app = Vue.createApp({
 					rule2: 'Special Attack deals 10–25 damage (every 3 rounds).',
 					rule3: 'Heal restores 8–20 health (max 100).',
 					rule4: 'Defend halves the next damage you take.',
-					start: 'START'
+					start: 'START',
+					chooseCharacter: 'Choose your character'
 				},
 				es: {
 					monsterHealth: 'Salud del Monstruo',
@@ -97,7 +132,8 @@ const app = Vue.createApp({
 					rule2: 'Especial hace 10–25 de daño (cada 3 rondas).',
 					rule3: 'Curar restaura 8–20 de vida (máx 100).',
 					rule4: 'Defender reduce a la mitad el próximo daño.',
-					start: 'EMPEZAR'
+					start: 'EMPEZAR',
+					chooseCharacter: 'Elige tu personaje'
 				}
 			}
 		};
@@ -140,6 +176,10 @@ const app = Vue.createApp({
 				this.fullHealth = false;
 			}
 			return this.fullHealth;
+		},
+
+		selectedCharacter() {
+			return this.characters.find(c => c.id === this.selectedCharacterId) || null;
 		},
 	},
 
@@ -189,10 +229,27 @@ const app = Vue.createApp({
 	},
 
 	methods: {
+		// Character selection helpers
+		selectCharacter(id) {
+			this.selectedCharacterId = id;
+		},
+		rollValue(base, variance = 0.2) {
+			const min = Math.max(1, Math.floor(base * (1 - variance)));
+			const max = Math.max(min + 1, Math.ceil(base * (1 + variance)));
+			return getRandomValue(min, max + 1);
+		},
+		getDefenseReduction(base) {
+			// Map base (approx 8-25) to 20%-70% reduction
+			const r = Math.max(0.2, Math.min(0.7, base / 50 + 0.2));
+			return r;
+		},
+
 		attackMonster () {
 			this.sound('attack');
 			this.currentRound++;
-			const attackValue = getRandomValue(5, 12);
+			let attackValue;
+			if (this.playerStats) attackValue = this.rollValue(this.playerStats.attack);
+			else attackValue = getRandomValue(5, 12);
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'attack', attackValue);
 			this.isMonsterHit = true;
@@ -208,8 +265,10 @@ const app = Vue.createApp({
 			this.slashPlayer = true;
 			let attackValue = getRandomValue(8 ,15);
 			if (this.isPlayerDefending) {
-				attackValue = Math.floor(attackValue / 2);
+				const reduction = this.defenseReductionActive || 0.5;
+				attackValue = Math.floor(attackValue * (1 - reduction));
 				this.isPlayerDefending = false;
+				this.defenseReductionActive = 0;
 			}
 			this.playerHealth = Math.max(this.playerHealth - attackValue, 0);
 			this.addLogMessage('monster', 'attack', attackValue);
@@ -220,7 +279,9 @@ const app = Vue.createApp({
 		specialAttackMonster() {
 			this.sound('special');
 			this.currentRound++;
-			const attackValue = getRandomValue(10, 25);
+			let attackValue;
+			if (this.playerStats) attackValue = this.rollValue(this.playerStats.special, 0.18);
+			else attackValue = getRandomValue(10, 25);
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.addLogMessage('player', 'special-attack', attackValue);
 			this.isMonsterHit = true;
@@ -231,7 +292,9 @@ const app = Vue.createApp({
 
 		healPLayer() {
 			this.currentRound++;
-			const healValue = getRandomValue(8, 20);
+			let healValue;
+			if (this.playerStats) healValue = this.rollValue(this.playerStats.heal, 0.15);
+			else healValue = getRandomValue(8, 20);
 			this.playerHealth = Math.min(this.playerHealth + healValue, 100);
 			this.addLogMessage('player', 'heal', healValue);
 			this.sound('heal');
@@ -267,12 +330,16 @@ const app = Vue.createApp({
 		defend() {
 			this.currentRound++;
 			this.isPlayerDefending = true;
+			this.defenseReductionActive = this.playerStats ? this.getDefenseReduction(this.playerStats.defend) : 0.5;
 			this.addLogMessage('player', 'defend', 0);
 			this.sound('defend');
 		},
 
 		startGame() {
+			if (!this.selectedCharacter) return;
 			this.started = true;
+			this.playerStats = { ...this.selectedCharacter.stats };
+			this.playerImg = this.selectedCharacter.image;
 			this.restart();
 			this.sound('start');
 			if (this.soundEnabled) this.startMusic('normal');
