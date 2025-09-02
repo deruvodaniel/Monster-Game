@@ -82,6 +82,7 @@
           <h2>{{ t('yourHealth') }}</h2>
           <div class="avatar" aria-hidden="true">
             <img :src="playerImg" alt="player" class="avatar-img" />
+            <span class="damage-bubble dmg--player" v-if="damagePlayer">-{{ damagePlayer }}</span>
             <span class="slash slash--enemy" v-if="slashPlayer"></span>
           </div>
           <div class="healthbar">
