@@ -291,8 +291,8 @@ const app = Vue.createApp({
 			return getRandomValue(min, max + 1);
 		},
 		getDefenseReduction(base) {
-			// Map base (approx 8-25) to 20%-70% reduction
-			const r = Math.max(0.2, Math.min(0.7, base / 50 + 0.2));
+			// Stronger shield: map base to 50%–85% reduction
+			const r = Math.max(0.5, Math.min(0.85, base / 40 + 0.35));
 			return r;
 		},
 
