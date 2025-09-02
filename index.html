@@ -111,7 +111,7 @@
 					<h2 v-else>{{ t('gameOver') }}</h2>
 					<template v-if="winner === 'monster'">
 						<h3>{{ t('youLost') }}</h3>
-						<p class="lives-left">❤�� × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+						<p class="lives-left">&#10084;&#65039; × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
 						<div class="win-actions">
 							<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
 							<button v-else @click="goToLanding">Volver al inicio</button>
