@@ -88,11 +88,21 @@
         </section>
       </section>
 			<section v-if="winner" class="container">
-				<h2>{{ t('gameOver') }}</h2>
-				<h3 v-if="winner === 'monster'">{{ t('youLost') }}</h3>
-				<h3 v-else-if="winner === 'player'">{{ t('youWon') }}</h3>
-				<h3 v-else>{{ t('draw') }}</h3>
-				<button @click="restart">{{ t('startNew') }}</button>
+				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
+					<h2>{{ t('congratsTitle') }}</h2>
+					<p>{{ t('congratsMsg') }}</p>
+					<button @click="goToLanding">{{ t('backToStart') }}</button>
+				</template>
+				<template v-else>
+					<h2>{{ t('gameOver') }}</h2>
+					<h3 v-if="winner === 'monster'">{{ t('youLost') }}</h3>
+					<h3 v-else-if="winner === 'player'">{{ t('youWon') }}</h3>
+					<h3 v-else>{{ t('draw') }}</h3>
+					<div class="win-actions">
+						<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
+						<button v-else @click="restart">{{ t('startNew') }}</button>
+					</div>
+				</template>
 			</section>
       <p v-if="!winner" class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p>
       <section v-if="!winner" id="controls" :class="{ 'is-locked': controlsDisabled }">
