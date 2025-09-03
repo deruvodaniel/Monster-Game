@@ -402,7 +402,7 @@ body[data-theme="dark"] .landing-root .container {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    height: calc(100vh - 200px); /* Reserve space for header and controls */
+    height: calc(100vh - 180px); /* Reserve space for header and compact controls */
     position: relative;
     overflow: hidden;
     padding: 0.5rem;
