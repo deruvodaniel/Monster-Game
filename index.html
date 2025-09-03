@@ -62,9 +62,6 @@
             </button>
           </div>
         </div>
-        <div class="landing-hero">
-          <img src="https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F501976978f6f4ebca1786eb8289d2967?format=webp&width=800" alt="Landing Hero" class="landing-hero-img" />
-        </div>
         <button :disabled="!selectedCharacterId" @click="startGame">{{ t('start') }}</button>
       </section>
       <template v-else>
@@ -151,7 +148,7 @@
           <h2 id="help-title" class="modal-title">{{ t('howToPlay') }}</h2>
           <p class="modal-intro">{{ t('rulesIntro') }}</p>
           <ul class="modal-list">
-            <li>����️ {{ t('attack') }} — {{ t('rule1') }}</li>
+            <li>🗡️ {{ t('attack') }} — {{ t('rule1') }}</li>
             <li>💥 {{ t('special') }} — {{ t('rule2') }}</li>
             <li>💚 {{ t('heal') }} — {{ t('rule3') }}</li>
             <li>🛡️ {{ t('defend') }} — {{ t('rule4') }}</li>
