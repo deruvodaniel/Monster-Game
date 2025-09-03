@@ -552,9 +552,29 @@ body[data-theme="dark"] .fighter.is-critical::after { background: rgba(0,0,0,0.6
 .icon-button:hover { filter: brightness(1.1); }
 body[data-theme="dark"] .icon-button { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
 
-/* Lives badge */
-.lives-badge { display:inline-flex; align-items:center; gap: 0.25rem; padding: 0.2rem 0.5rem; border-radius: 999px; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.35); }
-body[data-theme="dark"] .lives-badge { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.16); }
+/* Enhanced lives badge */
+.lives-badge {
+  display:inline-flex;
+  align-items:center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255,100,100,0.25) 0%, rgba(255,50,50,0.15) 100%);
+  border: 2px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+.lives-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+body[data-theme="dark"] .lives-badge {
+  background: linear-gradient(135deg, rgba(255,100,100,0.2) 0%, rgba(255,50,50,0.1) 100%);
+  border-color: rgba(255,255,255,0.2);
+}
 .lives-left { margin: 0.25rem 0; font-weight: 700; }
 
 /* Damage numbers */
