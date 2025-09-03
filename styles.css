@@ -212,88 +212,79 @@ header {
     text-align: center;
   }
 
-  /* Show essential header actions on mobile */
+  /* Hide original header actions but keep lives badge visible */
   .app-header .header-actions {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    flex-wrap: nowrap;
-  }
-
-  /* Hide non-essential items in mobile header */
-  .app-header .header-actions > .lang-group,
-  .app-header .header-actions > .icon-button:not(.user-info-mobile) {
     display: none;
   }
 
-  /* Essential user info for mobile */
-  .app-header .player-info {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.85rem;
-    background: rgba(255,255,255,0.15);
-    border-radius: 12px;
-    padding: 0.3rem 0.6rem;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
-  }
-
-  .app-header .player-avatar-header {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.6);
-  }
-
-  .app-header .player-details {
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  .app-header .player-name-header {
-    font-weight: 700;
-    font-size: 0.75rem;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-  }
-
-  .app-header .player-coins {
-    font-size: 0.7rem;
-    opacity: 0.9;
-  }
-
+  /* Show lives badge separately in mobile battle view */
   .app-header .lives-badge {
-    font-size: 0.8rem;
-    padding: 0.3rem 0.6rem;
-    background: linear-gradient(135deg, rgba(255,50,50,0.8) 0%, rgba(200,0,0,0.7) 100%);
-    border: 2px solid rgba(255,255,255,0.5);
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    display: block;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1100;
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, rgba(255,50,50,0.9) 0%, rgba(200,0,0,0.8) 100%);
+    border: 3px solid rgba(255,255,255,0.6);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    font-weight: 800;
+    animation: heartbeat-mobile 2s ease-in-out infinite;
   }
 
-  /* Compact settings gear button */
+  /* Only show lives badge in battle */
+  body:not([data-stage="battle"]) .app-header .lives-badge {
+    display: none;
+  }
+
+  @keyframes heartbeat-mobile {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Enhanced settings gear button */
   .mobile-settings-toggle {
-    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
-    border: 2px solid rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+    border: 3px solid #DAA520;
     color: white;
-    padding: 0.5rem;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    min-width: 40px;
-    min-height: 40px;
+    padding: 0.6rem;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    min-width: 44px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
-    backdrop-filter: blur(8px);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    box-shadow:
+      inset 0 2px 0 rgba(205,133,63,0.6),
+      inset 0 -2px 0 rgba(139,69,19,0.8),
+      0 4px 12px rgba(0,0,0,0.4);
+    backdrop-filter: blur(12px);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.6);
     position: relative;
+  }
+
+  .mobile-settings-toggle::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+    border-radius: 14px;
+    z-index: -1;
+    box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
+  }
+
+  .mobile-settings-toggle:hover {
+    background: linear-gradient(135deg, #DAA520 0%, #CD853F 100%);
+    transform: translateY(-2px) scale(1.05);
   }
 
   .mobile-settings-toggle:active {
@@ -301,22 +292,38 @@ header {
     opacity: 0.8;
   }
 
-  /* Settings dropdown panel - only on mobile */
+  /* Enhanced settings dropdown panel */
   .mobile-settings-panel {
     position: absolute;
     top: 100%;
     right: 1rem;
-    background: rgba(0,0,0,0.95);
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 16px;
-    padding: 1rem;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    background: linear-gradient(135deg, rgba(139,69,19,0.98) 0%, rgba(101,48,11,0.95) 100%);
+    border: 3px solid #DAA520;
+    border-radius: 20px;
+    padding: 1.5rem;
+    backdrop-filter: blur(20px);
+    box-shadow:
+      inset 0 2px 0 rgba(205,133,63,0.3),
+      inset 0 -2px 0 rgba(139,69,19,0.8),
+      0 12px 32px rgba(0,0,0,0.7);
     display: none;
     flex-direction: column;
-    gap: 0.8rem;
-    min-width: 200px;
+    gap: 1rem;
+    min-width: 220px;
     z-index: 1300;
+  }
+
+  .mobile-settings-panel::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+    border-radius: 22px;
+    z-index: -1;
+    box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
   }
 
   .mobile-settings-panel.open {
@@ -328,13 +335,33 @@ header {
   }
 
   .mobile-settings-panel .icon-button {
-    padding: 0.6rem 0.8rem;
-    font-size: 1rem;
-    min-width: 48px;
-    min-height: 48px;
+    padding: 0.8rem 1rem;
+    font-size: 1.1rem;
+    min-width: 52px;
+    min-height: 52px;
     justify-content: flex-start;
-    gap: 0.8rem;
-    border-radius: 12px;
+    gap: 1rem;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+    border: 2px solid #DAA520;
+    box-shadow:
+      inset 0 1px 0 rgba(205,133,63,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 3px 8px rgba(0,0,0,0.3);
+  }
+
+  .mobile-settings-panel .icon-button:hover {
+    background: linear-gradient(135deg, #DAA520 0%, #CD853F 100%);
+    transform: translateY(-1px);
+  }
+
+  .mobile-settings-panel .lang-group {
+    background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+    border: 2px solid #DAA520;
+    box-shadow:
+      inset 0 1px 0 rgba(205,133,63,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 3px 8px rgba(0,0,0,0.3);
   }
 
   .mobile-settings-panel .icon-button::after {
