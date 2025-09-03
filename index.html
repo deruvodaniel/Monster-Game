@@ -191,6 +191,30 @@
           <button class="icon-button" @click="closeHelp">{{ t('close') }}</button>
         </div>
       </div>
+
+      <!-- Welcome Modal with Rules -->
+      <div v-if="showWelcomeModal" class="modal-overlay">
+        <div class="welcome-modal-dialog" role="dialog" aria-modal="true">
+          <h2 class="welcome-modal-title">{{ t('welcome') }}</h2>
+          <p class="welcome-modal-intro">{{ t('welcomeMsg') }}</p>
+
+          <div class="welcome-rules">
+            <h3 class="rules-title">{{ t('howToPlay') }}</h3>
+            <p class="modal-intro">{{ t('rulesIntro') }}</p>
+            <ul class="modal-list">
+              <li>🗡️ {{ t('attack') }} — {{ t('rule1') }}</li>
+              <li>💥 {{ t('special') }} — {{ t('rule2') }}</li>
+              <li>💚 {{ t('heal') }} — {{ t('rule3') }}</li>
+              <li>���️ {{ t('defend') }} — {{ t('rule4') }}</li>
+            </ul>
+          </div>
+
+          <button class="welcome-play-button" @click="closeWelcomeModal">
+            <span class="play-icon">🎮</span>
+            <span class="play-text">{{ t('start') }}</span>
+          </button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
