@@ -225,6 +225,19 @@ header {
     font-weight: 600;
   }
 
+  /* Close panel when clicking outside */
+  .mobile-settings-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1250;
+    background: transparent;
+    display: none;
+  }
+
+  .mobile-settings-overlay.open {
+    display: block;
+  }
+
   /* Add top padding to body for fixed header */
   body {
     padding-top: 80px;
