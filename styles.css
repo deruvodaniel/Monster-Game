@@ -535,10 +535,10 @@ body[data-theme="dark"] .landing-root .container {
   #controls button::after {
     content: attr(data-action);
     position: absolute;
-    bottom: -20px;
+    bottom: -16px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: rgba(255,255,255,0.8);
     font-family: 'Cinzel', serif;
     font-weight: 600;
