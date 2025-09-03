@@ -23,7 +23,7 @@
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
           <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
-          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '����' }}</button>
+          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
           <button class="icon-button" @click="openHelp" :aria-label="t('howToPlay')">ℹ️</button>
         </div>
       </header>
@@ -136,23 +136,23 @@
       </section>
       <div class="turn-wrap" v-if="!winner && !showCredits"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
       <section v-if="!winner && !showCredits" id="controls" :class="{ 'is-locked': controlsDisabled }">
-        <button :disabled="controlsDisabled || !canAttack" @click="attackMonster">
+        <button :disabled="controlsDisabled || !canAttack" @click="attackMonster" :data-action="t('attack')">
           <span class="button-icon">🗡️</span>
           <span class="button-text">{{ t('attack') }}</span>
         </button>
-        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">
+        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster" :data-action="t('special')">
           <span class="button-icon">💥</span>
           <span class="button-text">{{ t('special') }}</span>
         </button>
-        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">
+        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer" :data-action="t('heal')">
           <span class="button-icon">💚</span>
           <span class="button-text">{{ t('heal') }}</span>
         </button>
-        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">
+        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend" :data-action="t('defend')">
           <span class="button-icon">🛡️</span>
           <span class="button-text">{{ t('defend') }}</span>
         </button>
-        <button :disabled="controlsDisabled" @click="surrender">
+        <button :disabled="controlsDisabled" @click="surrender" :data-action="t('surrender')">
           <span class="button-icon">🏳️</span>
           <span class="button-text">{{ t('surrender') }}</span>
         </button>
@@ -170,7 +170,7 @@
           </ul>
           <h3 class="modal-title">Controles</h3>
           <ul class="modal-list">
-            <li>Turnos: actúa cuando diga “{{ t('turnPlayer') }}”.</li>
+            <li>Turnos: actúa cuando diga ���{{ t('turnPlayer') }}”.</li>
             <li>Botones principales: {{ t('attack') }}, {{ t('special') }}, {{ t('heal') }}, {{ t('defend') }}, {{ t('surrender') }}.</li>
             <li>Idioma/Tema/Sonido: usa los botones de la cabecera.</li>
             <li>Vidas: tienes {{ maxLives }} intentos por partida.</li>
