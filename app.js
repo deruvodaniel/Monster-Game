@@ -344,6 +344,17 @@ const app = Vue.createApp({
 				window.removeEventListener('pointerdown', resumeAndPlay);
 			};
 			window.addEventListener('pointerdown', resumeAndPlay, { once: true });
+
+			// Setup carousel listeners for mobile
+			this.$nextTick(() => {
+				this.setupCarouselListeners();
+				// Watch for screen size changes
+				window.addEventListener('resize', () => {
+					if (window.innerWidth <= 520) {
+						setTimeout(() => this.updateCarouselFocus(), 100);
+					}
+				});
+			});
 		} catch (e) {}
 	},
 
