@@ -1731,6 +1731,189 @@ body[data-theme="dark"] .monster-name {
   color: #e6e6e6;
 }
 
+/* Player Info Header */
+.player-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
+  border: 2px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.player-info:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.4);
+}
+
+.player-avatar-header {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 2px solid rgba(255,255,255,0.6);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.player-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.player-name-header {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.player-coins {
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: 'Roboto Mono', monospace;
+  opacity: 0.9;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+body[data-theme="dark"] .player-info {
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.12) 100%);
+  border-color: rgba(255,255,255,0.45);
+}
+
+/* Name Input Section in Welcome Modal */
+.name-input-section {
+  background: rgba(136,0,91,0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+
+.name-label {
+  display: block;
+  font-size: 1.2rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #88005b;
+}
+
+.name-input {
+  width: 100%;
+  max-width: 300px;
+  padding: 0.8rem 1rem;
+  font-size: 1.1rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  border: 3px solid #88005b;
+  border-radius: 12px;
+  background: white;
+  color: #333;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(136,0,91,0.2);
+}
+
+.name-input:focus {
+  outline: none;
+  border-color: #af0a78;
+  box-shadow: 0 0 0 3px rgba(136,0,91,0.2), 0 6px 16px rgba(136,0,91,0.3);
+  transform: scale(1.02);
+}
+
+.name-input::placeholder {
+  color: #999;
+  font-style: italic;
+}
+
+/* Dark theme for name input */
+body[data-theme="dark"] .name-input-section {
+  background: rgba(255,255,255,0.08);
+}
+
+body[data-theme="dark"] .name-label {
+  color: #ff6aa3;
+}
+
+body[data-theme="dark"] .name-input {
+  background: rgba(255,255,255,0.1);
+  border-color: #ff6aa3;
+  color: #e6e6e6;
+}
+
+body[data-theme="dark"] .name-input:focus {
+  border-color: #ff8cc4;
+  box-shadow: 0 0 0 3px rgba(255,106,163,0.2), 0 6px 16px rgba(255,106,163,0.3);
+}
+
+body[data-theme="dark"] .name-input::placeholder {
+  color: #999;
+}
+
+/* Disabled play button when no name */
+.welcome-play-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  background: linear-gradient(135deg, #666 0%, #888 100%) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+}
+
+/* Coin bubble for center notifications */
+.center-bubble.bubble--coins {
+  background: linear-gradient(135deg, #ffd700, #ffb300);
+  color: #333;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  border: 2px solid #ffa000;
+}
+
+/* Mobile responsive adjustments for player info */
+@media (max-width: 520px) {
+  .player-info {
+    position: fixed;
+    top: 90px;
+    right: 1rem;
+    z-index: 1100;
+    padding: 0.6rem 1rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
+    border: 3px solid rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 20px;
+  }
+
+  .player-avatar-header {
+    width: 28px;
+    height: 28px;
+  }
+
+  .player-name-header {
+    font-size: 0.8rem;
+  }
+
+  .player-coins {
+    font-size: 0.75rem;
+  }
+
+  body[data-theme="dark"] .player-info {
+    background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.8) 100%);
+    border-color: rgba(255,255,255,0.7);
+  }
+
+  .name-input {
+    max-width: 250px;
+    font-size: 1rem;
+    padding: 0.7rem 0.9rem;
+  }
+}
+
 /* Win trumpet fanfare overlay */
 .win-fanfare { position: fixed; z-index: 1100; left: 50%; top: 18%; transform: translateX(-50%); pointer-events: none; }
 .fanfare-trumpet { display: inline-block; font-size: clamp(2.2rem, 6vw, 4rem); margin: 0 1rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25)); animation: trumpet-pop 900ms ease both; }
