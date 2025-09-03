@@ -2790,9 +2790,9 @@ body[data-theme="dark"] .player-arrow {
 /* Mobile adjustments for map player */
 @media (max-width: 520px) {
   .player-on-map {
-    right: 10px;
+    left: 50%;
     top: 80px;
-    transform: scale(0.8);
+    transform: translateX(-50%) scale(0.8);
   }
 
   .player-avatar-map {
