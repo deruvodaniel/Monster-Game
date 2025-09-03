@@ -838,9 +838,9 @@ body[data-theme="dark"] .landing-root .container {
   #controls button:last-child {
     grid-column: 2 / 4;
     grid-row: 2;
-    border-radius: 12px;
-    padding: 0.3rem 0.5rem;
-    min-height: 32px;
+    border-radius: 8px;
+    padding: 0.2rem 0.4rem;
+    min-height: 26px;
     aspect-ratio: auto;
   }
 
