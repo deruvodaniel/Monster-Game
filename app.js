@@ -382,8 +382,13 @@ const app = Vue.createApp({
 				this.setupCarouselListeners();
 				// Watch for screen size changes
 				window.addEventListener('resize', () => {
+					// Force reactivity update
+					this.$forceUpdate();
 					if (window.innerWidth <= 520) {
-						setTimeout(() => this.updateCarouselFocus(), 100);
+						setTimeout(() => {
+							this.scrollToMainCharacters();
+							this.updateCarouselFocus();
+						}, 200);
 					}
 				});
 			});
