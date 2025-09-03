@@ -215,7 +215,7 @@ body[data-theme="dark"] .landing-root .container {
     display: flex;
     flex-direction: column;
     gap: 0;
-    height: calc(100vh - 180px); /* Reserve space for fixed controls */
+    height: calc(100vh - 200px); /* Reserve space for fixed controls */
     position: relative;
     overflow: hidden;
   }
