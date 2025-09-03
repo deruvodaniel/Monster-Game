@@ -34,14 +34,53 @@ body[data-theme="dark"] header {
   color: #e6e6e6;
 }
 
-/* Improved header/menu contrast */
-header { position: sticky; top: 0; z-index: 1200; background: linear-gradient(180deg, #880017 0%, #6e0013 100%); border-bottom: 2px solid rgba(0,0,0,0.2); }
-.app-header .header-actions { gap: 0.6rem; }
-.icon-button { color:#fff; border-color: rgba(255,255,255,0.35); background: rgba(255,255,255,0.18); }
-body[data-theme="dark"] .icon-button { color:#e6e6e6; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.16); }
+/* Enhanced header styling */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1200;
+  background: linear-gradient(135deg, #b30020 0%, #880017 50%, #6e0013 100%);
+  border-bottom: 3px solid rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.app-header .header-actions { gap: 0.8rem; }
+
+/* Enhanced title styling */
+.app-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.3);
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Enhanced icon buttons */
+.icon-button {
+  color:#fff;
+  border: 2px solid rgba(255,255,255,0.4);
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+}
+body[data-theme="dark"] .icon-button {
+  color:#e6e6e6;
+  border-color: rgba(255,255,255,0.45);
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.12) 100%);
+}
 .lang-btn { color:#fff; }
 body[data-theme="dark"] .lang-btn { color:#e6e6e6; }
-.lang-group { border: 1px solid rgba(255,255,255,0.35); }
+
+/* Enhanced language group */
+.lang-group {
+  border: 2px solid rgba(255,255,255,0.4);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+  backdrop-filter: blur(8px);
+}
 body[data-theme="dark"] .container {
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
   background: rgba(0,0,0,0.75);
