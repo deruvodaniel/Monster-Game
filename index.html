@@ -17,6 +17,14 @@
       <header class="app-header">
         <h1>Monster Slayer</h1>
         <div class="header-actions">
+          <!-- Player Info -->
+          <div v-if="playerName && started" class="player-info">
+            <img v-if="selectedCharacter" :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="player-avatar-header" />
+            <div class="player-details">
+              <span class="player-name-header">{{ playerName }}</span>
+              <span class="player-coins numeric">🪙 {{ playerCoins }}</span>
+            </div>
+          </div>
           <span class="lives-badge numeric" aria-label="lives">❤️ × {{ lives }}</span>
           <div class="lang-group">
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
@@ -246,6 +254,19 @@
           <h2 class="welcome-modal-title">{{ t('welcome') }}</h2>
           <p class="welcome-modal-intro">{{ t('welcomeMsg') }}</p>
 
+          <!-- Name Input -->
+          <div class="name-input-section">
+            <label for="playerNameInput" class="name-label">{{ lang === 'es' ? 'Ingresa tu nombre:' : 'Enter your name:' }}</label>
+            <input
+              id="playerNameInput"
+              type="text"
+              v-model="playerName"
+              maxlength="10"
+              class="name-input"
+              :placeholder="lang === 'es' ? 'Tu nombre...' : 'Your name...'"
+            />
+          </div>
+
           <div class="welcome-rules">
             <h3 class="rules-title">{{ t('howToPlay') }}</h3>
             <p class="modal-intro">{{ t('rulesIntro') }}</p>
@@ -257,7 +278,7 @@
             </ul>
           </div>
 
-          <button class="welcome-play-button" @click="closeWelcomeModal">
+          <button class="welcome-play-button" @click="closeWelcomeModal" :disabled="!playerName.trim()">
             <span class="play-icon">🎮</span>
             <span class="play-text">{{ t('start') }}</span>
           </button>
