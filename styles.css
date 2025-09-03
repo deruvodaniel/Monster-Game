@@ -204,7 +204,7 @@ header {
     box-sizing: border-box;
   }
   .app-header h1 {
-    font-size: 1.3rem;
+    font-size: 1.1rem; /* Smaller for more space */
     margin: 0;
     font-family: 'Cinzel', serif;
     font-weight: 700;
