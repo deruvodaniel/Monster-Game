@@ -371,6 +371,11 @@ const app = Vue.createApp({
 		},
 
 		attackMonster () {
+			if (!this.canUseAction()('attack')) {
+				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para atacar!' : 'Not enough energy to attack!', 'bubble--warning', 1200);
+				return;
+			}
+			this.consumeStamina('player', 'attack');
 			this.sound('attack');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
@@ -390,6 +395,8 @@ const app = Vue.createApp({
 		
 		attackPlayer () {
 			if (this.monsterHealth <= 0 || this.winner === 'player') { this.isMonsterTurn = false; return; }
+			// Monster consumes stamina too
+			this.consumeStamina('monster', 'monsterAttack');
 			this.sound('hit');
 			this.isMonsterTurn = true;
 			this.slashPlayer = true;
