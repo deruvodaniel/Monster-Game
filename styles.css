@@ -2093,6 +2093,8 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
   text-shadow: 0 2px 8px rgba(0,0,0,0.4);
   border: 3px solid rgba(255,255,255,0.4);
   box-shadow: 0 15px 40px rgba(76,175,80,0.4), 0 5px 15px rgba(76,175,80,0.3);
+  z-index: 99999;
+  animation: enhanced-pop-center 1200ms ease-out, success-glow 2000ms ease-in-out;
 }
 
 .center-bubble.bubble--warning {
