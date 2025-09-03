@@ -212,9 +212,67 @@ header {
     text-align: center;
   }
 
-  /* Hide original header actions on mobile */
+  /* Show essential header actions on mobile */
   .app-header .header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  /* Hide non-essential items in mobile header */
+  .app-header .header-actions > .lang-group,
+  .app-header .header-actions > .icon-button:not(.user-info-mobile) {
     display: none;
+  }
+
+  /* Essential user info for mobile */
+  .app-header .player-info {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    background: rgba(255,255,255,0.15);
+    border-radius: 12px;
+    padding: 0.3rem 0.6rem;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  .app-header .player-avatar-header {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.6);
+  }
+
+  .app-header .player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .app-header .player-name-header {
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  .app-header .player-coins {
+    font-size: 0.7rem;
+    opacity: 0.9;
+  }
+
+  .app-header .lives-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
+    background: linear-gradient(135deg, rgba(255,50,50,0.8) 0%, rgba(200,0,0,0.7) 100%);
+    border: 2px solid rgba(255,255,255,0.5);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   }
 
   /* Compact settings gear button */
@@ -549,34 +607,70 @@ body[data-theme="dark"] .landing-root .container {
   #controls button {
     width: 100%;
     margin: 0;
-    padding: 0.2rem 0.1rem;
-    font-size: 1.2rem;
-    min-height: 32px;
+    padding: 0.3rem 0.2rem;
+    font-size: 1.3rem;
+    min-height: 36px;
     border-radius: 50%;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-    background: linear-gradient(135deg, #88005b 0%, #af0a78 100%);
-    border: 1px solid rgba(255,255,255,0.2);
+    /* Apply ornate mobile styling */
+    background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+    border: 3px solid #8B4513;
+    box-shadow:
+      inset 0 1px 0 rgba(205,133,63,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 3px 8px rgba(0,0,0,0.4);
     transition: all 0.2s ease;
     position: relative;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  }
+
+  #controls button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+    border-radius: 50%;
+    z-index: -1;
+    box-shadow: 0 0 0 1px rgba(218,165,32,0.3);
   }
 
   #controls button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    background: linear-gradient(135deg, #DAA520 0%, #CD853F 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(218,165,32,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 6px 16px rgba(0,0,0,0.5);
   }
 
   #controls button:active {
     transform: translateY(0);
+    box-shadow:
+      inset 0 1px 0 rgba(205,133,63,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 2px 4px rgba(0,0,0,0.4);
   }
 
   #controls button:disabled {
     opacity: 0.5;
     transform: none;
-    background: linear-gradient(135deg, #666 0%, #888 100%);
+    background: linear-gradient(135deg, #666 0%, #444 100%);
+    border-color: #666;
+    box-shadow:
+      inset 0 1px 0 rgba(102,102,102,0.3),
+      inset 0 -1px 0 rgba(68,68,68,0.8),
+      0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  #controls button:disabled::before {
+    background: linear-gradient(45deg, #666, #555, #444, #333);
+    box-shadow: 0 0 0 1px rgba(102,102,102,0.2);
   }
 
   #controls button .button-icon {
@@ -663,7 +757,7 @@ body[data-theme="dark"] .landing-root .container {
     z-index: 20;
   }
 
-  .healthbar { margin: 0.5rem 0; height: 24px; border-radius: 12px; overflow: hidden; }
+  .healthbar { margin: 0.5rem 0; height: 18px; border-radius: 10px; overflow: hidden; }
 
   /* Monster healthbar */
   .fighter.monster .healthbar {
@@ -714,13 +808,27 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   body[data-theme="dark"] #controls button {
-    background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
-    border-color: rgba(255,255,255,0.25);
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+    border-color: #4A5568;
+  }
+
+  body[data-theme="dark"] #controls button::before {
+    background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
+    box-shadow: 0 0 0 1px rgba(113,128,150,0.3);
+  }
+
+  body[data-theme="dark"] #controls button:hover {
+    background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
   }
 
   body[data-theme="dark"] #controls button:disabled {
     background: linear-gradient(135deg, #2b2b2f 0%, #3a3a3f 100%);
-    border-color: rgba(255,255,255,0.1);
+    border-color: #3a3a3f;
+  }
+
+  body[data-theme="dark"] #controls button:disabled::before {
+    background: linear-gradient(45deg, #3a3a3f, #2b2b2f, #1a1a1a, #0f0f0f);
+    box-shadow: 0 0 0 1px rgba(58,58,63,0.2);
   }
 }
 
@@ -1122,12 +1230,29 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
   }
 }
 
-/* Mobile layout: single column */
+/* Mobile layout: single column with larger cards */
 @media (max-width: 520px) {
   .characters-grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 1.5rem;
+    padding: 0 1rem;
   }
+
+  .character-card {
+    height: 600px;
+    border-radius: 24px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+  }
+
+  .card-face {
+    border-radius: 24px;
+  }
+
+  .char-img--full {
+    border-radius: 24px;
+  }
+
   /* On touch, keep stats visible */
   .char-stats { opacity: 1; transform: none; }
 }
@@ -3177,7 +3302,7 @@ body[data-theme="dark"] button:not(.icon-button):not(.lang-btn):not(.close-butto
   }
 
   .staminabar-container {
-    height: 20px;
+    height: 16px;
   }
 
   .stamina-label {
