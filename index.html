@@ -226,7 +226,7 @@
           <span class="button-text">{{ t('special') }}</span>
         </button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer" :data-action="t('heal')">
-          <span class="button-icon">💚</span>
+          <span class="button-icon">����</span>
           <span class="button-text">{{ t('heal') }}</span>
         </button>
         <button :disabled="controlsDisabled || isPlayerDefending" @click="defend" :data-action="t('defend')">
@@ -334,6 +334,15 @@
                   </div>
                 </button>
               </div>
+            </div>
+
+            <!-- Reset Data Section -->
+            <div class="reset-data-section">
+              <h3 class="section-title">{{ lang === 'es' ? 'Borrar Datos' : 'Reset Data' }}</h3>
+              <p class="reset-warning">{{ lang === 'es' ? 'Esto borrará tu nombre y estadísticas guardadas.' : 'This will clear your saved name and statistics.' }}</p>
+              <button class="reset-data-button" @click="resetPlayerData">
+                {{ lang === 'es' ? '🗑️ Borrar Todo' : '🗑️ Clear All' }}
+              </button>
             </div>
           </div>
         </div>
