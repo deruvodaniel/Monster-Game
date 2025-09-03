@@ -541,6 +541,11 @@ const app = Vue.createApp({
 		closeHelp() { this.showHelp = false; },
 		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
 		closeWelcomeModal() { this.showWelcomeModal = false; },
+		showMapProgress() { this.showMapScreen = true; },
+		continueToNextLevel() {
+			this.showMapScreen = false;
+			this.proceedToNextLevel();
+		},
 		t(key) {
 			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
 		},
