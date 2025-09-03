@@ -1711,7 +1711,7 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
       0 16px 40px rgba(0, 0, 0, 0.6),
       0 0 30px rgba(218,165,32,0.5),
       inset 0 1px 0 rgba(255,255,255,0.3);
-    z-index: 100;
+    z-index: 250;
   }
 
   /* Auto-flip effect for center focused card */
