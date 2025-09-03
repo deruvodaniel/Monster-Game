@@ -512,27 +512,27 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Monster name at top-left */
   .fighter.monster .monster-name {
-    top: 1rem;
-    left: 1rem;
-    font-size: 1rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 12px;
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
     background: linear-gradient(135deg, rgba(255,0,0,0.95) 0%, rgba(180,0,0,0.9) 100%);
     border: 2px solid rgba(255,255,255,0.4);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     backdrop-filter: blur(5px);
   }
 
-  /* Player name at bottom-left */
+  /* Player name at top-left */
   .fighter.player .player-name {
-    bottom: 1rem;
-    left: 1rem;
-    font-size: 1rem;
-    padding: 0.4rem 0.8rem;
-    border-radius: 12px;
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
     background: linear-gradient(135deg, rgba(0,100,255,0.95) 0%, rgba(0,80,200,0.9) 100%);
     border: 2px solid rgba(255,255,255,0.4);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     backdrop-filter: blur(5px);
   }
 
