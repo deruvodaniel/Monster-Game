@@ -854,32 +854,35 @@ const app = Vue.createApp({
 			};
 			switch (name) {
 				case 'attack':
-					// fast whoosh + impact
-					sweep(600, 180, 0.12, 'sawtooth', 0.12);
-					play(120, 'square', 0.08, 0.12, 0.12);
-					noiseBurst(0.07, 0.14, 0.12);
+					// fast whoosh + impact - increased volume
+					sweep(600, 180, 0.12, 'sawtooth', 0.24);
+					play(120, 'square', 0.08, 0.24, 0.12);
+					noiseBurst(0.07, 0.28, 0.12);
 					break;
 				case 'hit':
-					play(120, 'sine', 0.08, 0.1);
-					play(90, 'triangle', 0.09, 0.08, 0.04);
-					noiseBurst(0.06, 0.1, 0.02);
+					// increased hit volumes
+					play(120, 'sine', 0.08, 0.2);
+					play(90, 'triangle', 0.09, 0.16, 0.04);
+					noiseBurst(0.06, 0.2, 0.02);
 					break;
 				case 'special':
-					// charge up + sparkle + big impact
-					sweep(220, 1200, 0.32, 'square', 0.22);
-					play(1567.98, 'sine', 0.12, 0.14, 0.32); // sparkle
-					play(1318.51, 'sine', 0.12, 0.12, 0.38);
-					noiseBurst(0.18, 0.28, 0.34);
-					play(196, 'square', 0.18, 0.18, 0.36); // thump
+					// charge up + sparkle + big impact - increased volume
+					sweep(220, 1200, 0.32, 'square', 0.35);
+					play(1567.98, 'sine', 0.12, 0.22, 0.32); // sparkle
+					play(1318.51, 'sine', 0.12, 0.20, 0.38);
+					noiseBurst(0.18, 0.40, 0.34);
+					play(196, 'square', 0.18, 0.30, 0.36); // thump
 					break;
 				case 'heal':
-					play(392.0, 'sine', 0.12, 0.06);
-					play(523.25, 'sine', 0.12, 0.06, 0.08);
-					play(659.25, 'sine', 0.16, 0.06, 0.16);
+					// increased heal volumes
+					play(392.0, 'sine', 0.12, 0.12);
+					play(523.25, 'sine', 0.12, 0.12, 0.08);
+					play(659.25, 'sine', 0.16, 0.12, 0.16);
 					break;
 				case 'defend':
-					play(329.63, 'triangle', 0.12, 0.06);
-					play(415.30, 'triangle', 0.12, 0.06, 0.06);
+					// increased defend volumes
+					play(329.63, 'triangle', 0.12, 0.12);
+					play(415.30, 'triangle', 0.12, 0.12, 0.06);
 					break;
 				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
 				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
