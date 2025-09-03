@@ -479,14 +479,16 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   /* Turn indicator positioning - above fixed controls */
-  .turn-wrap { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); z-index: 999; }
+  .turn-wrap { position: fixed; bottom: 160px; left: 50%; transform: translateX(-50%); z-index: 999; }
   .turn-indicator {
     background: rgba(255,215,0,0.95);
     border: 2px solid rgba(255,215,0,0.8);
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 700;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    border-radius: 20px;
+    border-radius: 25px;
+    backdrop-filter: blur(8px);
   }
 
   /* Add bottom padding to prevent content hiding behind fixed controls */
