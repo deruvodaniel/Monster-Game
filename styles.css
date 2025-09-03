@@ -585,7 +585,7 @@ body[data-theme="dark"] .landing-root .container {
     z-index: 20;
   }
 
-  .healthbar { margin: 0.5rem 0; height: 32px; border-radius: 16px; overflow: hidden; }
+  .healthbar { margin: 0.5rem 0; height: 36px; border-radius: 18px; overflow: hidden; }
 
   /* Monster healthbar */
   .fighter.monster .healthbar {
