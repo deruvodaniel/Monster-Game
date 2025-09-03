@@ -680,6 +680,8 @@ body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); border: 1p
 
 /* Controls: bigger buttons with larger icons and nicer style */
 #controls button { font-size: 1.05rem; padding: 0.85rem 1.2rem; width: auto; margin: 0.5rem; display: inline-flex; align-items: center; gap: 0.6rem; border-radius: 12px; font-family: 'Cinzel', serif; font-weight: 600; }
+#controls button .button-icon { font-size: 1.35rem; }
+#controls button .button-text { font-size: 1rem; }
 #controls button .icon { font-size: 1.35rem; }
 .icon-button { padding: 0.45rem 0.8rem; font-size: 1rem; }
 .modal-title { margin: 0 0 0.5rem; }
