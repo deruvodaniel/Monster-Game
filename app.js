@@ -615,6 +615,49 @@ const app = Vue.createApp({
 				this.showCenterBubble(this.lang === 'es' ? 'Personaje cambiado!' : 'Character changed!', 'bubble--success', 1500);
 			}
 		},
+
+		// Stamina management methods
+		consumeStamina(entity, action) {
+			const cost = this.staminaCosts[action] || 0;
+			if (entity === 'player') {
+				this.playerStamina = Math.max(0, this.playerStamina - cost);
+				if (this.playerStamina === 0) {
+					this.showCenterBubble(this.lang === 'es' ? '¡Sin energía!' : 'Out of energy!', 'bubble--warning', 1000);
+				}
+			} else if (entity === 'monster') {
+				this.monsterStamina = Math.max(0, this.monsterStamina - cost);
+			}
+		},
+
+		startStaminaRegeneration() {
+			if (this.staminaRegenTimer) {
+				clearInterval(this.staminaRegenTimer);
+			}
+
+			this.staminaRegenTimer = setInterval(() => {
+				// Regenerate player stamina
+				if (this.playerStamina < this.maxStamina) {
+					this.playerStamina = Math.min(this.maxStamina, this.playerStamina + this.staminaRegenRate);
+				}
+
+				// Regenerate monster stamina
+				if (this.monsterStamina < this.maxStamina) {
+					this.monsterStamina = Math.min(this.maxStamina, this.monsterStamina + this.staminaRegenRate);
+				}
+			}, 1000); // Regenerate every second
+		},
+
+		stopStaminaRegeneration() {
+			if (this.staminaRegenTimer) {
+				clearInterval(this.staminaRegenTimer);
+				this.staminaRegenTimer = null;
+			}
+		},
+
+		resetStamina() {
+			this.playerStamina = this.maxStamina;
+			this.monsterStamina = this.maxStamina;
+		},
 		showMapProgress() { this.showMapScreen = true; },
 		continueToNextLevel() {
 			this.showMapScreen = false;
