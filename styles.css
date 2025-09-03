@@ -536,31 +536,34 @@ body[data-theme="dark"] .landing-root .container {
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
 
-  /* Scrollable mobile layout for battle cards */
+  /* Improved mobile layout for battle cards */
   .board {
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    height: calc(100vh - 160px); /* Optimized space for header and ultra compact controls */
+    gap: 0.8rem;
+    height: calc(100vh - 140px); /* More space for content */
     position: relative;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 0.4rem;
+    padding: 0.6rem;
     margin-top: 0;
     scroll-behavior: smooth;
   }
 
   .fighter.container {
     flex: 0 0 auto;
-    min-height: 200px;
+    min-height: 240px; /* Increased height for better character visibility */
     margin: 0;
     position: relative;
-    padding: 0.5rem;
+    padding: 0.8rem;
     overflow: visible;
     width: 100%;
-    border-radius: 14px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   /* Player card - top half */
@@ -579,24 +582,41 @@ body[data-theme="dark"] .landing-root .container {
     border-color: rgba(255,50,50,0.3);
   }
 
-  /* Optimized character images for compact layout */
+  /* Enhanced character images for better visibility */
   .avatar {
-    margin: 0.15rem 0 0.6rem 0;
+    margin: 0.5rem 0 1rem 0;
     position: relative;
-    height: 100px;
+    height: 140px; /* Increased height significantly */
     overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    border: 3px solid rgba(255,255,255,0.5);
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .avatar-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
-    border-radius: 15px;
+    object-position: center 20%;
+    border-radius: 16px;
     transition: transform 0.3s ease;
+  }
+
+  /* Remove the ornate frame on mobile for cleaner look */
+  .avatar-ornate-frame {
+    border: none;
+    background: transparent;
+    padding: 0;
+    box-shadow: none;
+    border-radius: 16px;
+  }
+
+  .avatar-ornate-frame::before {
+    display: none;
   }
 
   /* Player image positioning - focus on face/upper body */
@@ -756,62 +776,55 @@ body[data-theme="dark"] .landing-root .container {
     text-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
 
-  /* Monster name at top-left */
-  .fighter.monster .monster-name {
-    top: 0.4rem;
-    left: 0.4rem;
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 10px;
-    background: linear-gradient(135deg, rgba(255,0,0,0.95) 0%, rgba(180,0,0,0.9) 100%);
-    border: 2px solid rgba(255,255,255,0.5);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    backdrop-filter: blur(6px);
-    z-index: 20;
-  }
-
-  /* Player name at top-left */
+  /* Character names repositioned */
+  .fighter.monster .monster-name,
   .fighter.player .player-name {
-    top: 0.4rem;
-    left: 0.4rem;
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 10px;
-    background: linear-gradient(135deg, rgba(0,100,255,0.95) 0%, rgba(0,80,200,0.9) 100%);
-    border: 2px solid rgba(255,255,255,0.5);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    backdrop-filter: blur(6px);
-    z-index: 20;
-  }
-
-  .healthbar { margin: 0.5rem 0; height: 18px; border-radius: 10px; overflow: hidden; }
-
-  /* Monster healthbar */
-  .fighter.monster .healthbar {
-    position: absolute;
-    bottom: 0.4rem;
-    left: 0.4rem;
-    right: 0.4rem;
-    width: auto;
-    margin: 0;
-    z-index: 20;
+    position: relative;
+    top: auto;
+    left: auto;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.6);
     box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.5);
-    backdrop-filter: blur(6px);
+    backdrop-filter: blur(8px);
+    z-index: 20;
+    text-align: center;
+    margin: 0.3rem 0;
+    font-weight: 800;
   }
 
-  /* Player healthbar */
+  .fighter.monster .monster-name {
+    background: linear-gradient(135deg, rgba(255,50,50,0.95) 0%, rgba(200,0,0,0.9) 100%);
+  }
+
+  .fighter.player .player-name {
+    background: linear-gradient(135deg, rgba(0,120,255,0.95) 0%, rgba(0,90,200,0.9) 100%);
+  }
+
+  .healthbar { margin: 0.3rem 0; height: 12px; border-radius: 8px; overflow: hidden; }
+
+  /* Improved healthbars positioning and styling */
+  .fighter.monster .healthbar,
   .fighter.player .healthbar {
-    position: absolute;
-    bottom: 0.4rem;
-    left: 0.4rem;
-    right: 0.4rem;
-    width: auto;
-    margin: 0;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    margin: 0.3rem 0;
     z-index: 20;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.5);
-    border: 2px solid rgba(255,255,255,0.5);
+    height: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.6);
     backdrop-filter: blur(6px);
+    border-radius: 8px;
+  }
+
+  /* Stamina bars also thinner */
+  .staminabar-container {
+    height: 10px;
+    margin: 0.2rem 0;
   }
 
   /* Turn indicator positioning - above ultra compact controls */
