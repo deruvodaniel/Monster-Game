@@ -396,7 +396,7 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   /* Turn indicator positioning - above fixed controls */
-  .turn-wrap { position: fixed; bottom: 120px; left: 50%; transform: translateX(-50%); z-index: 999; }
+  .turn-wrap { position: fixed; bottom: 140px; left: 50%; transform: translateX(-50%); z-index: 999; }
   .turn-indicator {
     background: rgba(255,215,0,0.95);
     border: 2px solid rgba(255,215,0,0.8);
