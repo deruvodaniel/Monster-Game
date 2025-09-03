@@ -1181,6 +1181,33 @@ body[data-theme="dark"] .lives-badge {
     border-color: rgba(255,255,255,0.7);
   }
 }
+
+/* Dark theme for tablet carousel elements */
+@media (min-width: 521px) and (max-width: 900px) {
+  body[data-theme="dark"] .carousel-nav {
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+    border-color: #718096;
+  }
+
+  body[data-theme="dark"] .carousel-nav::before {
+    background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
+  }
+
+  body[data-theme="dark"] .carousel-nav:hover {
+    background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
+  }
+
+  body[data-theme="dark"] .carousel-dot {
+    background: rgba(255,255,255,0.2);
+    border-color: #718096;
+  }
+
+  body[data-theme="dark"] .carousel-dot.active {
+    background: #718096;
+    box-shadow: 0 0 8px rgba(113,128,150,0.6);
+  }
+}
+
 .lives-left { margin: 0.25rem 0; font-weight: 700; }
 
 /* Damage numbers */
