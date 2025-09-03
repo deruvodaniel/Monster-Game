@@ -30,6 +30,8 @@ const app = Vue.createApp({
 			bgmActive: 'A',
 			bgmVolume: 0.6,
 			bgmFadeTimer: null,
+			bgmCurrentUrl: null,
+			bgmStage: null,
 			bgmTracks: {
 				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e',
 				battle: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F9386db22b85a440b98e94a68f979d6b8?alt=media&token=36bbf65f-430f-4709-855e-80f83760a23f&apiKey=eb9edba76d874a5385833a00b6be2b6e',
@@ -673,6 +675,13 @@ const app = Vue.createApp({
 				if (which === 'B' && !this.bgmAudioB) { this.bgmAudioB = new Audio(); this.bgmAudioB.loop = true; this.bgmAudioB.volume = 0; }
 			};
 			ensure('A'); ensure('B');
+			// If already playing the same stage/url, don't restart; just ensure it's playing
+			if (this.bgmStage === stage && this.bgmCurrentUrl === url) {
+				const a = this.bgmAudioA, b = this.bgmAudioB;
+				if ((a && a.src === url && !a.paused) || (b && b.src === url && !b.paused)) return;
+				const target = (a && a.src === url) ? a : (b && b.src === url ? b : null);
+				if (target) { target.volume = this.bgmVolume; target.play().catch(() => {}); return; }
+			}
 			const from = this.bgmActive === 'A' ? this.bgmAudioA : this.bgmAudioB;
 			const to = this.bgmActive === 'A' ? this.bgmAudioB : this.bgmAudioA;
 			if (to.src !== url) { try { to.pause(); } catch(e) {} to.src = url; }
@@ -691,14 +700,17 @@ const app = Vue.createApp({
 				} else {
 					if (from) { try { from.pause(); } catch(e) {} from.src = ''; from.currentTime = 0; }
 					this.bgmActive = this.bgmActive === 'A' ? 'B' : 'A';
+					this.bgmCurrentUrl = url;
+					this.bgmStage = stage;
 				}
 			};
 			this.bgmFadeTimer = requestAnimationFrame(step);
 		},
 		stopBgm() {
 			if (this.bgmFadeTimer) { cancelAnimationFrame(this.bgmFadeTimer); this.bgmFadeTimer = null; }
-			if (this.bgmAudioA) { try { this.bgmAudioA.pause(); } catch(e) {} this.bgmAudioA.src=''; }
-			if (this.bgmAudioB) { try { this.bgmAudioB.pause(); } catch(e) {} this.bgmAudioB.src=''; }
+			if (this.bgmAudioA) { try { this.bgmAudioA.pause(); } catch(e) {} this.bgmAudioA.src=''; this.bgmAudioA.currentTime = 0; this.bgmAudioA.volume = 0; }
+			if (this.bgmAudioB) { try { this.bgmAudioB.pause(); } catch(e) {} this.bgmAudioB.src=''; this.bgmAudioB.currentTime = 0; this.bgmAudioB.volume = 0; }
+			this.bgmCurrentUrl = null; this.bgmStage = null;
 		},
 		setBgmVolume(vol) {
 			this.bgmVolume = Math.max(0, Math.min(1, vol));
