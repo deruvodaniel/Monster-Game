@@ -58,6 +58,17 @@
             <div class="carousel-nav carousel-nav-left" @click="carouselPrev" v-show="isMobile">‹</div>
             <div class="carousel-nav carousel-nav-right" @click="carouselNext" v-show="isMobile">›</div>
 
+            <!-- Carousel indicators -->
+            <div class="carousel-indicators" v-show="isMobile">
+              <div
+                v-for="(char, index) in characters"
+                :key="'dot-' + char.id"
+                class="carousel-dot"
+                :class="{ active: index === currentCarouselIndex }"
+                @click="scrollToCharacter(index)"
+              ></div>
+            </div>
+
             <div class="characters-grid" ref="charactersGrid">
               <!-- Duplicate last characters at beginning for infinite scroll -->
               <button
