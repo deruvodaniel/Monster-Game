@@ -641,7 +641,7 @@ const app = Vue.createApp({
 				const oldStamina = this.playerStamina;
 				this.playerStamina = Math.min(this.maxStamina, this.playerStamina + charge);
 				if (oldStamina < this.maxStamina && this.playerStamina >= this.maxStamina) {
-					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL LISTO!!' : 'SUPER SPECIAL READY!!', 'bubble--warning', 1500);
+					this.showCenterBubble(this.lang === 'es' ? '⚡ ¡¡SUPER ESPECIAL LISTO!! ⚡' : '⚡ SUPER SPECIAL READY!! ⚡', 'bubble--level', 2000);
 				}
 			} else if (entity === 'monster') {
 				this.monsterStamina = Math.min(this.maxStamina, this.monsterStamina + charge);
