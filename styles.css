@@ -230,14 +230,14 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   .fighter.monster {
-    clip-path: polygon(0 0, 100% 0, 100% 50%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%);
     transform: translateY(0);
     z-index: 2;
   }
 
   .fighter.player {
-    clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%);
-    transform: translateY(-25%);
+    clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
+    transform: translateY(-20%);
     z-index: 1;
   }
 
