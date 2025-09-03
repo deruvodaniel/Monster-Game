@@ -818,7 +818,7 @@ body[data-theme="dark"] .landing-root .container {
     background: linear-gradient(135deg, rgba(0,120,255,0.95) 0%, rgba(0,90,200,0.9) 100%);
   }
 
-  .healthbar { margin: 0.3rem 0; height: 12px; border-radius: 8px; overflow: hidden; }
+  .healthbar { margin: 0.3rem 0; height: 8px; border-radius: 6px; overflow: hidden; }
 
   /* Improved healthbars positioning and styling */
   .fighter.monster .healthbar,
