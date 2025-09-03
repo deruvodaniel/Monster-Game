@@ -234,10 +234,9 @@ header {
       display: none !important;
     }
 
-    /* Mostrar player-info y lives-badge en desktop */
-    .app-header .player-info,
-    .app-header .lives-badge {
-      display: inline-flex !important;
+    /* header-main-content siempre visible en desktop */
+    .header-main-content {
+      display: flex !important;
     }
 
     /* Styling del mobile-settings-toggle para desktop */
