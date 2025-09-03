@@ -276,6 +276,34 @@ const app = Vue.createApp({
 			return this.characters.find(c => c.id === this.selectedCharacterId) || null;
 		},
 
+		// Infinite carousel characters
+		infiniteCharacters() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) {
+				// Desktop - return normal characters
+				return this.characters.map((char, index) => ({ ...char, index }));
+			}
+			// Mobile - create infinite carousel by duplicating characters
+			const chars = this.characters;
+			const infiniteArray = [];
+
+			// Add last 2 characters at beginning
+			for (let i = chars.length - 2; i < chars.length; i++) {
+				infiniteArray.push({ ...chars[i], index: `pre-${i}` });
+			}
+
+			// Add all characters
+			for (let i = 0; i < chars.length; i++) {
+				infiniteArray.push({ ...chars[i], index: `main-${i}` });
+			}
+
+			// Add first 2 characters at end
+			for (let i = 0; i < 2; i++) {
+				infiniteArray.push({ ...chars[i], index: `post-${i}` });
+			}
+
+			return infiniteArray;
+		},
+
 		currentMonster() {
 			return this.monsters[this.currentLevel] || null;
 		},
