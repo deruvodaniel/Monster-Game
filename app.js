@@ -23,6 +23,13 @@ const app = Vue.createApp({
 			theme: 'light',
 			audioCtx: null,
 			soundEnabled: true,
+			// Background music (BGM)
+			bgmAudio: null,
+			bgmVolume: 0.6,
+			bgmTracks: {
+				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F954cfa37a48c42f7aef11b0a5d690726?alt=media&token=a1f5ebc0-b3a7-4916-a4e6-9309f0b17b93&apiKey=eb9edba76d874a5385833a00b6be2b6e'
+			},
+			userInteracted: false,
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
@@ -281,6 +288,15 @@ const app = Vue.createApp({
 				this.setMusicMode('danger');
 			});
 			this.$watch(() => [this.started, this.showCredits], () => this.updateStageBg());
+			// Attempt to unlock and play BGM after first user interaction (autoplay policies)
+			const resumeAndPlay = () => {
+				if (this.userInteracted) return;
+				this.userInteracted = true;
+				try { if (this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume(); } catch(e) {}
+				this.updateStageBg();
+				window.removeEventListener('pointerdown', resumeAndPlay);
+			};
+			window.addEventListener('pointerdown', resumeAndPlay, { once: true });
 		} catch (e) {}
 	},
 
@@ -597,7 +613,14 @@ const app = Vue.createApp({
 
 		toggleSound() {
 			this.soundEnabled = !this.soundEnabled;
-			if (this.soundEnabled) this.startMusic(this.musicMode === 'off' ? 'normal' : this.musicMode); else this.stopMusic();
+			if (!this.soundEnabled) {
+				this.stopMusic();
+				if (this.bgmAudio) { try { this.bgmAudio.pause(); } catch(e) {} }
+			} else {
+				this.startMusic(this.musicMode === 'off' ? 'normal' : this.musicMode);
+				// Also resume stage BGM if configured
+				this.updateStageBg();
+			}
 			if (this.audioCtx) {
 				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
 				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
@@ -633,6 +656,33 @@ const app = Vue.createApp({
 			this.musicMode = mode;
 		},
 
+		// Stage BGM control using mp3 files
+		playBgmForStage(stage) {
+			const url = this.bgmTracks && this.bgmTracks[stage];
+			if (!url) { this.stopBgm(); return; }
+			if (!this.soundEnabled) { this.stopBgm(); return; }
+			if (!this.bgmAudio) {
+				this.bgmAudio = new Audio();
+				this.bgmAudio.loop = true;
+				this.bgmAudio.volume = this.bgmVolume;
+			}
+			if (this.bgmAudio.src !== url) {
+				try { this.bgmAudio.pause(); } catch(e) {}
+				this.bgmAudio.src = url;
+			}
+			this.bgmAudio.volume = this.bgmVolume;
+			this.bgmAudio.play().catch(() => {});
+		},
+		stopBgm() {
+			if (this.bgmAudio) {
+				try { this.bgmAudio.pause(); } catch(e) {}
+			}
+		},
+		setBgmVolume(vol) {
+			this.bgmVolume = Math.max(0, Math.min(1, vol));
+			if (this.bgmAudio) this.bgmAudio.volume = this.bgmVolume;
+		},
+
 		goToCredits() { this.showCredits = true; this.updateStageBg(); },
 
 		updateStageBg() {
@@ -641,7 +691,14 @@ const app = Vue.createApp({
 			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
 			if (this.showCredits) stage = 'credits';
 			document.body.setAttribute('data-stage', stage);
-			if (stage === 'battle') this.setMusicMode('danger'); else this.setMusicMode('medieval');
+			// Prefer mp3 BGM if provided for this stage; otherwise use synth music
+			if (this.bgmTracks && this.bgmTracks[stage]) {
+				this.stopMusic();
+				this.playBgmForStage(stage);
+			} else {
+				this.stopBgm();
+				if (stage === 'battle') this.setMusicMode('danger'); else this.setMusicMode('medieval');
+			}
 		},
 
 		stopMusic() {
