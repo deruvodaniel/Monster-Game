@@ -505,6 +505,7 @@ const app = Vue.createApp({
 			this.isLevelTransitioning = false;
 			this.lastLeveledTo = -1;
 			this.showCredits = false;
+			this.showMapScreen = false;
 			this.updateStageBg();
 		},
 
