@@ -431,6 +431,8 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
 .monster-name { margin: 0.15rem 0 0.25rem; font-weight: 700; opacity: 0.95; }
 
 /* Character selection */
+.landing-hero { display:flex; align-items:center; justify-content:center; margin: 1rem auto; }
+.landing-hero-img { width: min(640px, 85%); height: auto; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
 .landing-root { width: 95%; max-width: 90rem; margin: 0 auto 1rem; text-align: center; }
 .character-select { margin: 0.75rem auto 0.5rem; }
 .select-title { margin: 0.25rem 0 0.5rem; }
