@@ -311,37 +311,45 @@ body[data-theme="dark"] .landing-root .container {
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
 
-  /* Mobile diagonal layout for battle cards - optimized for visibility */
+  /* Mobile stacked card layout like real playing cards */
   .board {
     display: flex;
     flex-direction: column;
     gap: 0;
     height: calc(100vh - 170px); /* Reserve space for fixed controls */
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+    padding: 1rem 0.5rem;
   }
 
   .fighter.container {
-    min-height: 0;
-    height: 50%;
+    min-height: 200px;
+    height: auto;
     margin: 0;
-    position: relative;
-    padding: 0.5rem;
+    position: absolute;
+    padding: 1rem;
     overflow: hidden;
+    width: calc(100% - 3rem);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   }
 
-  .fighter.monster {
-    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
-    transform: translateY(0);
-    z-index: 2;
-    padding-top: 1rem;
-  }
-
+  /* Player card - on top, slightly to the right */
   .fighter.player {
-    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
-    transform: translateY(-15%);
+    top: 20%;
+    left: 1.5rem;
+    z-index: 2;
+    transform: rotate(-2deg);
+    background: linear-gradient(135deg, rgba(0,100,255,0.15) 0%, rgba(0,80,200,0.1) 100%);
+  }
+
+  /* Monster card - below, slightly to the left */
+  .fighter.monster {
+    top: 5%;
+    left: 0.5rem;
     z-index: 1;
-    padding-bottom: 1rem;
+    transform: rotate(1deg);
+    background: linear-gradient(135deg, rgba(255,50,50,0.15) 0%, rgba(200,0,0,0.1) 100%);
   }
 
   /* Full-size background images for mobile diagonal layout */
