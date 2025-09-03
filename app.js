@@ -856,15 +856,23 @@ const app = Vue.createApp({
 		setLang(lang) {
 			this.lang = lang;
 			try { localStorage.setItem('lang', lang); } catch(e) {}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 
 		toggleTheme() {
 			this.theme = this.theme === 'dark' ? 'light' : 'dark';
 			document.body.setAttribute('data-theme', this.theme);
 			try { localStorage.setItem('theme', this.theme); } catch(e) {}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 
-		openHelp() { this.showHelp = true; },
+		openHelp() {
+			this.showHelp = true;
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
+		},
 		closeHelp() { this.showHelp = false; },
 		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
 		closeMobileSettings() { this.showMobileSettings = false; },
