@@ -269,6 +269,22 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Hide text, show only emojis on mobile */
   #controls button .button-text { display: none; }
+
+  /* Compact healthbar and text for diagonal layout */
+  .fighter h2 { font-size: 0.9rem; margin: 0.1rem; }
+  .fighter .monster-name,
+  .fighter .player-name { font-size: 0.85rem; margin: 0.1rem; }
+  .healthbar { margin: 0.5rem 0; height: 20px; }
+
+  /* Turn indicator positioning */
+  .turn-wrap { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; }
+  .turn-indicator {
+    background: rgba(255,215,0,0.9);
+    border: 2px solid rgba(255,215,0,0.7);
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
 }
 
 /* Sword slash effect */
