@@ -43,8 +43,9 @@ body[data-theme="dark"] .lang-btn { color:#e6e6e6; }
 .lang-group { border: 1px solid rgba(255,255,255,0.35); }
 body[data-theme="dark"] .container {
   box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.75);
   border: 1px solid rgba(255,255,255,0.12);
+  color: #e6e6e6;
 }
 body[data-theme="dark"] .healthbar {
   background: #2a2f3a;
@@ -173,6 +174,16 @@ body[data-stage="landing"] .container,
 body[data-stage="congrats"] .container,
 body[data-stage="credits"] .container,
 .landing-root .container { background: rgba(255,255,255,0.78); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+
+/* Dark theme overrides for stage-specific containers */
+body[data-theme="dark"][data-stage="landing"] .container,
+body[data-theme="dark"][data-stage="congrats"] .container,
+body[data-theme="dark"][data-stage="credits"] .container,
+body[data-theme="dark"] .landing-root .container {
+  background: rgba(0,0,0,0.82);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #e6e6e6;
+}
 
 #monster h2,
 #player h2 {
@@ -479,6 +490,7 @@ body[data-theme="dark"] .character-card.is-selected { box-shadow: 0 0 0 3px rgba
 .character-card:hover .flip-inner, .character-card.is-selected .flip-inner { transform: rotateY(180deg); }
 .card-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; backface-visibility: hidden; }
 .card-face--front { background: #ffffff; }
+body[data-theme="dark"] .card-face--front { background: rgba(0,0,0,0.9); color: #e6e6e6; }
 .card-face--back { transform: rotateY(180deg); background: #000; }
 
 .card-title-overlay { position: absolute; left: 12px; top: 12px; padding: 0.25rem 0.5rem; border-radius: 10px; background: rgba(0,0,0,0.55); color: #fff; font-weight: 700; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
@@ -565,7 +577,7 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
 /* Modal */
 .modal-overlay { position: fixed; inset: 0; background: transparent; display: flex; align-items: flex-start; justify-content: center; padding-top: 3.5rem; z-index: 1300; pointer-events: none; }
 .modal-dialog { pointer-events: auto; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 1rem 1.25rem; width: min(90vw, 520px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.06); }
-body[data-theme="dark"] .modal-dialog { background: rgba(10,10,12,0.75); border: 1px solid rgba(255,255,255,0.06); }
+body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.08); color: #e6e6e6; }
 .modal-title { font-size: 1.15rem; }
 .modal-intro { font-size: 1rem; }
 .modal-list { font-size: 1rem; }
