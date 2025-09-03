@@ -87,7 +87,7 @@ const app = Vue.createApp({
 					id: 'dwarf',
 					icon: '⛏️',
 					name: { es: 'Enano', en: 'Dwarf' },
-					image: 'https://preview.redd.it/4rrgn1wet4u61.jpg?width=1080&crop=smart&auto=webp&s=27f2825b584010c46b9e1c65766f5248823b0162',
+					image: 'https://i.pinimg.com/736x/7b/37/fb/7b37fb2963e63c7444b770c19debc3cb.jpg',
 					stats: { attack: 22, defend: 25, heal: 8, special: 30 }
 				}
 			],
