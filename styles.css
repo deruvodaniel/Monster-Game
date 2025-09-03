@@ -217,24 +217,21 @@ header {
     display: none;
   }
 
-  /* Show header actions on tablet and desktop */
+  /* Desktop header - funciona como mobile pero con avatar y vidas visibles */
   @media (min-width: 521px) {
+    /* Ocultar header-actions completamente en desktop */
     .app-header .header-actions {
-      display: inline-flex !important;
-      gap: 0.8rem;
-      align-items: center;
-    }
-
-    /* Hide individual controls on desktop - only show avatar and lives badge */
-    .app-header .header-actions .lang-group,
-    .app-header .header-actions .icon-button {
       display: none !important;
     }
 
-    /* Show desktop settings toggle instead of mobile one */
+    /* Mostrar player-info y lives-badge en desktop */
+    .app-header .player-info,
+    .app-header .lives-badge {
+      display: inline-flex !important;
+    }
+
+    /* Styling del mobile-settings-toggle para desktop */
     .mobile-settings-toggle {
-      display: flex !important;
-      position: relative;
       background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
       border: 2px solid rgba(255,255,255,0.4);
       box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
@@ -246,6 +243,7 @@ header {
       font-weight: 600;
       text-shadow: 0 1px 2px rgba(0,0,0,0.3);
       cursor: pointer;
+      padding: 0.6rem;
     }
 
     .mobile-settings-toggle:hover {
@@ -261,7 +259,6 @@ header {
 
     /* Desktop settings panel styling */
     .mobile-settings-panel {
-      display: none;
       position: absolute;
       top: 100%;
       right: 0;
@@ -271,15 +268,9 @@ header {
       padding: 1rem;
       backdrop-filter: blur(20px);
       box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-      flex-direction: column;
-      gap: 0.8rem;
       min-width: 200px;
       z-index: 1300;
       margin-top: 0.5rem;
-    }
-
-    .mobile-settings-panel.open {
-      display: flex;
     }
 
     .mobile-settings-panel .icon-button {
@@ -345,16 +336,10 @@ header {
 
     /* Close panel when clicking outside */
     .mobile-settings-overlay {
-      display: none;
       position: fixed;
       inset: 0;
       z-index: 1250;
       background: transparent;
-      pointer-events: none;
-    }
-
-    .mobile-settings-overlay.open {
-      display: block;
       pointer-events: auto;
     }
   }
