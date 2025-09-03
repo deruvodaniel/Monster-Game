@@ -23,7 +23,7 @@ const app = Vue.createApp({
 			theme: 'light',
 			audioCtx: null,
 			soundEnabled: true,
-			sfxEnabled: false,
+			sfxEnabled: true,
 			// Background music (BGM)
 			bgmAudioA: null,
 			bgmAudioB: null,
