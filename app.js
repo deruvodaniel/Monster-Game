@@ -969,6 +969,8 @@ const app = Vue.createApp({
 			} else {
 				this.updateStageBg();
 			}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 
 
