@@ -23,7 +23,7 @@
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
           <button class="icon-button" @click="toggleSound" :aria-label="t('soundToggle')">{{ soundEnabled ? '🔊' : '🔇' }}</button>
-          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
+          <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '����' }}</button>
           <button class="icon-button" @click="openHelp" :aria-label="t('howToPlay')">ℹ️</button>
         </div>
       </header>
@@ -136,11 +136,26 @@
       </section>
       <div class="turn-wrap" v-if="!winner && !showCredits"><p class="turn-indicator">{{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}</p></div>
       <section v-if="!winner && !showCredits" id="controls" :class="{ 'is-locked': controlsDisabled }">
-        <button :disabled="controlsDisabled || !canAttack" @click="attackMonster">🗡️ {{ t('attack') }}</button>
-        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">💥 {{ t('special') }}</button>
-        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">💚 {{ t('heal') }}</button>
-        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">🛡️ {{ t('defend') }}</button>
-        <button :disabled="controlsDisabled" @click="surrender">🏳️ {{ t('surrender') }}</button>
+        <button :disabled="controlsDisabled || !canAttack" @click="attackMonster">
+          <span class="button-icon">🗡️</span>
+          <span class="button-text">{{ t('attack') }}</span>
+        </button>
+        <button :disabled="controlsDisabled || mayUseSpecialAttack" @click="specialAttackMonster">
+          <span class="button-icon">💥</span>
+          <span class="button-text">{{ t('special') }}</span>
+        </button>
+        <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer">
+          <span class="button-icon">💚</span>
+          <span class="button-text">{{ t('heal') }}</span>
+        </button>
+        <button :disabled="controlsDisabled || isPlayerDefending" @click="defend">
+          <span class="button-icon">🛡️</span>
+          <span class="button-text">{{ t('defend') }}</span>
+        </button>
+        <button :disabled="controlsDisabled" @click="surrender">
+          <span class="button-icon">🏳️</span>
+          <span class="button-text">{{ t('surrender') }}</span>
+        </button>
       </section>
       </template>
       <div v-if="showHelp" class="modal-overlay" @click.self="closeHelp">
