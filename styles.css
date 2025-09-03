@@ -515,34 +515,34 @@ body[data-theme="dark"] .landing-root .container {
     z-index: 20;
   }
 
-  .healthbar { margin: 0.5rem 0; height: 28px; border-radius: 14px; overflow: hidden; }
+  .healthbar { margin: 0.5rem 0; height: 32px; border-radius: 16px; overflow: hidden; }
 
   /* Monster healthbar */
   .fighter.monster .healthbar {
     position: absolute;
-    bottom: 0.8rem;
-    left: 0.8rem;
-    right: 0.8rem;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     width: auto;
     margin: 0;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    border: 3px solid rgba(255,255,255,0.4);
-    backdrop-filter: blur(8px);
+    z-index: 20;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    border: 3px solid rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
   }
 
   /* Player healthbar */
   .fighter.player .healthbar {
     position: absolute;
-    bottom: 0.8rem;
-    left: 0.8rem;
-    right: 0.8rem;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
     width: auto;
     margin: 0;
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    border: 3px solid rgba(255,255,255,0.4);
-    backdrop-filter: blur(8px);
+    z-index: 20;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.6);
+    border: 3px solid rgba(255,255,255,0.5);
+    backdrop-filter: blur(10px);
   }
 
   /* Turn indicator positioning - above fixed controls */
