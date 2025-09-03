@@ -179,29 +179,9 @@ header {
     position: relative;
   }
 
-  .mobile-settings-toggle::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 14px;
-    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-
-  .mobile-settings-toggle:hover::before {
-    opacity: 1;
-  }
-
-  .mobile-settings-toggle:hover {
-    transform: rotate(45deg) scale(1.05);
-    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.3) 100%);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
-  }
-
   .mobile-settings-toggle:active {
-    transform: rotate(45deg) scale(1.02);
+    transform: scale(0.95);
+    opacity: 0.8;
   }
 
   /* Settings dropdown panel */
