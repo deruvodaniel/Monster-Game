@@ -700,11 +700,11 @@ const app = Vue.createApp({
 					break;
 				case 'special':
 					// charge up + sparkle + big impact
-					sweep(220, 1200, 0.32, 'square', 0.12);
-					play(1567.98, 'sine', 0.1, 0.06, 0.32); // sparkle
-					play(1318.51, 'sine', 0.1, 0.06, 0.38);
-					noiseBurst(0.18, 0.2, 0.34);
-					play(196, 'square', 0.14, 0.12, 0.36); // thump
+					sweep(220, 1200, 0.32, 'square', 0.22);
+					play(1567.98, 'sine', 0.12, 0.14, 0.32); // sparkle
+					play(1318.51, 'sine', 0.12, 0.12, 0.38);
+					noiseBurst(0.18, 0.28, 0.34);
+					play(196, 'square', 0.18, 0.18, 0.36); // thump
 					break;
 				case 'heal':
 					play(392.0, 'sine', 0.12, 0.06);
