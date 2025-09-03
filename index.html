@@ -105,40 +105,43 @@
         </section>
       </section>
       <div class="center-bubble" v-if="centerBubbleText" :class="centerBubbleClass">{{ centerBubbleText }}</div>
-			<section v-if="winner && !showCredits" class="container">
-				<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
-					<h2>{{ t('congratsTitle') }}</h2>
-					<p>{{ t('congratsMsg') }}</p>
-					<div class="winner-hero" v-if="selectedCharacter">
-						<img :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="winner-img" />
-						<h3 class="winner-name">{{ selectedCharacter.icon }} {{ selectedCharacter.name[lang] }}</h3>
-					</div>
-					<div class="win-actions">
-						<button @click="goToCredits">Ver créditos</button>
-						<button @click="goToLanding">{{ t('backToStart') }}</button>
-					</div>
-				</template>
-				<template v-else>
-					<h2 v-if="winner==='player' && currentLevel < monsters.length - 1">{{ t('levelCleared') }}</h2>
-					<h2 v-else>{{ t('gameOver') }}</h2>
-					<template v-if="winner === 'monster'">
-						<h3>{{ t('youLost') }}</h3>
-						<p class="lives-left">&#10084;&#65039; × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+			<!-- Centered Game Result Modal -->
+			<div v-if="winner && !showCredits" class="modal-overlay">
+				<div class="game-result-modal" role="dialog" aria-modal="true">
+					<template v-if="winner === 'player' && currentLevel === monsters.length - 1">
+						<h2>{{ t('congratsTitle') }}</h2>
+						<p>{{ t('congratsMsg') }}</p>
+						<div class="winner-hero" v-if="selectedCharacter">
+							<img :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="winner-img" />
+							<h3 class="winner-name">{{ selectedCharacter.icon }} {{ selectedCharacter.name[lang] }}</h3>
+						</div>
 						<div class="win-actions">
-							<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
-							<button v-else @click="goToLanding">Volver al inicio</button>
+							<button @click="goToCredits">Ver créditos</button>
+							<button @click="goToLanding">{{ t('backToStart') }}</button>
 						</div>
 					</template>
 					<template v-else>
-						<h3 v-if="winner === 'player'">{{ t('youWon') }}</h3>
-						<h3 v-else>{{ t('draw') }}</h3>
-						<div class="win-actions">
-							<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
-							<button v-else @click="restart">{{ t('startNew') }}</button>
-						</div>
+						<h2 v-if="winner==='player' && currentLevel < monsters.length - 1">{{ t('levelCleared') }}</h2>
+						<h2 v-else>{{ t('gameOver') }}</h2>
+						<template v-if="winner === 'monster'">
+							<h3>{{ t('youLost') }}</h3>
+							<p class="lives-left">&#10084;&#65039; × {{ lives - 1 >= 0 ? lives - 1 : 0 }}</p>
+							<div class="win-actions">
+								<button v-if="lives > 1" @click="loseLifeAndRetry()">Reintentar</button>
+								<button v-else @click="goToLanding">Volver al inicio</button>
+							</div>
+						</template>
+						<template v-else>
+							<h3 v-if="winner === 'player'">{{ t('youWon') }}</h3>
+							<h3 v-else>{{ t('draw') }}</h3>
+							<div class="win-actions">
+								<button v-if="winner==='player' && currentLevel < monsters.length - 1" @click="nextLevel">{{ t('nextLevel') }}</button>
+								<button v-else @click="restart">{{ t('startNew') }}</button>
+							</div>
+						</template>
 					</template>
-				</template>
-			</section>
+				</div>
+			</div>
       <section v-if="showCredits" class="container credits-screen">
         <img src="https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7" alt="Credits" class="credits-img" />
         <h2>Créditos</h2>
