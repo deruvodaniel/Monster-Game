@@ -637,7 +637,144 @@ const app = Vue.createApp({
 			this.goToLanding();
 		},
 
-		playEndJingle(type) { /* disabled */ return; }
+		sound(name) {
+			if (!this.sfxEnabled || !this.soundEnabled) return;
+			this.initAudio();
+			const ctx = this.audioCtx;
+			if (!ctx) return;
+			try { if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
+			const now = ctx.currentTime;
+			const play = (freq, type = 'sine', dur = 0.14, vol = 0.1, delay = 0) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = type;
+				o.frequency.setValueAtTime(freq, now + delay);
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				o.connect(g);
+				g.connect(ctx.destination);
+				o.start(now + delay);
+				o.stop(now + delay + dur + 0.05);
+			};
+			const sweep = (startF, endF, dur = 0.25, type = 'square', vol = 0.14, delay = 0) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = type;
+				o.frequency.setValueAtTime(startF, now + delay);
+				o.frequency.exponentialRampToValueAtTime(Math.max(endF, 1), now + delay + dur);
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				o.connect(g);
+				g.connect(ctx.destination);
+				o.start(now + delay);
+				o.stop(now + delay + dur + 0.05);
+			};
+			const noiseBurst = (dur = 0.1, vol = 0.12, delay = 0) => {
+				const frames = Math.max(1, Math.floor(ctx.sampleRate * dur));
+				const buffer = ctx.createBuffer(1, frames, ctx.sampleRate);
+				const data = buffer.getChannelData(0);
+				for (let i = 0; i < frames; i++) data[i] = Math.random() * 2 - 1;
+				const src = ctx.createBufferSource();
+				const g = ctx.createGain();
+				src.buffer = buffer;
+				g.gain.setValueAtTime(0, now + delay);
+				g.gain.linearRampToValueAtTime(vol, now + delay + 0.01);
+				g.gain.exponentialRampToValueAtTime(0.0001, now + delay + dur);
+				src.connect(g);
+				g.connect(ctx.destination);
+				src.start(now + delay);
+			};
+			switch (name) {
+				case 'attack':
+					// fast whoosh + impact
+					sweep(600, 180, 0.12, 'sawtooth', 0.12);
+					play(120, 'square', 0.08, 0.12, 0.12);
+					noiseBurst(0.07, 0.14, 0.12);
+					break;
+				case 'hit':
+					play(120, 'sine', 0.08, 0.1);
+					play(90, 'triangle', 0.09, 0.08, 0.04);
+					noiseBurst(0.06, 0.1, 0.02);
+					break;
+				case 'special':
+					// charge up + sparkle + big impact
+					sweep(220, 1200, 0.32, 'square', 0.12);
+					play(1567.98, 'sine', 0.1, 0.06, 0.32); // sparkle
+					play(1318.51, 'sine', 0.1, 0.06, 0.38);
+					noiseBurst(0.18, 0.2, 0.34);
+					play(196, 'square', 0.14, 0.12, 0.36); // thump
+					break;
+				case 'heal':
+					play(392.0, 'sine', 0.12, 0.06);
+					play(523.25, 'sine', 0.12, 0.06, 0.08);
+					play(659.25, 'sine', 0.16, 0.06, 0.16);
+					break;
+				case 'defend':
+					play(329.63, 'triangle', 0.12, 0.06);
+					play(415.30, 'triangle', 0.12, 0.06, 0.06);
+					break;
+				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
+				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
+				case 'start': play(329.63, 'sine', 0.12, 0.06); play(392, 'sine', 0.12, 0.06, 0.08); break;
+			}
+		},
+		playEndJingle(type) {
+			if (!this.sfxEnabled || !this.soundEnabled) return;
+			this.initAudio();
+			const ctx = this.audioCtx;
+			if (!ctx) return;
+			if (type === 'win') {
+				// Trumpet-like fanfare
+				const chords = [
+					[392.0, 523.25], // G4 + C5
+					[440.0, 587.33], // A4 + D5
+					[523.25, 659.25], // C5 + E5
+					[587.33, 784.0]  // D5 + G5
+				];
+				let t = 0;
+				const trumpet = (freq, start) => {
+					const o = ctx.createOscillator();
+					const f = ctx.createBiquadFilter();
+					const g = ctx.createGain();
+					o.type = 'sawtooth';
+					o.frequency.setValueAtTime(freq, start);
+					f.type = 'bandpass';
+					f.frequency.setValueAtTime(1200, start);
+					f.Q.value = 6;
+					g.gain.setValueAtTime(0, start);
+					g.gain.linearRampToValueAtTime(0.12, start + 0.04);
+					g.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
+					o.connect(f); f.connect(g); g.connect(ctx.destination);
+					o.start(start);
+					o.stop(start + 0.4);
+				};
+				chords.forEach(([a,b]) => {
+					const start = ctx.currentTime + t;
+					trumpet(a, start);
+					trumpet(b, start);
+					t += 0.28;
+				});
+				return;
+			}
+			// Lose jingle
+			const notes = [392.0, 349.23, 261.63, 174.61];
+			let t = 0;
+			notes.forEach((f) => {
+				const o = ctx.createOscillator();
+				const g = ctx.createGain();
+				o.type = 'square';
+				o.frequency.setValueAtTime(f, ctx.currentTime + t);
+				g.gain.setValueAtTime(0, ctx.currentTime + t);
+				g.gain.linearRampToValueAtTime(0.1, ctx.currentTime + t + 0.02);
+				g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.25);
+				o.connect(g); g.connect(ctx.destination);
+				o.start(ctx.currentTime + t);
+				o.stop(ctx.currentTime + t + 0.3);
+				t += 0.25;
+			});
+		},
 	},
 });
 
