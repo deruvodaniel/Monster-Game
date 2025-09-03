@@ -1441,6 +1441,15 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
     transform: translateY(-50%) scale(0.95);
   }
 
+  /* Force arrows to be visible on mobile - override any hiding */
+  @media (max-width: 520px) {
+    .carousel-nav {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+
   .carousel-nav-left {
     left: 0.5rem;
     box-shadow:
