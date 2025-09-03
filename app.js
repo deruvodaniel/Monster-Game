@@ -517,23 +517,27 @@ const app = Vue.createApp({
 		nextLevel() {
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
-				// Show map screen first, then proceed
+				// Increment level first so map shows correct progress
+				this.currentLevel = next;
+				// Show map screen with updated progress
 				setTimeout(() => {
 					this.showMapProgress();
 				}, 500);
 			}
 		},
 
-		proceedToNextLevel() {
-			const next = this.currentLevel + 1;
-			if (next < this.monsters.length) {
+		proceedToCurrentLevel() {
+			if (this.currentLevel < this.monsters.length) {
 				if (this.isLevelTransitioning) return;
 				this.isLevelTransitioning = true;
-				// Guard against double triggering and repeated same target
+				// Guard against double triggering
 				const now = Date.now();
-				if (now - this.lastLevelUpAt < 1500 || this.lastLeveledTo === next) { this.loadLevel(next); return; }
+				if (now - this.lastLevelUpAt < 1500 || this.lastLeveledTo === this.currentLevel) {
+					this.loadLevel(this.currentLevel);
+					return;
+				}
 				this.lastLevelUpAt = now;
-				this.lastLeveledTo = next;
+				this.lastLeveledTo = this.currentLevel;
 				// Level-up buffs
 				let atk=0, sp=0, heal=0, def=0, hp=0;
 				if (this.playerStats) {
@@ -542,10 +546,10 @@ const app = Vue.createApp({
 					this.playerStats.heal += (heal = 2);
 					this.playerStats.defend += (def = 1);
 				}
-				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
+				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
 				this.playerHealth = Math.min(newMax, this.playerHealth + (hp = 20));
 				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 2400);
-				this.loadLevel(next);
+				this.loadLevel(this.currentLevel);
 			}
 		},
 
@@ -690,7 +694,8 @@ const app = Vue.createApp({
 		showMapProgress() { this.showMapScreen = true; },
 		continueToNextLevel() {
 			this.showMapScreen = false;
-			this.proceedToNextLevel();
+			// Level already incremented in nextLevel(), just load it and apply buffs
+			this.proceedToCurrentLevel();
 		},
 		t(key) {
 			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
