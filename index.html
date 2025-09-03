@@ -16,8 +16,9 @@
     <div id="game">
       <header class="app-header">
         <h1>Monster Slayer</h1>
-        <div class="header-actions">
-          <!-- Player Info -->
+
+        <!-- Always visible: Player Info and Lives (desktop y mobile) -->
+        <div class="header-main-content">
           <div v-if="playerName && started" class="player-info" @click="openUserMenu" role="button" :aria-label="lang === 'es' ? 'Abrir menú de usuario' : 'Open user menu'">
             <img v-if="selectedCharacter" :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="player-avatar-header" />
             <div class="player-details">
@@ -26,6 +27,10 @@
             </div>
           </div>
           <span class="lives-badge numeric" aria-label="lives">❤️ × {{ lives }}</span>
+        </div>
+
+        <!-- Desktop individual controls (hidden en mobile) -->
+        <div class="header-actions">
           <div class="lang-group">
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
@@ -34,7 +39,8 @@
           <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
           <button class="icon-button" @click="openHelp" :aria-label="t('howToPlay')">ℹ️</button>
         </div>
-        <!-- Mobile settings toggle and panel -->
+
+        <!-- Settings toggle (mobile y desktop) -->
         <button class="mobile-settings-toggle" @click="toggleMobileSettings" aria-label="Settings">⚙️</button>
         <div class="mobile-settings-overlay" :class="{ open: showMobileSettings }" @click="showMobileSettings = false"></div>
         <div class="mobile-settings-panel" :class="{ open: showMobileSettings }">
