@@ -240,6 +240,21 @@ header {
     display: block;
   }
 
+  /* Show mobile settings on mobile */
+  .mobile-settings-toggle,
+  .mobile-settings-panel,
+  .mobile-settings-overlay {
+    display: initial;
+  }
+
+  .mobile-settings-panel {
+    display: none;
+  }
+
+  .mobile-settings-panel.open {
+    display: flex;
+  }
+
   /* Add top padding to body for fixed header */
   body {
     padding-top: 80px;
