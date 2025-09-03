@@ -786,11 +786,24 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
 .select-title { margin: 0.25rem 0 0.5rem; }
 .characters-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.2rem;
 }
+
+/* Tablet layout: 2x2 grid */
+@media (max-width: 900px) {
+  .characters-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Mobile layout: single column */
 @media (max-width: 520px) {
-  .characters-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+  .characters-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
   /* On touch, keep stats visible */
   .char-stats { opacity: 1; transform: none; }
 }
