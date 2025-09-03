@@ -469,7 +469,7 @@ body[data-theme="dark"] .landing-root .container {
     transform: scale(1.1);
   }
 
-  /* Extra compact controls for mobile */
+  /* Ultra compact controls for mobile */
   #controls {
     position: fixed;
     bottom: 0;
@@ -478,29 +478,29 @@ body[data-theme="dark"] .landing-root .container {
     width: 100vw;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 0.25rem;
-    padding: 0.3rem 0.4rem 1rem 0.4rem;
+    gap: 0.2rem;
+    padding: 0.2rem 0.3rem 0.8rem 0.3rem;
     margin: 0;
     background: rgba(0,0,0,0.95);
     backdrop-filter: blur(15px);
-    border-top: 2px solid rgba(255,255,255,0.15);
+    border-top: 1px solid rgba(255,255,255,0.15);
     z-index: 1000;
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 -1px 8px rgba(0,0,0,0.3);
     box-sizing: border-box;
   }
 
   #controls button {
     width: 100%;
     margin: 0;
-    padding: 0.3rem 0.15rem;
-    font-size: 1.4rem;
-    min-height: 38px;
+    padding: 0.2rem 0.1rem;
+    font-size: 1.2rem;
+    min-height: 32px;
     border-radius: 50%;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
     background: linear-gradient(135deg, #88005b 0%, #af0a78 100%);
     border: 1px solid rgba(255,255,255,0.2);
     transition: all 0.2s ease;
