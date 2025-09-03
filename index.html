@@ -76,6 +76,51 @@
         </div>
         <button :disabled="!selectedCharacterId" @click="startGame">{{ t('start') }}</button>
       </section>
+
+      <!-- Map Progress Screen -->
+      <section v-else-if="showMapScreen" class="map-screen">
+        <div class="map-container">
+          <h2 class="map-title">{{ lang === 'es' ? 'Tu Progreso' : 'Your Progress' }}</h2>
+          <div class="map-path">
+            <div
+              v-for="(monster, index) in monsters"
+              :key="monster.id"
+              class="map-node"
+              :class="{
+                'completed': index < currentLevel,
+                'current': index === currentLevel,
+                'upcoming': index > currentLevel
+              }"
+            >
+              <div class="node-connector" v-if="index < monsters.length - 1"></div>
+              <div class="monster-card">
+                <img :src="monster.image" :alt="monster.name[lang]" class="monster-image" />
+                <div class="monster-info">
+                  <h4 class="monster-name">{{ monster.name[lang] }}</h4>
+                  <div class="monster-status">
+                    <span v-if="index < currentLevel" class="status-completed">✓ {{ lang === 'es' ? 'Derrotado' : 'Defeated' }}</span>
+                    <span v-else-if="index === currentLevel" class="status-current">{{ lang === 'es' ? 'Próximo' : 'Next' }}</span>
+                    <span v-else class="status-upcoming">{{ lang === 'es' ? 'Bloqueado' : 'Locked' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Player Progress -->
+          <div class="player-progress">
+            <div class="player-avatar">
+              <img :src="selectedCharacter?.image" :alt="selectedCharacter?.name[lang]" class="player-image" />
+              <div class="player-level">{{ lang === 'es' ? 'Nivel' : 'Level' }} {{ currentLevel + 1 }}</div>
+            </div>
+          </div>
+
+          <button class="continue-button" @click="continueToNextLevel">
+            {{ lang === 'es' ? 'Continuar Aventura' : 'Continue Adventure' }}
+          </button>
+        </div>
+      </section>
+
       <template v-else>
       <section class="board" v-if="!(winner==='player' && currentLevel === monsters.length - 1) && !showCredits">
         <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn, 'is-critical': isMonsterCritical}">
