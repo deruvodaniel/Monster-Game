@@ -1813,39 +1813,120 @@ body[data-theme="dark"] .game-result-modal h3 {
   color: #999;
 }
 
-.player-progress {
-  text-align: center;
-  margin: 2rem 0;
+/* Dynamic Player Positioning on Map */
+.player-on-map {
+  position: absolute;
+  right: 20px;
+  top: 100px;
+  z-index: 20;
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
 
-.player-avatar {
-  display: inline-block;
-  position: relative;
-  animation: bounce 2s ease-in-out infinite;
+.player-avatar-map {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+  border: 3px solid #88005b;
+  border-radius: 20px;
+  padding: 0.8rem;
+  box-shadow:
+    0 8px 24px rgba(136,0,91,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.5);
+  backdrop-filter: blur(10px);
+  animation: map-player-glow 2s ease-in-out infinite;
 }
 
-.player-image {
-  width: 120px;
-  height: 120px;
+.player-image-map {
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 50%;
-  border: 4px solid #88005b;
-  box-shadow: 0 8px 24px rgba(136,0,91,0.3);
+  border: 3px solid #88005b;
+  box-shadow: 0 4px 12px rgba(136,0,91,0.3);
+  flex-shrink: 0;
 }
 
-.player-level {
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: linear-gradient(135deg, #88005b 0%, #af0a78 100%);
-  color: white;
-  padding: 0.3rem 0.8rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
+.player-level-map {
+  font-size: 0.9rem;
   font-weight: 700;
   font-family: 'Cinzel', serif;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  color: #88005b;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  white-space: nowrap;
+}
+
+.player-arrow {
+  font-size: 1.5rem;
+  color: #88005b;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  animation: bounce-arrow 1s ease-in-out infinite;
+}
+
+@keyframes map-player-glow {
+  0%, 100% {
+    box-shadow:
+      0 8px 24px rgba(136,0,91,0.4),
+      inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+  50% {
+    box-shadow:
+      0 12px 32px rgba(136,0,91,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.7),
+      0 0 20px rgba(136,0,91,0.3);
+  }
+}
+
+@keyframes bounce-arrow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+/* Dark theme for map player */
+body[data-theme="dark"] .player-avatar-map {
+  background: linear-gradient(135deg, rgba(15,17,21,0.95) 0%, rgba(15,17,21,0.85) 100%);
+  border-color: #ff6aa3;
+}
+
+body[data-theme="dark"] .player-image-map {
+  border-color: #ff6aa3;
+}
+
+body[data-theme="dark"] .player-level-map {
+  color: #ff6aa3;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+}
+
+body[data-theme="dark"] .player-arrow {
+  color: #ff6aa3;
+}
+
+/* Mobile adjustments for map player */
+@media (max-width: 520px) {
+  .player-on-map {
+    right: 10px;
+    top: 80px;
+    transform: scale(0.8);
+  }
+
+  .player-avatar-map {
+    padding: 0.6rem;
+    gap: 0.8rem;
+  }
+
+  .player-image-map {
+    width: 50px;
+    height: 50px;
+  }
+
+  .player-level-map {
+    font-size: 0.8rem;
+  }
+
+  .player-arrow {
+    font-size: 1.2rem;
+  }
 }
 
 .continue-button {
