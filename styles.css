@@ -222,21 +222,21 @@ body[data-theme="dark"] .landing-root .container {
 
   .fighter.container {
     min-height: 0;
-    height: 50%;
+    height: 55%;
     margin: 0;
     position: relative;
-    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
     padding: 0.5rem;
   }
 
   .fighter.monster {
+    clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%);
     transform: translateY(0);
     z-index: 2;
   }
 
   .fighter.player {
-    transform: translateY(-30%);
-    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+    clip-path: polygon(0 25%, 100% 0, 100% 100%, 0 100%);
+    transform: translateY(-25%);
     z-index: 1;
   }
 
