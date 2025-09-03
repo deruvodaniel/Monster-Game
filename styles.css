@@ -241,7 +241,7 @@ header {
   /* Add top padding to body for fixed header */
   body {
     padding-top: 80px;
-    padding-bottom: 130px;
+    padding-bottom: 90px;
   }
 }
 .app-header .theme-icon {
