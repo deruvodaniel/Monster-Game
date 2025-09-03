@@ -385,25 +385,25 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   #controls button .button-icon {
-    font-size: 2.2rem;
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
   }
 
-  /* Hide text, show only emojis on mobile but add small labels */
-  #controls button .button-text { display: none; }
-
-  /* Add small action labels below buttons */
-  #controls button::after {
-    content: attr(data-action);
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.7rem;
-    color: rgba(255,255,255,0.8);
-    font-family: 'Cinzel', serif;
-    font-weight: 600;
+  /* Show text labels inside buttons on mobile */
+  #controls button .button-text {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.95);
     text-shadow: 0 1px 2px rgba(0,0,0,0.8);
-    white-space: nowrap;
+    font-family: 'Cinzel', serif;
+  }
+
+  /* Remove the ::after labels since we're showing text inside */
+  #controls button::after {
+    display: none;
   }
 
   /* Compact healthbar and text for diagonal layout */
