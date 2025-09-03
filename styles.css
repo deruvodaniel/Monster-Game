@@ -2624,6 +2624,386 @@ body[data-theme="dark"] .name-input::placeholder {
   }
 }
 
+/* Ornate Fantasy Borders */
+.ornate-border {
+  position: relative;
+  border: 4px solid #8B4513;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+  padding: 3px;
+  box-shadow:
+    inset 0 2px 0 rgba(205,133,63,0.6),
+    inset 0 -2px 0 rgba(139,69,19,0.8),
+    0 4px 8px rgba(0,0,0,0.3);
+}
+
+.ornate-border::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+  border-radius: 10px;
+  z-index: -1;
+  box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
+}
+
+/* Apply ornate borders to health bars */
+.healthbar {
+  width: 100%;
+  height: 40px;
+  border: none;
+  margin: 1rem 0;
+  background: none;
+  position: relative;
+  padding: 0;
+}
+
+.healthbar-container {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+  border: 4px solid #8B4513;
+  border-radius: 8px;
+  padding: 3px;
+  box-shadow:
+    inset 0 2px 0 rgba(205,133,63,0.6),
+    inset 0 -2px 0 rgba(139,69,19,0.8),
+    0 4px 8px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+.healthbar-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+  border-radius: 10px;
+  z-index: -1;
+  box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
+}
+
+.healthbar__value {
+  background: linear-gradient(135deg, #00a876 0%, #00c389 50%, #00ff99 100%);
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.3),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.healthbar__value::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  border-radius: 4px 4px 0 0;
+}
+
+/* Enhanced Stamina bars with charging system */
+.staminabar-container {
+  width: 100%;
+  height: 28px;
+  margin: 0.5rem 0;
+  position: relative;
+  background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+  border: 3px solid #8B4513;
+  border-radius: 6px;
+  padding: 2px;
+  box-shadow:
+    inset 0 1px 0 rgba(205,133,63,0.6),
+    inset 0 -1px 0 rgba(139,69,19,0.8),
+    0 2px 4px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+}
+
+.staminabar-container::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+  border-radius: 8px;
+  z-index: -1;
+  box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
+  transition: all 0.3s ease;
+}
+
+.staminabar__value {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF8C00 100%);
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.4),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.staminabar__value::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  border-radius: 2px 2px 0 0;
+}
+
+.stamina-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.7rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  color: #8B4513;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  letter-spacing: 1px;
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Special styling when stamina is full */
+.staminabar-container.stamina-full {
+  animation: stamina-pulse 1s ease-in-out infinite;
+  border-color: #FFD700;
+  box-shadow:
+    inset 0 1px 0 rgba(255,215,0,0.8),
+    inset 0 -1px 0 rgba(255,140,0,0.8),
+    0 4px 12px rgba(255,215,0,0.6);
+}
+
+.staminabar-container.stamina-full::before {
+  background: linear-gradient(45deg, #FFD700, #FFA500, #FF8C00, #DAA520);
+  box-shadow: 0 0 0 3px rgba(255,215,0,0.5);
+}
+
+.staminabar-container.stamina-full .staminabar__value {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 30%, #FF8C00 60%, #FF6347 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255,255,255,0.6),
+    inset 0 -1px 0 rgba(0,0,0,0.3),
+    0 0 8px rgba(255,215,0,0.8);
+}
+
+.staminabar-container.stamina-full .stamina-label {
+  color: #8B0000;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.9), 0 0 8px rgba(255,215,0,0.8);
+  font-weight: 900;
+  animation: text-glow 1s ease-in-out infinite;
+}
+
+@keyframes stamina-pulse {
+  0%, 100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,215,0,0.8),
+      inset 0 -1px 0 rgba(255,140,0,0.8),
+      0 4px 12px rgba(255,215,0,0.6);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255,215,0,1),
+      inset 0 -1px 0 rgba(255,140,0,1),
+      0 6px 20px rgba(255,215,0,0.9);
+  }
+}
+
+@keyframes text-glow {
+  0%, 100% {
+    text-shadow: 0 1px 3px rgba(255,255,255,0.9), 0 0 8px rgba(255,215,0,0.8);
+  }
+  50% {
+    text-shadow: 0 1px 3px rgba(255,255,255,1), 0 0 12px rgba(255,215,0,1);
+  }
+}
+
+/* Apply ornate borders to avatar images */
+.avatar-img {
+  width: 220px;
+  height: 220px;
+  object-fit: cover;
+  object-position: top center;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+  position: relative;
+}
+
+.avatar-ornate-frame {
+  position: relative;
+  display: inline-block;
+  background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+  border: 6px solid #8B4513;
+  border-radius: 16px;
+  padding: 4px;
+  box-shadow:
+    inset 0 3px 0 rgba(205,133,63,0.6),
+    inset 0 -3px 0 rgba(139,69,19,0.8),
+    0 6px 12px rgba(0,0,0,0.4);
+}
+
+.avatar-ornate-frame::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+  border-radius: 20px;
+  z-index: -1;
+  box-shadow: 0 0 0 3px rgba(218,165,32,0.4);
+}
+
+/* Apply ornate styling to main buttons */
+button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small) {
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  border: 4px solid #8B4513;
+  background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  margin: 1rem;
+  width: 12rem;
+  cursor: pointer;
+  box-shadow:
+    inset 0 2px 0 rgba(205,133,63,0.6),
+    inset 0 -2px 0 rgba(139,69,19,0.8),
+    0 4px 8px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small)::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #DAA520, #B8860B, #CD853F, #8B4513);
+  border-radius: 14px;
+  z-index: -1;
+  box-shadow: 0 0 0 2px rgba(218,165,32,0.3);
+}
+
+button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small):hover {
+  background: linear-gradient(135deg, #DAA520 0%, #CD853F 100%);
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 2px 0 rgba(218,165,32,0.6),
+    inset 0 -2px 0 rgba(139,69,19,0.8),
+    0 6px 12px rgba(0,0,0,0.4);
+}
+
+button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small):active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 1px 0 rgba(205,133,63,0.6),
+    inset 0 -1px 0 rgba(139,69,19,0.8),
+    0 2px 4px rgba(0,0,0,0.3);
+}
+
+button:disabled:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small) {
+  background: linear-gradient(135deg, #666 0%, #444 100%);
+  border-color: #666;
+  box-shadow:
+    inset 0 1px 0 rgba(102,102,102,0.3),
+    inset 0 -1px 0 rgba(68,68,68,0.8),
+    0 2px 4px rgba(0,0,0,0.2);
+  color: #999;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button:disabled:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small)::before {
+  background: linear-gradient(45deg, #666, #555, #444, #333);
+  box-shadow: 0 0 0 2px rgba(102,102,102,0.2);
+}
+
+/* Dark theme adjustments for ornate borders */
+body[data-theme="dark"] .ornate-border,
+body[data-theme="dark"] .healthbar-container,
+body[data-theme="dark"] .staminabar-container,
+body[data-theme="dark"] .avatar-ornate-frame {
+  background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+  border-color: #4A5568;
+  box-shadow:
+    inset 0 2px 0 rgba(74,85,104,0.6),
+    inset 0 -2px 0 rgba(45,55,72,0.8),
+    0 4px 8px rgba(0,0,0,0.5);
+}
+
+body[data-theme="dark"] .ornate-border::before,
+body[data-theme="dark"] .healthbar-container::before,
+body[data-theme="dark"] .staminabar-container::before,
+body[data-theme="dark"] .avatar-ornate-frame::before {
+  background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
+  box-shadow: 0 0 0 2px rgba(113,128,150,0.3);
+}
+
+body[data-theme="dark"] button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small) {
+  background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+  border-color: #4A5568;
+  color: #E2E8F0;
+}
+
+body[data-theme="dark"] button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small)::before {
+  background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
+}
+
+body[data-theme="dark"] button:not(.icon-button):not(.lang-btn):not(.close-button):not(.save-name-button):not(.character-card):not(.character-card-small):hover {
+  background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
+}
+
+/* Mobile adjustments for ornate elements */
+@media (max-width: 520px) {
+  .avatar-img {
+    width: 96px;
+    height: 96px;
+  }
+
+  .avatar-ornate-frame {
+    border-width: 4px;
+    padding: 3px;
+  }
+
+  .healthbar-container,
+  .staminabar-container {
+    border-width: 2px;
+    padding: 2px;
+  }
+
+  .staminabar-container {
+    height: 20px;
+  }
+
+  .stamina-label {
+    font-size: 0.6rem;
+  }
+}
+
 /* Win trumpet fanfare overlay */
 .win-fanfare { position: fixed; z-index: 1100; left: 50%; top: 18%; transform: translateX(-50%); pointer-events: none; }
 .fanfare-trumpet { display: inline-block; font-size: clamp(2.2rem, 6vw, 4rem); margin: 0 1rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25)); animation: trumpet-pop 900ms ease both; }
