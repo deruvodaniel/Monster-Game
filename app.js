@@ -300,7 +300,6 @@ const app = Vue.createApp({
 			const resumeAndPlay = () => {
 				if (this.userInteracted) return;
 				this.userInteracted = true;
-				try { if (this.audioCtx && this.audioCtx.state === 'suspended') this.audioCtx.resume(); } catch(e) {}
 				this.updateStageBg();
 				window.removeEventListener('pointerdown', resumeAndPlay);
 			};
