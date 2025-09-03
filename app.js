@@ -563,6 +563,23 @@ const app = Vue.createApp({
 				carousel.scrollLeft = duplicateOffset;
 			}
 		},
+
+		scrollToCharacter(index) {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			const targetPosition = cardWidth * (index + 2); // +2 for pre-duplicate cards
+
+			carousel.scrollTo({
+				left: targetPosition,
+				behavior: 'smooth'
+			});
+
+			this.currentCarouselIndex = index;
+		},
 		rollValue(base, variance = 0.2) {
 			const min = Math.max(1, Math.floor(base * (1 - variance)));
 			const max = Math.max(min + 1, Math.ceil(base * (1 + variance)));
