@@ -510,6 +510,10 @@ const app = Vue.createApp({
 			this.lastLeveledTo = -1;
 			this.showCredits = false;
 			this.showMapScreen = false;
+			// Reset player data for new game
+			this.playerName = '';
+			this.playerCoins = 0;
+			this.showWelcomeModal = true;
 			this.updateStageBg();
 		},
 
