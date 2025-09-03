@@ -170,6 +170,15 @@ section {
   background: rgba(255,255,255,0.95);
 }
 
+/* Battle containers should be taller for more visual impact */
+.fighter.container {
+  min-height: 420px;
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 /* Make containers on landing/congrats/credits more transparent so the backdrop shows through */
 body[data-stage="landing"] .container,
 body[data-stage="congrats"] .container,
@@ -190,10 +199,10 @@ body[data-theme="dark"] .landing-root .container {
 #player h2 {
   margin: 0.25rem;
 }
-.avatar { position: relative; display:flex; justify-content:center; margin-top: 0.5rem; }
-.avatar-img { width: 160px; height: 160px; object-fit: cover; object-position: top center; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.26); }
+.avatar { position: relative; display:flex; justify-content:center; margin: 0.75rem 0; flex-grow: 1; align-items: center; }
+.avatar-img { width: 220px; height: 220px; object-fit: cover; object-position: top center; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
 @media (min-width: 900px) {
-  .avatar-img { width: 200px; height: 200px; }
+  .avatar-img { width: 280px; height: 280px; }
 }
 @media (max-width: 520px) {
   button { width: 100%; margin: 0.5rem 0; }
