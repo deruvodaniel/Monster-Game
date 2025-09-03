@@ -1295,6 +1295,92 @@ body[data-theme="dark"] .rules-title {
   color: #ff6aa3;
 }
 
+/* Game Result Modal (Level Cleared, Game Over, etc.) */
+.game-result-modal {
+  pointer-events: auto;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  width: min(90vw, 500px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  border: 3px solid rgba(136,0,91,0.3);
+  text-align: center;
+  backdrop-filter: blur(15px);
+}
+
+.game-result-modal h2 {
+  font-size: 2rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  background: linear-gradient(135deg, #88005b 0%, #af0a78 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.game-result-modal h3 {
+  font-size: 1.5rem;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  color: #88005b;
+}
+
+.game-result-modal p {
+  font-size: 1.1rem;
+  margin: 0 0 1.5rem 0;
+  opacity: 0.9;
+}
+
+.win-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.win-actions button {
+  background: linear-gradient(135deg, #88005b 0%, #af0a78 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cinzel', serif;
+  min-width: 120px;
+  margin: 0;
+  width: auto;
+}
+
+.win-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(136,0,91,0.4);
+  background: linear-gradient(135deg, #af0a78 0%, #c50d8a 100%);
+}
+
+.lives-left {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  font-family: 'Roboto Mono', monospace;
+}
+
+/* Dark theme for game result modal */
+body[data-theme="dark"] .game-result-modal {
+  background: linear-gradient(135deg, rgba(15,17,21,0.95) 0%, rgba(15,17,21,0.9) 100%);
+  border-color: rgba(255,255,255,0.2);
+  color: #e6e6e6;
+}
+
+body[data-theme="dark"] .game-result-modal h3 {
+  color: #ff6aa3;
+}
+
 /* Win trumpet fanfare overlay */
 .win-fanfare { position: fixed; z-index: 1100; left: 50%; top: 18%; transform: translateX(-50%); pointer-events: none; }
 .fanfare-trumpet { display: inline-block; font-size: clamp(2.2rem, 6vw, 4rem); margin: 0 1rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.25)); animation: trumpet-pop 900ms ease both; }
