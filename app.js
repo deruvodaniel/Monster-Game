@@ -44,6 +44,7 @@ const app = Vue.createApp({
 			showHelp: false,
 			showMobileSettings: false,
 			showWelcomeModal: true,
+			showMapScreen: false,
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
