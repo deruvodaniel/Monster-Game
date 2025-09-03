@@ -319,6 +319,12 @@ const app = Vue.createApp({
 			if (savedLang) this.lang = savedLang;
 			const savedTheme = localStorage.getItem('theme');
 			if (savedTheme) this.theme = savedTheme;
+			// Load saved player name
+			const savedPlayerName = localStorage.getItem('playerName');
+			if (savedPlayerName) {
+				this.playerName = savedPlayerName;
+				this.showWelcomeModal = false; // Skip welcome modal if name exists
+			}
 			document.body.setAttribute('data-theme', this.theme);
 			this.updateStageBg();
 			this.$watch('winner', (value) => {
@@ -622,6 +628,8 @@ const app = Vue.createApp({
 		saveName() {
 			if (this.editingName.trim() && this.editingName.trim() !== this.playerName) {
 				this.playerName = this.editingName.trim();
+				// Save to localStorage
+				try { localStorage.setItem('playerName', this.playerName); } catch(e) {}
 				this.showCenterBubble(this.lang === 'es' ? 'Nombre actualizado!' : 'Name updated!', 'bubble--success', 1500);
 			}
 		},
