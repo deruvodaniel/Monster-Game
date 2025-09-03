@@ -456,15 +456,13 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Compact healthbar and text for diagonal layout */
   .fighter h2 {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     margin: 0;
     position: absolute;
-    z-index: 10;
-    background: rgba(0,0,0,0.8);
+    z-index: 15;
     color: white;
-    padding: 0.15rem 0.4rem;
-    border-radius: 6px;
-    font-weight: 600;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
   }
 
   /* Monster health title above healthbar */
