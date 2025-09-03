@@ -640,46 +640,32 @@ const app = Vue.createApp({
 		},
 
 		// Stamina management methods
-		consumeStamina(entity, action) {
-			const cost = this.staminaCosts[action] || 0;
+		chargeStamina(entity, action) {
+			const charge = this.staminaCharges[action] || 0;
 			if (entity === 'player') {
-				this.playerStamina = Math.max(0, this.playerStamina - cost);
-				if (this.playerStamina === 0) {
-					this.showCenterBubble(this.lang === 'es' ? '¡Sin energía!' : 'Out of energy!', 'bubble--warning', 1000);
+				const oldStamina = this.playerStamina;
+				this.playerStamina = Math.min(this.maxStamina, this.playerStamina + charge);
+				if (oldStamina < this.maxStamina && this.playerStamina >= this.maxStamina) {
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL LISTO!!' : 'SUPER SPECIAL READY!!', 'bubble--warning', 1500);
 				}
 			} else if (entity === 'monster') {
-				this.monsterStamina = Math.max(0, this.monsterStamina - cost);
+				this.monsterStamina = Math.min(this.maxStamina, this.monsterStamina + charge);
 			}
 		},
 
-		startStaminaRegeneration() {
-			if (this.staminaRegenTimer) {
-				clearInterval(this.staminaRegenTimer);
+		useSpecialAttack() {
+			// Reset stamina when using special attack at full charge
+			if (this.playerStamina >= this.maxStamina) {
+				this.playerStamina = 0;
+				return true; // Indicates super special was used
 			}
-
-			this.staminaRegenTimer = setInterval(() => {
-				// Regenerate player stamina
-				if (this.playerStamina < this.maxStamina) {
-					this.playerStamina = Math.min(this.maxStamina, this.playerStamina + this.staminaRegenRate);
-				}
-
-				// Regenerate monster stamina
-				if (this.monsterStamina < this.maxStamina) {
-					this.monsterStamina = Math.min(this.maxStamina, this.monsterStamina + this.staminaRegenRate);
-				}
-			}, 1000); // Regenerate every second
+			return false; // Normal special
 		},
 
-		stopStaminaRegeneration() {
-			if (this.staminaRegenTimer) {
-				clearInterval(this.staminaRegenTimer);
-				this.staminaRegenTimer = null;
-			}
-		},
 
 		resetStamina() {
-			this.playerStamina = this.maxStamina;
-			this.monsterStamina = this.maxStamina;
+			this.playerStamina = 0;
+			this.monsterStamina = 0;
 		},
 		showMapProgress() { this.showMapScreen = true; },
 		continueToNextLevel() {
