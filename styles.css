@@ -346,15 +346,15 @@ body[data-theme="dark"] .landing-root .container {
     border-color: rgba(255,50,50,0.3);
   }
 
-  /* Optimized images for vertical card layout */
+  /* Large character images optimized for face visibility */
   .avatar {
-    margin: 0.5rem 0 1rem 0;
+    margin: 0.5rem 0 1.5rem 0;
     position: relative;
-    height: 140px;
+    height: 200px;
     overflow: hidden;
-    border-radius: 16px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    border: 3px solid rgba(255,255,255,0.4);
   }
 
   .avatar-img {
@@ -362,18 +362,20 @@ body[data-theme="dark"] .landing-root .container {
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    border-radius: 14px;
+    border-radius: 15px;
     transition: transform 0.3s ease;
   }
 
-  /* Player image positioning */
+  /* Player image positioning - focus on face/upper body */
   .fighter.player .avatar-img {
-    object-position: top center;
+    object-position: center 20%;
+    transform: scale(1.1);
   }
 
-  /* Monster image positioning */
+  /* Monster image positioning - focus on face/head area */
   .fighter.monster .avatar-img {
-    object-position: center center;
+    object-position: center 25%;
+    transform: scale(1.1);
   }
 
   /* Fixed controls at bottom for mobile */
