@@ -57,3 +57,4 @@ const emit = defineEmits([
   border-radius: 16px;
   border: 1px solid var(--border-color);
 }
+</style>
