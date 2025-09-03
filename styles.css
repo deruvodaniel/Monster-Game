@@ -348,14 +348,15 @@ body[data-theme="dark"] .landing-root .container {
     border-color: rgba(255,50,50,0.3);
   }
 
-  /* Optimized images for stacked card layout */
+  /* Optimized images for vertical card layout */
   .avatar {
-    margin: 0.5rem 0;
+    margin: 0.5rem 0 1rem 0;
     position: relative;
-    height: 120px;
+    height: 140px;
     overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
   }
 
   .avatar-img {
@@ -363,7 +364,8 @@ body[data-theme="dark"] .landing-root .container {
     height: 100%;
     object-fit: cover;
     object-position: top center;
-    border-radius: 12px;
+    border-radius: 14px;
+    transition: transform 0.3s ease;
   }
 
   /* Player image positioning */
