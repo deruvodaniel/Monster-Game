@@ -986,6 +986,39 @@ body[data-theme="dark"] .fighter.is-critical::after { background: rgba(0,0,0,0.6
       0 12px 32px rgba(0, 0, 0, 0.6),
       0 0 20px rgba(113,128,150,0.3);
   }
+
+  /* Dark theme for carousel navigation */
+  body[data-theme="dark"] .carousel-nav {
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+    border-color: #718096;
+  }
+
+  body[data-theme="dark"] .carousel-nav::before {
+    background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
+  }
+
+  body[data-theme="dark"] .carousel-nav:hover {
+    background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
+  }
+
+  body[data-theme="dark"] .mobile-settings-panel {
+    background: linear-gradient(135deg, rgba(45,55,72,0.98) 0%, rgba(26,32,44,0.95) 100%);
+    border-color: #718096;
+  }
+
+  body[data-theme="dark"] .mobile-settings-toggle {
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+    border-color: #718096;
+  }
+
+  body[data-theme="dark"] .mobile-settings-toggle:hover {
+    background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
+  }
+
+  body[data-theme="dark"] .lives-badge {
+    background: linear-gradient(135deg, rgba(255,100,100,0.9) 0%, rgba(255,50,50,0.8) 100%);
+    border-color: rgba(255,255,255,0.7);
+  }
 }
 
 
