@@ -680,7 +680,7 @@ const app = Vue.createApp({
 				const a = this.bgmAudioA, b = this.bgmAudioB;
 				if ((a && a.src === url && !a.paused) || (b && b.src === url && !b.paused)) return;
 				const target = (a && a.src === url) ? a : (b && b.src === url ? b : null);
-				if (target) { target.volume = this.bgmVolume; target.play().catch(() => {}); return; }
+				if (target) { target.volume = Math.max(0, Math.min(1, this.bgmVolume)); target.play().catch(() => {}); return; }
 			}
 			const from = this.bgmActive === 'A' ? this.bgmAudioA : this.bgmAudioB;
 			const to = this.bgmActive === 'A' ? this.bgmAudioB : this.bgmAudioA;
@@ -691,14 +691,15 @@ const app = Vue.createApp({
 			const duration = 600; // ms
 			const start = performance.now();
 			if (this.bgmFadeTimer) cancelAnimationFrame(this.bgmFadeTimer);
+			const clampVol = (v) => Math.max(0, Math.min(1, v));
 			const step = (ts) => {
-				const t = Math.min(1, (ts - start) / duration);
-				to.volume = this.bgmVolume * t;
-				if (from) from.volume = this.bgmVolume * (1 - t);
+				const t = Math.min(1, Math.max(0, (ts - start) / duration));
+				to.volume = clampVol(this.bgmVolume * t);
+				if (from) from.volume = clampVol(this.bgmVolume * (1 - t));
 				if (t < 1) {
 					this.bgmFadeTimer = requestAnimationFrame(step);
 				} else {
-					if (from) { try { from.pause(); } catch(e) {} from.src = ''; from.currentTime = 0; }
+					if (from) { try { from.pause(); } catch(e) {} from.src = ''; from.currentTime = 0; from.volume = 0; }
 					this.bgmActive = this.bgmActive === 'A' ? 'B' : 'A';
 					this.bgmCurrentUrl = url;
 					this.bgmStage = stage;
@@ -714,8 +715,8 @@ const app = Vue.createApp({
 		},
 		setBgmVolume(vol) {
 			this.bgmVolume = Math.max(0, Math.min(1, vol));
-			if (this.bgmAudioA) this.bgmAudioA.volume = Math.min(this.bgmAudioA.volume, this.bgmVolume);
-			if (this.bgmAudioB) this.bgmAudioB.volume = Math.min(this.bgmAudioB.volume, this.bgmVolume);
+			if (this.bgmAudioA) this.bgmAudioA.volume = Math.max(0, Math.min(1, this.bgmAudioA.volume));
+			if (this.bgmAudioB) this.bgmAudioB.volume = Math.max(0, Math.min(1, this.bgmAudioB.volume));
 		},
 
 		goToCredits() { this.showCredits = true; this.updateStageBg(); },
