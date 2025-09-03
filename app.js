@@ -73,7 +73,7 @@ const app = Vue.createApp({
 					id: 'elf',
 					icon: '🏹',
 					name: { es: 'Elfo', en: 'Elf' },
-					image: 'https://orbedosdragoes.com/wp-content/uploads/2022/01/PF2-elfo-03-405x600.png',
+					image: 'https://i.pinimg.com/736x/20/6c/f4/206cf40f4522ff901f00e40e6cc3f5cf.jpg',
 					stats: { attack: 18, defend: 10, heal: 15, special: 35 }
 				},
 				{
