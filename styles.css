@@ -407,7 +407,7 @@ body[data-theme="dark"] .landing-root .container {
   }
 
   /* Add bottom padding to prevent content hiding behind fixed controls */
-  body { padding-bottom: 120px; }
+  body { padding-bottom: 140px; }
 
   /* Dark theme for fixed mobile controls */
   body[data-theme="dark"] #controls {
