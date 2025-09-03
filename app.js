@@ -367,11 +367,7 @@ const app = Vue.createApp({
 		},
 
 		attackMonster () {
-			if (!this.canUseAction()('attack')) {
-				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para atacar!' : 'Not enough energy to attack!', 'bubble--warning', 1200);
-				return;
-			}
-			this.consumeStamina('player', 'attack');
+			this.chargeStamina('player', 'attack');
 			this.sound('attack');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
@@ -391,8 +387,8 @@ const app = Vue.createApp({
 		
 		attackPlayer () {
 			if (this.monsterHealth <= 0 || this.winner === 'player') { this.isMonsterTurn = false; return; }
-			// Monster consumes stamina too
-			this.consumeStamina('monster', 'monsterAttack');
+			// Monster charges stamina too
+			this.chargeStamina('monster', 'monsterAttack');
 			this.sound('hit');
 			this.isMonsterTurn = true;
 			this.slashPlayer = true;
@@ -424,17 +420,26 @@ const app = Vue.createApp({
 		},
 
 		specialAttackMonster() {
-			if (!this.canUseAction()('special')) {
-				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para ataque especial!' : 'Not enough energy for special attack!', 'bubble--warning', 1200);
-				return;
-			}
-			this.consumeStamina('player', 'special');
+			// Check if super special is available
+			const isSuperSpecial = this.useSpecialAttack();
 			this.sound('special');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
 			let attackValue;
-			if (this.playerStats) attackValue = this.rollValue(this.playerStats.special, 0.18);
-			else attackValue = getRandomValue(10, 25);
+			if (this.playerStats) {
+				attackValue = this.rollValue(this.playerStats.special, 0.18);
+				// Double damage if super special
+				if (isSuperSpecial) {
+					attackValue *= 2;
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!!' : 'SUPER SPECIAL!!', 'bubble--level', 1800);
+				}
+			} else {
+				attackValue = getRandomValue(10, 25);
+				if (isSuperSpecial) {
+					attackValue *= 2;
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!!' : 'SUPER SPECIAL!!', 'bubble--level', 1800);
+				}
+			}
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.damageMonster = attackValue;
 			this.showCenterBubble('-' + attackValue, 'bubble--to-monster');
@@ -447,11 +452,7 @@ const app = Vue.createApp({
 		},
 
 		healPLayer() {
-			if (!this.canUseAction()('heal')) {
-				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para curar!' : 'Not enough energy to heal!', 'bubble--warning', 1200);
-				return;
-			}
-			this.consumeStamina('player', 'heal');
+			this.chargeStamina('player', 'heal');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
 			let healValue;
@@ -569,11 +570,7 @@ const app = Vue.createApp({
 		},
 
 		defend() {
-			if (!this.canUseAction()('defend')) {
-				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para defenderse!' : 'Not enough energy to defend!', 'bubble--warning', 1200);
-				return;
-			}
-			this.consumeStamina('player', 'defend');
+			this.chargeStamina('player', 'defend');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
 			this.isPlayerDefending = true;
