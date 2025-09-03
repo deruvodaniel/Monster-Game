@@ -512,7 +512,7 @@ body[data-theme="dark"] .card-face--front { background: rgba(0,0,0,0.9); color: 
 
 /* Stage-specific backgrounds */
 body[data-stage="battle"] { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F6fdd3fd3af164d4b9c495600e27e5586'); }
-body[data-stage="credits"] { background-image: linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.28)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7'); }
+body[data-stage="credits"] { background-image: linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.28)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8'); }
 body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255,0.48), rgba(255,255,255,0.48)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8'); }
 
 /* Center bubble */
