@@ -28,6 +28,7 @@
         </div>
         <!-- Mobile settings toggle and panel -->
         <button class="mobile-settings-toggle" @click="toggleMobileSettings" aria-label="Settings">⚙️</button>
+        <div class="mobile-settings-overlay" :class="{ open: showMobileSettings }" @click="showMobileSettings = false"></div>
         <div class="mobile-settings-panel" :class="{ open: showMobileSettings }">
           <div class="lang-group">
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
