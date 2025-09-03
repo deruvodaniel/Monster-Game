@@ -6,8 +6,15 @@ const app = Vue.createApp({
 
 	data() {
 		return {
+			playerName: '',
+			playerCoins: 0,
 			playerHealth: 100,
 			monsterHealth: 100,
+			// Stamina system - now charges up with actions
+			playerStamina: 0,
+			monsterStamina: 0,
+			maxStamina: 100,
+			staminaChargeRate: 20, // stamina gained per action
 			currentRound: 0,
 			fullHealth: null,
 			winner: null,
@@ -16,6 +23,7 @@ const app = Vue.createApp({
 			isMonsterHit: false,
 			isPlayerDefending: false,
 			isMonsterTurn: false,
+			hasAttackedThisTurn: false,
 			playerImg: 'https://images.pexels.com/photos/10068851/pexels-photo-10068851.jpeg',
 			monsterImg: 'https://www.cinemascomics.com/wp-content/uploads/2025/02/Tiamat-Dragon-mas-poderoso-de-toda-la-literatura-fantastica-poster.jpg',
 			started: false,
@@ -23,15 +31,34 @@ const app = Vue.createApp({
 			theme: 'light',
 			audioCtx: null,
 			soundEnabled: true,
+			sfxEnabled: true,
+			// Background music (BGM)
+			bgmAudioA: null,
+			bgmAudioB: null,
+			bgmActive: 'A',
+			bgmVolume: 0.6,
+			bgmFadeTimer: null,
+			bgmCurrentUrl: null,
+			bgmTargetUrl: null,
+			bgmStage: null,
+			bgmTracks: {
+				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				battle: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F9386db22b85a440b98e94a68f979d6b8?alt=media&token=36bbf65f-430f-4709-855e-80f83760a23f&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				credits: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F14003e39846b4575a9549f77f31cb8c0?alt=media&token=009b1637-30da-470d-bfd9-2a123e8137a7&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				congrats: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F14003e39846b4575a9549f77f31cb8c0?alt=media&token=009b1637-30da-470d-bfd9-2a123e8137a7&apiKey=eb9edba76d874a5385833a00b6be2b6e'
+			},
+			userInteracted: false,
+			showHelp: false,
+			showMobileSettings: false,
+			showWelcomeModal: true,
+			showMapScreen: false,
+			showUserMenu: false,
+			editingName: '',
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
 			isHealing: false,
 			burstMonsterSpecial: false,
-			musicTimer: null,
-			musicOsc: null,
-			musicGain: null,
-			musicMode: 'off',
 			centerBubbleText: null,
 			centerBubbleClass: '',
 			centerBubbleTimer: null,
@@ -51,49 +78,50 @@ const app = Vue.createApp({
 					id: 'warrior',
 					icon: '⚔️',
 					name: { es: 'Guerrero', en: 'Warrior' },
-					image: 'https://guerrerosdelahistoria.com/wp-content/uploads/2017/07/guerrero-medieval.jpeg',
+					image: 'https://i.pinimg.com/736x/26/b2/3a/26b23a08befd52566b5c42b566d1007a.jpg',
 					stats: { attack: 25, defend: 20, heal: 5, special: 40 }
 				},
 				{
 					id: 'elf',
 					icon: '🏹',
 					name: { es: 'Elfo', en: 'Elf' },
-					image: 'https://orbedosdragoes.com/wp-content/uploads/2022/01/PF2-elfo-03-405x600.png',
+					image: 'https://i.pinimg.com/736x/20/6c/f4/206cf40f4522ff901f00e40e6cc3f5cf.jpg',
 					stats: { attack: 18, defend: 10, heal: 15, special: 35 }
 				},
 				{
 					id: 'mage',
 					icon: '🔮',
 					name: { es: 'Mago', en: 'Wizard' },
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3F5j9KRQOC1I-BAQPiqrmkUN0OcT5bS0zeCuRbAyIuw&s',
+					image: 'https://i.pinimg.com/736x/01/cb/51/01cb51e44ad11b3d5ae84d44bb21f5ba.jpg',
 					stats: { attack: 15, defend: 8, heal: 25, special: 45 }
 				},
 				{
 					id: 'dwarf',
 					icon: '⛏️',
 					name: { es: 'Enano', en: 'Dwarf' },
-					image: 'https://preview.redd.it/4rrgn1wet4u61.jpg?width=1080&crop=smart&auto=webp&s=27f2825b584010c46b9e1c65766f5248823b0162',
+					image: 'https://i.pinimg.com/736x/7b/37/fb/7b37fb2963e63c7444b770c19debc3cb.jpg',
 					stats: { attack: 22, defend: 25, heal: 8, special: 30 }
 				}
 			],
 			selectedCharacterId: null,
 			playerStats: null,
+			currentCarouselIndex: 0,
 			defenseReductionActive: 0,
+			// Stamina charges for actions
+			staminaCharges: {
+				attack: 20,
+				special: 0, // Special attack doesn't charge stamina, it consumes it
+				heal: 25,
+				defend: 15,
+				monsterAttack: 15
+			},
 			// Levels / monsters
 			monsters: [
 				{ id: 'ghost-entity', name: { es: 'Ente Fantasmal', en: 'Ghost Entity' }, image: 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg', stats: { attack: 10 } },
 				{ id: 'blood-tiger', name: { es: 'Tigre sangriento', en: 'Blood Tiger' }, image: 'https://i.pinimg.com/1200x/a2/ae/15/a2ae15542cbf18fc808e16f8e2592762.jpg', stats: { attack: 14 } },
 				{ id: 'forest-spirit', name: { es: 'Espíritu del bosque', en: 'Forest Spirit' }, image: 'https://i.pinimg.com/736x/83/0b/07/830b07a8ee78c3751404c14fdfcea0dd.jpg', stats: { attack: 18 } },
 				{ id: 'apoc-colossus', name: { es: 'Coloso apocalíptico', en: 'Apocalyptic Colossus' }, image: 'https://i.pinimg.com/1200x/47/29/31/4729319b7a8d14fcbaba715d970e2bc6.jpg', stats: { attack: 24 } },
-				{ id: 'death-angel', name: { es: 'Ángel de la muerte', en: 'Angel of Death' }, image: 'https://i.pinimg.com/736x/80/84/5a/80845aba50bdf5256357713bfb682f86.jpg', stats: { attack: 30 } }
-			],
-			currentLevel: 0,
-			// Levels / monsters
-			monsters: [
-				{ id: 'ghost-entity', name: { es: 'Ente Fantasmal', en: 'Ghost Entity' }, image: 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg', stats: { attack: 10 } },
-				{ id: 'blood-tiger', name: { es: 'Tigre sangriento', en: 'Blood Tiger' }, image: 'https://i.pinimg.com/1200x/a2/ae/15/a2ae15542cbf18fc808e16f8e2592762.jpg', stats: { attack: 14 } },
-				{ id: 'forest-spirit', name: { es: 'Espíritu del bosque', en: 'Forest Spirit' }, image: 'https://i.pinimg.com/736x/83/0b/07/830b07a8ee78c3751404c14fdfcea0dd.jpg', stats: { attack: 18 } },
-				{ id: 'apoc-colossus', name: { es: 'Coloso apocalíptico', en: 'Apocalyptic Colossus' }, image: 'https://i.pinimg.com/1200x/47/29/31/4729319b7a8d14fcbaba715d970e2bc6.jpg', stats: { attack: 24 } },
+				{ id: 'cursed-siren', name: { es: 'Sirena maldita', en: 'Cursed Siren' }, image: 'https://i.pinimg.com/1200x/91/29/2d/91292dd2087febdf4e8fcf97d38205e3.jpg', stats: { attack: 27 } },
 				{ id: 'death-angel', name: { es: 'Ángel de la muerte', en: 'Angel of Death' }, image: 'https://i.pinimg.com/736x/80/84/5a/80845aba50bdf5256357713bfb682f86.jpg', stats: { attack: 30 } }
 			],
 			currentLevel: 0,
@@ -121,6 +149,8 @@ const app = Vue.createApp({
 					attacksDeals: 'attacks 👊 and deals',
 					themeToggle: 'Toggle Theme',
 					soundToggle: 'Toggle Sound',
+					howToPlay: 'How to play',
+					close: 'Close',
 					changeMonster: 'Change Monster Image',
 					turnMonster: "Monster's turn...",
 					turnPlayer: 'Your turn!',
@@ -165,6 +195,8 @@ const app = Vue.createApp({
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
 					soundToggle: 'Sonido',
+					howToPlay: 'Cómo jugar',
+					close: 'Cerrar',
 					changeMonster: 'Cambiar imagen del monstruo',
 					turnMonster: 'Turno del monstruo...',
 					turnPlayer: '¡Tu turno!',
@@ -194,6 +226,12 @@ const app = Vue.createApp({
 			controlsDisabled() {
 				return this.isMonsterTurn;
 			},
+		canAttack() {
+			// Only elf can attack multiple times per turn
+			if (this.selectedCharacter && this.selectedCharacter.id === 'elf') return true;
+			// Other characters can only attack once per turn
+			return !this.hasAttackedThisTurn;
+		},
 		monsterBarStyles(){
 			if ( this.monsterHealth < 0) {
 				return { width: '0%' }
@@ -222,8 +260,49 @@ const app = Vue.createApp({
 			return this.fullHealth;
 		},
 
+		// Stamina system computed properties
+		canUseSuperSpecial() {
+			return this.playerStamina >= this.maxStamina;
+		},
+
+		playerStaminaPercentage() {
+			return Math.max(0, Math.min(100, (this.playerStamina / this.maxStamina) * 100));
+		},
+
+		monsterStaminaPercentage() {
+			return Math.max(0, Math.min(100, (this.monsterStamina / this.maxStamina) * 100));
+		},
+
 		selectedCharacter() {
 			return this.characters.find(c => c.id === this.selectedCharacterId) || null;
+		},
+
+		// Infinite carousel characters
+		infiniteCharacters() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) {
+				// Large desktop - return normal characters
+				return this.characters.map((char, index) => ({ ...char, index }));
+			}
+			// Mobile and Tablet - create infinite carousel by duplicating characters
+			const chars = this.characters;
+			const infiniteArray = [];
+
+			// Add last 2 characters at beginning
+			for (let i = chars.length - 2; i < chars.length; i++) {
+				infiniteArray.push({ ...chars[i], index: `pre-${i}` });
+			}
+
+			// Add all characters
+			for (let i = 0; i < chars.length; i++) {
+				infiniteArray.push({ ...chars[i], index: `main-${i}` });
+			}
+
+			// Add first 2 characters at end
+			for (let i = 0; i < 2; i++) {
+				infiniteArray.push({ ...chars[i], index: `post-${i}` });
+			}
+
+			return infiniteArray;
 		},
 
 		currentMonster() {
@@ -236,6 +315,14 @@ const app = Vue.createApp({
 		isMonsterCritical() {
 			const max = typeof this.getMonsterMaxHealth === 'function' ? this.getMonsterMaxHealth(this.currentLevel) : 100;
 			return (this.monsterHealth / max) * 100 <= 15;
+		},
+
+		isMobile() {
+			return typeof window !== 'undefined' && window.innerWidth <= 520;
+		},
+
+		isTabletOrMobile() {
+			return typeof window !== 'undefined' && window.innerWidth <= 900;
 		},
 	},
 
@@ -255,7 +342,9 @@ const app = Vue.createApp({
 				// Draw
 				this.winner = 'draw';
 			} else if (value <= 0) {
-				// Player win
+				// Player win - award coins
+				this.playerCoins += 10;
+				this.showCenterBubble('+10 🪙', 'bubble--coins', 1500);
 				this.winner = 'player';
 			}
 		},
@@ -267,27 +356,233 @@ const app = Vue.createApp({
 			if (savedLang) this.lang = savedLang;
 			const savedTheme = localStorage.getItem('theme');
 			if (savedTheme) this.theme = savedTheme;
+			// Load saved player name
+			const savedPlayerName = localStorage.getItem('playerName');
+			if (savedPlayerName) {
+				this.playerName = savedPlayerName;
+				this.showWelcomeModal = false; // Skip welcome modal if name exists
+			}
 			document.body.setAttribute('data-theme', this.theme);
 			this.updateStageBg();
 			this.$watch('winner', (value) => {
 				if (!value) { this.updateStageBg(); return; }
-				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
-				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
 				this.updateStageBg();
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner, this.started], ([p, m, w, s]) => {
 				if (w || !s) return;
-				// Always use danger track during battle regardless of health
-				this.setMusicMode('danger');
+				this.updateStageBg();
 			});
 			this.$watch(() => [this.started, this.showCredits], () => this.updateStageBg());
+			// Attempt to unlock and play BGM after first user interaction (autoplay policies)
+			const resumeAndPlay = () => {
+				if (this.userInteracted) return;
+				this.userInteracted = true;
+				this.updateStageBg();
+				window.removeEventListener('pointerdown', resumeAndPlay);
+			};
+			window.addEventListener('pointerdown', resumeAndPlay, { once: true });
+
+			// Setup carousel listeners for mobile
+			this.$nextTick(() => {
+				this.setupCarouselListeners();
+				// Watch for screen size changes
+				window.addEventListener('resize', () => {
+					// Force reactivity update
+					this.$forceUpdate();
+					if (window.innerWidth <= 900) {
+						setTimeout(() => {
+							this.scrollToMainCharacters();
+							this.updateCarouselFocus();
+						}, 200);
+					}
+				});
+			});
 		} catch (e) {}
 	},
 
 	methods: {
 		// Character selection helpers
 		selectCharacter(id) {
-			this.selectedCharacterId = id;
+			// In carousel (mobile/tablet), only allow selection of center-focused character
+			if (window.innerWidth <= 900) {
+				const centerChar = this.getCenterCharacterInCarousel();
+				if (centerChar && centerChar.id === id) {
+					this.selectedCharacterId = id;
+				}
+			} else {
+				// Large desktop behavior - allow any selection
+				this.selectedCharacterId = id;
+			}
+		},
+
+		getCenterCharacterInCarousel() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return null;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return null;
+
+			const cards = carousel.querySelectorAll('.character-card');
+			if (!cards.length) return null;
+
+			const carouselRect = carousel.getBoundingClientRect();
+			const carouselCenter = carouselRect.left + carouselRect.width / 2;
+
+			let centerCard = null;
+			let minDistance = Infinity;
+
+			cards.forEach(card => {
+				const cardRect = card.getBoundingClientRect();
+				const cardCenter = cardRect.left + cardRect.width / 2;
+				const distance = Math.abs(carouselCenter - cardCenter);
+
+				if (distance < minDistance) {
+					minDistance = distance;
+					centerCard = card;
+				}
+			});
+
+			if (centerCard) {
+				const charId = centerCard.getAttribute('data-char-id');
+				return this.characters.find(c => c.id === charId);
+			}
+
+			return null;
+		},
+
+		updateCarouselFocus() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cards = carousel.querySelectorAll('.character-card');
+			if (!cards.length) return;
+
+			const carouselRect = carousel.getBoundingClientRect();
+			const carouselCenter = carouselRect.left + carouselRect.width / 2;
+
+			let centerCard = null;
+			let minDistance = Infinity;
+			let centerIndex = 0;
+
+			cards.forEach((card, index) => {
+				const cardRect = card.getBoundingClientRect();
+				const cardCenter = cardRect.left + cardRect.width / 2;
+				const distance = Math.abs(carouselCenter - cardCenter);
+
+				// Remove focus class from all cards
+				card.classList.remove('center-focused');
+
+				if (distance < minDistance) {
+					minDistance = distance;
+					centerCard = card;
+					centerIndex = index;
+				}
+			});
+
+			// Add focus class to center card and update index
+			if (centerCard) {
+				centerCard.classList.add('center-focused');
+				// Calculate real character index (accounting for infinite scroll)
+				const realIndex = (centerIndex - 2 + this.characters.length) % this.characters.length;
+				this.currentCarouselIndex = Math.max(0, Math.min(this.characters.length - 1, realIndex));
+			}
+		},
+
+		setupCarouselListeners() {
+			if (typeof window === 'undefined') return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			// Handle scroll events with throttling
+			let scrollTimeout;
+			carousel.addEventListener('scroll', () => {
+				clearTimeout(scrollTimeout);
+				scrollTimeout = setTimeout(() => {
+					this.updateCarouselFocus();
+					this.handleInfiniteScroll();
+				}, 50);
+			});
+
+			// Initial focus update and scroll to main characters
+			setTimeout(() => {
+				this.scrollToMainCharacters();
+				this.updateCarouselFocus();
+			}, 200);
+		},
+
+		carouselNext() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+		},
+
+		carouselPrev() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+		},
+
+		scrollToMainCharacters() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			// Scroll to the main characters section (skip the pre-duplicates)
+			const cardWidth = 260 + 24; // card width + gap
+			const offsetToMain = cardWidth * 2; // Skip 2 pre-duplicate cards
+			carousel.scrollLeft = offsetToMain;
+		},
+
+		handleInfiniteScroll() {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			const totalCards = this.infiniteCharacters.length;
+			const mainCardsCount = this.characters.length;
+			const duplicateOffset = cardWidth * 2; // 2 duplicate cards on each side
+
+			// If scrolled to the very beginning (at pre-duplicates)
+			if (carousel.scrollLeft <= 0) {
+				// Jump to the end main section
+				const jumpTo = cardWidth * (totalCards - 4); // Go to end of main chars
+				carousel.scrollLeft = jumpTo;
+			}
+			// If scrolled to the very end (at post-duplicates)
+			else if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+				// Jump back to beginning of main section
+				carousel.scrollLeft = duplicateOffset;
+			}
+		},
+
+		scrollToCharacter(index) {
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			const targetPosition = cardWidth * (index + 2); // +2 for pre-duplicate cards
+
+			carousel.scrollTo({
+				left: targetPosition,
+				behavior: 'smooth'
+			});
+
+			this.currentCarouselIndex = index;
 		},
 		rollValue(base, variance = 0.2) {
 			const min = Math.max(1, Math.floor(base * (1 - variance)));
@@ -310,8 +605,10 @@ const app = Vue.createApp({
 		},
 
 		attackMonster () {
+			this.chargeStamina('player', 'attack');
 			this.sound('attack');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let attackValue;
 			if (this.playerStats) attackValue = this.rollValue(this.playerStats.attack);
 			else attackValue = getRandomValue(5, 12);
@@ -328,6 +625,8 @@ const app = Vue.createApp({
 		
 		attackPlayer () {
 			if (this.monsterHealth <= 0 || this.winner === 'player') { this.isMonsterTurn = false; return; }
+			// Monster charges stamina too
+			this.chargeStamina('monster', 'monsterAttack');
 			this.sound('hit');
 			this.isMonsterTurn = true;
 			this.slashPlayer = true;
@@ -349,15 +648,36 @@ const app = Vue.createApp({
 			this.showCenterBubble('-' + attackValue, 'bubble--to-player');
 			setTimeout(() => { this.damagePlayer = null; }, 1000);
 			this.isPlayerHit = true;
-			setTimeout(() => { this.isPlayerHit = false; this.isMonsterTurn = false; this.slashPlayer = false; }, 900);
+			setTimeout(() => {
+				this.isPlayerHit = false;
+				this.isMonsterTurn = false;
+				this.slashPlayer = false;
+				// Reset attack flag for next player turn
+				this.hasAttackedThisTurn = false;
+			}, 900);
 		},
 
 		specialAttackMonster() {
+			// Check if super special is available
+			const isSuperSpecial = this.useSpecialAttack();
 			this.sound('special');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let attackValue;
-			if (this.playerStats) attackValue = this.rollValue(this.playerStats.special, 0.18);
-			else attackValue = getRandomValue(10, 25);
+			if (this.playerStats) {
+				attackValue = this.rollValue(this.playerStats.special, 0.18);
+				// Double damage if super special
+				if (isSuperSpecial) {
+					attackValue *= 2;
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!! x2' : 'SUPER SPECIAL!! x2', 'bubble--level', 2000);
+				}
+			} else {
+				attackValue = getRandomValue(10, 25);
+				if (isSuperSpecial) {
+					attackValue *= 2;
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!!' : 'SUPER SPECIAL!!', 'bubble--level', 1800);
+				}
+			}
 			this.monsterHealth = Math.max(this.monsterHealth - attackValue, 0);
 			this.damageMonster = attackValue;
 			this.showCenterBubble('-' + attackValue, 'bubble--to-monster');
@@ -370,7 +690,9 @@ const app = Vue.createApp({
 		},
 
 		healPLayer() {
+			this.chargeStamina('player', 'heal');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let healValue;
 			if (this.playerStats) healValue = this.rollValue(this.playerStats.heal, 0.15);
 			else healValue = getRandomValue(8, 20);
@@ -398,6 +720,7 @@ const app = Vue.createApp({
 			this.isMonsterHit = false;
 			this.isPlayerDefending = false;
 			this.isMonsterTurn = false;
+			this.hasAttackedThisTurn = false;
 		},
 
 		getMonsterMaxHealth(level) {
@@ -420,18 +743,33 @@ const app = Vue.createApp({
 			this.isMonsterHit = false;
 			this.isPlayerHit = false;
 			this.isLevelTransitioning = false;
+			this.hasAttackedThisTurn = false;
 		},
 
 		nextLevel() {
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
+				// Increment level first so map shows correct progress
+				this.currentLevel = next;
+				// Show map screen with updated progress
+				setTimeout(() => {
+					this.showMapProgress();
+				}, 500);
+			}
+		},
+
+		proceedToCurrentLevel() {
+			if (this.currentLevel < this.monsters.length) {
 				if (this.isLevelTransitioning) return;
 				this.isLevelTransitioning = true;
-				// Guard against double triggering and repeated same target
+				// Guard against double triggering
 				const now = Date.now();
-				if (now - this.lastLevelUpAt < 1500 || this.lastLeveledTo === next) { this.loadLevel(next); return; }
+				if (now - this.lastLevelUpAt < 1500 || this.lastLeveledTo === this.currentLevel) {
+					this.loadLevel(this.currentLevel);
+					return;
+				}
 				this.lastLevelUpAt = now;
-				this.lastLeveledTo = next;
+				this.lastLeveledTo = this.currentLevel;
 				// Level-up buffs
 				let atk=0, sp=0, heal=0, def=0, hp=0;
 				if (this.playerStats) {
@@ -440,15 +778,15 @@ const app = Vue.createApp({
 					this.playerStats.heal += (heal = 2);
 					this.playerStats.defend += (def = 1);
 				}
-				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(next) : 100;
+				const newMax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
 				this.playerHealth = Math.min(newMax, this.playerHealth + (hp = 20));
 				this.showCenterBubble(`Level Up! +HP ${hp} · +ATK ${atk} · +SP ${sp} · +HEAL ${heal} · +DEF ${def}`, 'bubble--level', 2400);
-				this.loadLevel(next);
+				this.loadLevel(this.currentLevel);
 			}
 		},
 
 		goToLanding() {
-			this.stopMusic();
+			this.stopBgm();
 			this.started = false;
 			this.currentLevel = 0;
 			this.winner = null;
@@ -459,7 +797,28 @@ const app = Vue.createApp({
 			this.isLevelTransitioning = false;
 			this.lastLeveledTo = -1;
 			this.showCredits = false;
+			this.showMapScreen = false;
+			// Reset game data but keep player name and coins for session
+			this.playerCoins = 0;
+			this.resetStamina();
+			// Only show welcome modal if no name is saved
+			this.showWelcomeModal = !this.playerName.trim();
 			this.updateStageBg();
+			// Refresh carousel when returning to character selection
+			this.$nextTick(() => {
+				setTimeout(() => this.setupCarouselListeners(), 200);
+			});
+		},
+
+		resetPlayerData() {
+			// Complete reset including localStorage
+			this.playerName = '';
+			this.playerCoins = 0;
+			try {
+				localStorage.removeItem('playerName');
+			} catch(e) {}
+			this.showWelcomeModal = true;
+			this.showCenterBubble(this.lang === 'es' ? 'Datos borrados' : 'Data cleared', 'bubble--warning', 1500);
 		},
 
 		addLogMessage() {
@@ -467,7 +826,9 @@ const app = Vue.createApp({
 		},
 
 		defend() {
+			this.chargeStamina('player', 'defend');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			this.isPlayerDefending = true;
 			this.defenseReductionActive = this.playerStats ? this.getDefenseReduction(this.playerStats.defend) : 0.5;
 			this.addLogMessage('player', 'defend', 0);
@@ -479,28 +840,114 @@ const app = Vue.createApp({
 			if (!this.selectedCharacter) return;
 			this.started = true;
 			this.showCredits = false;
+			this.showMapScreen = false;
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
 			this.playerHealth = 100;
 			this.lives = this.maxLives;
 			this.currentLevel = 0;
+			// Initialize stamina system
+			this.resetStamina();
 			this.loadLevel(0);
 			this.sound('start');
-			if (this.soundEnabled) this.startMusic('danger');
 			this.updateStageBg();
 		},
 
 		setLang(lang) {
 			this.lang = lang;
 			try { localStorage.setItem('lang', lang); } catch(e) {}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 
 		toggleTheme() {
 			this.theme = this.theme === 'dark' ? 'light' : 'dark';
 			document.body.setAttribute('data-theme', this.theme);
 			try { localStorage.setItem('theme', this.theme); } catch(e) {}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 
+		openHelp() {
+			this.showHelp = true;
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
+		},
+		closeHelp() { this.showHelp = false; },
+		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
+		closeMobileSettings() { this.showMobileSettings = false; },
+		closeWelcomeModal() {
+			this.showWelcomeModal = false;
+			// Save player name to localStorage
+			if (this.playerName.trim()) {
+				try { localStorage.setItem('playerName', this.playerName.trim()); } catch(e) {}
+			}
+			// Setup carousel after modal closes
+			this.$nextTick(() => {
+				setTimeout(() => this.setupCarouselListeners(), 100);
+			});
+		},
+		openUserMenu() {
+			this.editingName = this.playerName;
+			this.showUserMenu = true;
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
+		},
+		closeUserMenu() {
+			this.showUserMenu = false;
+			this.editingName = '';
+		},
+		saveName() {
+			if (this.editingName.trim() && this.editingName.trim() !== this.playerName) {
+				this.playerName = this.editingName.trim();
+				// Save to localStorage
+				try { localStorage.setItem('playerName', this.playerName); } catch(e) {}
+				this.showCenterBubble(this.lang === 'es' ? 'Nombre actualizado!' : 'Name updated!', 'bubble--success', 1500);
+			}
+		},
+		selectNewCharacter(id) {
+			if (id !== this.selectedCharacterId) {
+				this.selectedCharacterId = id;
+				this.playerStats = { ...this.characters.find(c => c.id === id).stats };
+				this.playerImg = this.characters.find(c => c.id === id).image;
+				this.showCenterBubble(this.lang === 'es' ? 'Personaje cambiado!' : 'Character changed!', 'bubble--success', 1500);
+			}
+		},
+
+		// Stamina management methods
+		chargeStamina(entity, action) {
+			const charge = this.staminaCharges[action] || 0;
+			if (entity === 'player') {
+				const oldStamina = this.playerStamina;
+				this.playerStamina = Math.min(this.maxStamina, this.playerStamina + charge);
+				if (oldStamina < this.maxStamina && this.playerStamina >= this.maxStamina) {
+					this.showCenterBubble(this.lang === 'es' ? '⚡ ¡¡SUPER ESPECIAL LISTO!! ⚡' : '⚡ SUPER SPECIAL READY!! ⚡', 'bubble--level', 2000);
+				}
+			} else if (entity === 'monster') {
+				this.monsterStamina = Math.min(this.maxStamina, this.monsterStamina + charge);
+			}
+		},
+
+		useSpecialAttack() {
+			// Reset stamina when using special attack at full charge
+			if (this.playerStamina >= this.maxStamina) {
+				this.playerStamina = 0;
+				return true; // Indicates super special was used
+			}
+			return false; // Normal special
+		},
+
+
+		resetStamina() {
+			this.playerStamina = 0;
+			this.monsterStamina = 0;
+		},
+		showMapProgress() { this.showMapScreen = true; },
+		continueToNextLevel() {
+			this.showMapScreen = false;
+			// Level already incremented in nextLevel(), just load it and apply buffs
+			this.proceedToCurrentLevel();
+		},
 		t(key) {
 			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
 		},
@@ -508,15 +955,122 @@ const app = Vue.createApp({
 		initAudio() {
 			if (!this.audioCtx) {
 				const AC = window.AudioContext || window.webkitAudioContext;
-				this.audioCtx = new AC();
+				try { this.audioCtx = new AC(); } catch (e) { this.audioCtx = null; }
 			}
 		},
 
 		sound(name) {
-			if (!this.soundEnabled) return;
+			// SFX (WebAudio synth) permanently disabled — no-op
+			return;
+		},
+
+		toggleSound() {
+			this.soundEnabled = !this.soundEnabled;
+			if (!this.soundEnabled) {
+				// Stop all background music
+				this.stopBgm();
+			} else {
+				// Resume background music
+				this.updateStageBg();
+			}
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
+		},
+
+
+		// Stage BGM control using mp3 files
+		playBgmForStage(stage) {
+			const url = this.bgmTracks && this.bgmTracks[stage];
+			if (!url || !this.soundEnabled) { this.stopBgm(); return; }
+			const ensure = (which) => {
+				if (which === 'A' && !this.bgmAudioA) { this.bgmAudioA = new Audio(); this.bgmAudioA.loop = true; this.bgmAudioA.volume = 0; }
+				if (which === 'B' && !this.bgmAudioB) { this.bgmAudioB = new Audio(); this.bgmAudioB.loop = true; this.bgmAudioB.volume = 0; }
+			};
+			ensure('A'); ensure('B');
+			// If already playing or targeting the same url for this stage, don't start a new crossfade
+			if ((this.bgmStage === stage && this.bgmCurrentUrl === url) || this.bgmTargetUrl === url) {
+				const a = this.bgmAudioA, b = this.bgmAudioB;
+				if ((a && a.src === url && !a.paused) || (b && b.src === url && !b.paused)) return;
+			}
+			const from = this.bgmActive === 'A' ? this.bgmAudioA : this.bgmAudioB;
+			const to = this.bgmActive === 'A' ? this.bgmAudioB : this.bgmAudioA;
+			if (to.src !== url) { try { to.pause(); } catch(e) {} to.src = url; }
+			to.currentTime = 0;
+			to.volume = 0;
+			this.bgmTargetUrl = url;
+			to.play().catch(() => {});
+			const duration = 600; // ms
+			const start = performance.now();
+			if (this.bgmFadeTimer) cancelAnimationFrame(this.bgmFadeTimer);
+			const clampVol = (v) => Math.max(0, Math.min(1, v));
+			const step = (ts) => {
+				const t = Math.min(1, Math.max(0, (ts - start) / duration));
+				to.volume = clampVol(this.bgmVolume * t);
+				if (from) from.volume = clampVol(this.bgmVolume * (1 - t));
+				if (t < 1) {
+					this.bgmFadeTimer = requestAnimationFrame(step);
+				} else {
+					if (from) { try { from.pause(); } catch(e) {} from.src = ''; from.currentTime = 0; from.volume = 0; }
+					this.bgmActive = this.bgmActive === 'A' ? 'B' : 'A';
+					this.bgmCurrentUrl = url;
+					this.bgmStage = stage;
+					this.bgmTargetUrl = null;
+				}
+			};
+			this.bgmFadeTimer = requestAnimationFrame(step);
+		},
+		stopBgm() {
+			if (this.bgmFadeTimer) { cancelAnimationFrame(this.bgmFadeTimer); this.bgmFadeTimer = null; }
+			if (this.bgmAudioA) { try { this.bgmAudioA.pause(); } catch(e) {} this.bgmAudioA.src=''; this.bgmAudioA.currentTime = 0; this.bgmAudioA.volume = 0; }
+			if (this.bgmAudioB) { try { this.bgmAudioB.pause(); } catch(e) {} this.bgmAudioB.src=''; this.bgmAudioB.currentTime = 0; this.bgmAudioB.volume = 0; }
+			this.bgmCurrentUrl = null; this.bgmTargetUrl = null; this.bgmStage = null;
+		},
+		setBgmVolume(vol) {
+			this.bgmVolume = Math.max(0, Math.min(1, vol));
+			if (this.bgmAudioA) this.bgmAudioA.volume = Math.max(0, Math.min(1, this.bgmAudioA.volume));
+			if (this.bgmAudioB) this.bgmAudioB.volume = Math.max(0, Math.min(1, this.bgmAudioB.volume));
+		},
+
+		goToCredits() { this.showCredits = true; this.updateStageBg(); },
+
+		updateStageBg() {
+			let stage = 'landing';
+			if (this.started && !this.winner) stage = 'battle';
+			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
+			if (this.showCredits) stage = 'credits';
+			document.body.setAttribute('data-stage', stage);
+			if (this.bgmTracks && this.bgmTracks[stage]) {
+				this.playBgmForStage(stage);
+			} else {
+				this.stopBgm();
+			}
+		},
+
+
+
+
+		loseLifeAndRetry() {
+			if (this.lives > 0) this.lives -= 1;
+			if (this.lives > 0) {
+				// Continue same level preserving monster health, restore to full for current level
+				const pmax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
+				this.playerHealth = pmax;
+				this.winner = null;
+				this.isMonsterTurn = false;
+				this.isPlayerHit = false;
+				this.isMonsterHit = false;
+				this.hasAttackedThisTurn = false;
+				return;
+			}
+			this.goToLanding();
+		},
+
+		sound(name) {
+			if (!this.sfxEnabled || !this.soundEnabled) return;
 			this.initAudio();
 			const ctx = this.audioCtx;
-			if (ctx.state === 'suspended') ctx.resume();
+			if (!ctx) return;
+			try { if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
 			const now = ctx.currentTime;
 			const play = (freq, type = 'sine', dur = 0.14, vol = 0.1, delay = 0) => {
 				const o = ctx.createOscillator();
@@ -562,121 +1116,46 @@ const app = Vue.createApp({
 			};
 			switch (name) {
 				case 'attack':
-					// fast whoosh + impact
-					sweep(600, 180, 0.12, 'sawtooth', 0.12);
-					play(120, 'square', 0.08, 0.12, 0.12);
-					noiseBurst(0.07, 0.14, 0.12);
+					// fast whoosh + impact - increased volume
+					sweep(600, 180, 0.12, 'sawtooth', 0.24);
+					play(120, 'square', 0.08, 0.24, 0.12);
+					noiseBurst(0.07, 0.28, 0.12);
 					break;
 				case 'hit':
-					play(120, 'sine', 0.08, 0.1);
-					play(90, 'triangle', 0.09, 0.08, 0.04);
-					noiseBurst(0.06, 0.1, 0.02);
+					// increased hit volumes
+					play(120, 'sine', 0.08, 0.2);
+					play(90, 'triangle', 0.09, 0.16, 0.04);
+					noiseBurst(0.06, 0.2, 0.02);
 					break;
 				case 'special':
-					// charge up + sparkle + big impact
-					sweep(220, 1200, 0.32, 'square', 0.12);
-					play(1567.98, 'sine', 0.1, 0.06, 0.32); // sparkle
-					play(1318.51, 'sine', 0.1, 0.06, 0.38);
-					noiseBurst(0.18, 0.2, 0.34);
-					play(196, 'square', 0.14, 0.12, 0.36); // thump
+					// charge up + sparkle + big impact - increased volume
+					sweep(220, 1200, 0.32, 'square', 0.35);
+					play(1567.98, 'sine', 0.12, 0.22, 0.32); // sparkle
+					play(1318.51, 'sine', 0.12, 0.20, 0.38);
+					noiseBurst(0.18, 0.40, 0.34);
+					play(196, 'square', 0.18, 0.30, 0.36); // thump
 					break;
 				case 'heal':
-					play(392.0, 'sine', 0.12, 0.06);
-					play(523.25, 'sine', 0.12, 0.06, 0.08);
-					play(659.25, 'sine', 0.16, 0.06, 0.16);
+					// increased heal volumes
+					play(392.0, 'sine', 0.12, 0.12);
+					play(523.25, 'sine', 0.12, 0.12, 0.08);
+					play(659.25, 'sine', 0.16, 0.12, 0.16);
 					break;
 				case 'defend':
-					play(329.63, 'triangle', 0.12, 0.06);
-					play(415.30, 'triangle', 0.12, 0.06, 0.06);
+					// increased defend volumes
+					play(329.63, 'triangle', 0.12, 0.12);
+					play(415.30, 'triangle', 0.12, 0.12, 0.06);
 					break;
 				case 'win': play(523.25, 'sine', 0.15, 0.07); play(659.25, 'sine', 0.15, 0.07, 0.05); play(783.99, 'sine', 0.2, 0.07, 0.1); break;
 				case 'lose': play(392, 'sawtooth', 0.18, 0.06); play(261.63, 'sawtooth', 0.22, 0.06, 0.08); break;
 				case 'start': play(329.63, 'sine', 0.12, 0.06); play(392, 'sine', 0.12, 0.06, 0.08); break;
 			}
 		},
-
-		toggleSound() {
-			this.soundEnabled = !this.soundEnabled;
-			if (this.soundEnabled) this.startMusic(this.musicMode === 'off' ? 'normal' : this.musicMode); else this.stopMusic();
-			if (this.audioCtx) {
-				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
-				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
-			}
-		},
-
-		startMusic(mode = 'normal') {
-			this.initAudio();
-			const ctx = this.audioCtx;
-			if (this.musicOsc) return;
-			this.musicOsc = ctx.createOscillator();
-			this.musicGain = ctx.createGain();
-			let cfg;
-			if (mode === 'danger') {
-				cfg = { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] };
-			} else if (mode === 'medieval') {
-				cfg = { type: 'triangle', gain: 0.035, step: 220, pattern: [392.0, 440.0, 523.25, 587.33, 659.25, 587.33, 523.25, 440.0] };
-			} else {
-				cfg = { type: 'square', gain: 0.035, step: 160, pattern: [392.0, 523.25, 659.25, 784.0, 659.25, 523.25, 440.0, 523.25, 392.0, 440.0, 523.25, 659.25] };
-			}
-			this.musicOsc.type = cfg.type;
-			this.musicGain.gain.value = cfg.gain;
-			this.musicOsc.connect(this.musicGain);
-			this.musicGain.connect(ctx.destination);
-			this.musicOsc.start();
-			const pattern = cfg.pattern;
-			let step = 0;
-			this.musicTimer = setInterval(() => {
-				if (!this.musicOsc) return;
-				this.musicOsc.frequency.setValueAtTime(pattern[step % pattern.length], ctx.currentTime);
-				step++;
-			}, cfg.step);
-			this.musicMode = mode;
-		},
-
-		goToCredits() { this.showCredits = true; this.updateStageBg(); },
-
-		updateStageBg() {
-			let stage = 'landing';
-			if (this.started && !this.winner) stage = 'battle';
-			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
-			if (this.showCredits) stage = 'credits';
-			document.body.setAttribute('data-stage', stage);
-			if (stage === 'battle') this.setMusicMode('danger'); else this.setMusicMode('medieval');
-		},
-
-		stopMusic() {
-			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
-			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
-			if (this.musicGain) { try { this.musicGain.disconnect(); } catch(e) {} this.musicGain = null; }
-			this.musicMode = 'off';
-		},
-
-
-		setMusicMode(mode) {
-			if (!this.soundEnabled) { this.musicMode = mode; return; }
-			if (this.musicMode === mode) return;
-			this.stopMusic();
-			this.startMusic(mode);
-		},
-
-		loseLifeAndRetry() {
-			if (this.lives > 0) this.lives -= 1;
-			if (this.lives > 0) {
-				// Continue same level preserving monster health, restore to full for current level
-				const pmax = this.getPlayerMaxHealth ? this.getPlayerMaxHealth(this.currentLevel) : 100;
-				this.playerHealth = pmax;
-				this.winner = null;
-				this.isMonsterTurn = false;
-				this.isPlayerHit = false;
-				this.isMonsterHit = false;
-				return;
-			}
-			this.goToLanding();
-		},
-
 		playEndJingle(type) {
+			if (!this.sfxEnabled || !this.soundEnabled) return;
 			this.initAudio();
 			const ctx = this.audioCtx;
+			if (!ctx) return;
 			if (type === 'win') {
 				// Trumpet-like fanfare
 				const chords = [
@@ -726,7 +1205,7 @@ const app = Vue.createApp({
 				o.stop(ctx.currentTime + t + 0.3);
 				t += 0.25;
 			});
-		}
+		},
 	},
 });
 
