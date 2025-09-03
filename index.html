@@ -116,11 +116,12 @@
             </div>
           </div>
 
-          <!-- Player Progress -->
-          <div class="player-progress">
-            <div class="player-avatar">
-              <img :src="selectedCharacter?.image" :alt="selectedCharacter?.name[lang]" class="player-image" />
-              <div class="player-level">{{ lang === 'es' ? 'Nivel' : 'Level' }} {{ currentLevel + 1 }}</div>
+          <!-- Dynamic Player Position -->
+          <div class="player-on-map" :style="{ transform: `translateY(${currentLevel * 120}px)` }">
+            <div class="player-avatar-map">
+              <img :src="selectedCharacter?.image" :alt="selectedCharacter?.name[lang]" class="player-image-map" />
+              <div class="player-level-map">{{ lang === 'es' ? 'Nivel' : 'Level' }} {{ currentLevel + 1 }}</div>
+              <div class="player-arrow">👤</div>
             </div>
           </div>
 
@@ -226,7 +227,7 @@
           <span class="button-text">{{ t('special') }}</span>
         </button>
         <button :disabled="controlsDisabled || mayUseHeal" @click="healPLayer" :data-action="t('heal')">
-          <span class="button-icon">����</span>
+          <span class="button-icon">💚</span>
           <span class="button-text">{{ t('heal') }}</span>
         </button>
         <button :disabled="controlsDisabled || isPlayerDefending" @click="defend" :data-action="t('defend')">
