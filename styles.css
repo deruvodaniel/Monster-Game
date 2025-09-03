@@ -397,27 +397,28 @@ body[data-theme="dark"] .landing-root .container {
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
 
-  /* Mobile layout with 45% screen split */
+  /* Optimized mobile layout for maximum card visibility */
   .board {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    height: calc(100vh - 180px); /* Reserve space for header and compact controls */
+    gap: 0.4rem;
+    height: calc(100vh - 160px); /* Optimized space for header and ultra compact controls */
     position: relative;
     overflow: hidden;
-    padding: 0.5rem;
+    padding: 0.4rem;
     margin-top: 0;
   }
 
   .fighter.container {
-    height: 45%;
+    height: calc(50% - 0.2rem);
+    min-height: 180px;
     margin: 0;
     position: relative;
-    padding: 0.6rem;
+    padding: 0.5rem;
     overflow: hidden;
     width: 100%;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    border-radius: 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
     border: 2px solid rgba(255,255,255,0.2);
   }
 
