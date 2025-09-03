@@ -1832,6 +1832,8 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
       0 -4px 20px rgba(0,0,0,0.3);
     backdrop-filter: blur(15px);
     box-sizing: border-box;
+    pointer-events: auto;
+    cursor: pointer;
   }
 
   .landing-root > button::before {
