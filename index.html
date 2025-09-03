@@ -42,10 +42,10 @@
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
-          <button v-if="playerName && started" class="icon-button" @click="openUserMenu" data-label="Perfil">👤</button>
-          <button class="icon-button" @click="toggleSound" data-label="Sonido">{{ soundEnabled ? '🔊' : '🔇' }}</button>
-          <button class="icon-button theme-icon" @click="toggleTheme" data-label="Tema">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
-          <button class="icon-button" @click="openHelp" data-label="Ayuda">ℹ️</button>
+          <button v-if="playerName && started" class="icon-button" @click="openUserMenu" :data-label="lang === 'es' ? 'Perfil' : 'Profile'">👤</button>
+          <button class="icon-button" @click="toggleSound" :data-label="lang === 'es' ? 'Sonido' : 'Sound'">{{ soundEnabled ? '🔊' : '🔇' }}</button>
+          <button class="icon-button theme-icon" @click="toggleTheme" :data-label="lang === 'es' ? 'Tema' : 'Theme'">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
+          <button class="icon-button" @click="openHelp" :data-label="lang === 'es' ? 'Ayuda' : 'Help'">ℹ️</button>
         </div>
       </header>
       <section v-if="!started" id="landing" class="landing-root">
