@@ -122,7 +122,7 @@
       </section>
 
       <template v-else>
-      <section class="board" v-if="!(winner==='player' && currentLevel === monsters.length - 1) && !showCredits">
+      <section class="board" v-if="!(winner==='player' && currentLevel === monsters.length - 1) && !showCredits && !showMapScreen">
         <section id="monster" class="container fighter monster" :class="{'is-hit': isMonsterHit, 'is-active': isMonsterTurn, 'is-critical': isMonsterCritical}">
           <h2>{{ t('monsterHealth') }}</h2>
           <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
