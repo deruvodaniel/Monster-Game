@@ -27,9 +27,13 @@ const app = Vue.createApp({
 			bgmAudio: null,
 			bgmVolume: 0.6,
 			bgmTracks: {
-				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e'
+				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				battle: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F9386db22b85a440b98e94a68f979d6b8?alt=media&token=36bbf65f-430f-4709-855e-80f83760a23f&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				credits: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F14003e39846b4575a9549f77f31cb8c0?alt=media&token=009b1637-30da-470d-bfd9-2a123e8137a7&apiKey=eb9edba76d874a5385833a00b6be2b6e',
+				congrats: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F14003e39846b4575a9549f77f31cb8c0?alt=media&token=009b1637-30da-470d-bfd9-2a123e8137a7&apiKey=eb9edba76d874a5385833a00b6be2b6e'
 			},
 			userInteracted: false,
+			showHelp: false,
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
@@ -128,6 +132,8 @@ const app = Vue.createApp({
 					attacksDeals: 'attacks 👊 and deals',
 					themeToggle: 'Toggle Theme',
 					soundToggle: 'Toggle Sound',
+					howToPlay: 'How to play',
+					close: 'Close',
 					changeMonster: 'Change Monster Image',
 					turnMonster: "Monster's turn...",
 					turnPlayer: 'Your turn!',
@@ -172,6 +178,8 @@ const app = Vue.createApp({
 					attacksDeals: 'ataca 👊 y causa',
 					themeToggle: 'Cambiar Tema',
 					soundToggle: 'Sonido',
+					howToPlay: 'Cómo jugar',
+					close: 'Cerrar',
 					changeMonster: 'Cambiar imagen del monstruo',
 					turnMonster: 'Turno del monstruo...',
 					turnPlayer: '¡Tu turno!',
@@ -284,8 +292,7 @@ const app = Vue.createApp({
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner, this.started], ([p, m, w, s]) => {
 				if (w || !s) return;
-				// Always use danger track during battle regardless of health
-				this.setMusicMode('danger');
+				this.updateStageBg();
 			});
 			this.$watch(() => [this.started, this.showCredits], () => this.updateStageBg());
 			// Attempt to unlock and play BGM after first user interaction (autoplay policies)
@@ -464,7 +471,7 @@ const app = Vue.createApp({
 		},
 
 		goToLanding() {
-			this.stopMusic();
+			this.stopBgm();
 			this.started = false;
 			this.currentLevel = 0;
 			this.winner = null;
@@ -517,6 +524,8 @@ const app = Vue.createApp({
 			try { localStorage.setItem('theme', this.theme); } catch(e) {}
 		},
 
+		openHelp() { this.showHelp = true; },
+		closeHelp() { this.showHelp = false; },
 		t(key) {
 			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
 		},
@@ -614,11 +623,8 @@ const app = Vue.createApp({
 		toggleSound() {
 			this.soundEnabled = !this.soundEnabled;
 			if (!this.soundEnabled) {
-				this.stopMusic();
 				if (this.bgmAudio) { try { this.bgmAudio.pause(); } catch(e) {} }
 			} else {
-				this.startMusic(this.musicMode === 'off' ? 'normal' : this.musicMode);
-				// Also resume stage BGM if configured
 				this.updateStageBg();
 			}
 			if (this.audioCtx) {
@@ -691,13 +697,10 @@ const app = Vue.createApp({
 			if (this.winner === 'player' && this.currentLevel === this.monsters.length - 1 && !this.showCredits) stage = 'congrats';
 			if (this.showCredits) stage = 'credits';
 			document.body.setAttribute('data-stage', stage);
-			// Prefer mp3 BGM if provided for this stage; otherwise use synth music
 			if (this.bgmTracks && this.bgmTracks[stage]) {
-				this.stopMusic();
 				this.playBgmForStage(stage);
 			} else {
 				this.stopBgm();
-				if (stage === 'battle') this.setMusicMode('danger'); else this.setMusicMode('medieval');
 			}
 		},
 
