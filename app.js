@@ -461,6 +461,16 @@ const app = Vue.createApp({
 		nextLevel() {
 			const next = this.currentLevel + 1;
 			if (next < this.monsters.length) {
+				// Show map screen first, then proceed
+				setTimeout(() => {
+					this.showMapProgress();
+				}, 500);
+			}
+		},
+
+		proceedToNextLevel() {
+			const next = this.currentLevel + 1;
+			if (next < this.monsters.length) {
 				if (this.isLevelTransitioning) return;
 				this.isLevelTransitioning = true;
 				// Guard against double triggering and repeated same target
