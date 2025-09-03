@@ -967,8 +967,10 @@ const app = Vue.createApp({
 		toggleSound() {
 			this.soundEnabled = !this.soundEnabled;
 			if (!this.soundEnabled) {
-				if (this.bgmAudio) { try { this.bgmAudio.pause(); } catch(e) {} }
+				// Stop all background music
+				this.stopBgm();
 			} else {
+				// Resume background music
 				this.updateStageBg();
 			}
 			// Close settings panel on desktop
