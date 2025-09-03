@@ -3629,17 +3629,15 @@ body[data-theme="dark"] .name-input::placeholder {
 
 /* Mobile responsive adjustments for player info */
 @media (max-width: 520px) {
+  /* Player info en header-main-content (no fijo) */
   .player-info {
-    position: fixed;
-    top: 90px;
-    right: 1rem;
-    z-index: 1100;
-    padding: 0.6rem 1rem;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+    position: relative;
+    padding: 0.3rem 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
-    border: 3px solid rgba(255,255,255,0.6);
-    backdrop-filter: blur(12px);
-    border-radius: 20px;
+    border: 2px solid rgba(255,255,255,0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
   }
 
   .player-avatar-header {
@@ -3648,11 +3646,12 @@ body[data-theme="dark"] .name-input::placeholder {
   }
 
   .player-name-header {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
   }
 
   .player-coins {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
 
   body[data-theme="dark"] .player-info {
