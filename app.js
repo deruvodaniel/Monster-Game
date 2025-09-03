@@ -546,10 +546,6 @@ const app = Vue.createApp({
 			} else {
 				this.updateStageBg();
 			}
-			if (this.audioCtx) {
-				if (!this.soundEnabled && this.audioCtx.state !== 'suspended') this.audioCtx.suspend();
-				if (this.soundEnabled && this.audioCtx.state === 'suspended') this.audioCtx.resume();
-			}
 		},
 
 
