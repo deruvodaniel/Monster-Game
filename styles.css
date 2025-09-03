@@ -3869,8 +3869,8 @@ body[data-theme="dark"] button:not(.icon-button):not(.lang-btn):not(.close-butto
 /* Mobile adjustments for ornate elements */
 @media (max-width: 520px) {
   .avatar-img {
-    width: 96px;
-    height: 96px;
+    width: 120px;
+    height: 120px;
   }
 
   .avatar-ornate-frame {
