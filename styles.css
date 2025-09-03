@@ -1404,7 +1404,7 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
 
 /* Modal */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1300; pointer-events: none; }
-.modal-dialog { pointer-events: auto; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 1rem 1.25rem; width: min(90vw, 520px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.06); }
+.modal-dialog { pointer-events: auto; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 1rem 1.25rem; width: min(95vw, 750px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.06); }
 body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.08); color: #e6e6e6; }
 .modal-title { font-size: 1.15rem; font-family: 'Cinzel', serif; font-weight: 600; }
 .modal-intro { font-size: 1rem; }
@@ -1432,8 +1432,8 @@ body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); color: #e6
   background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
   border-radius: 20px;
   padding: 2rem;
-  width: min(95vw, 600px);
-  max-height: 90vh;
+  width: min(96vw, 850px);
+  max-height: 92vh;
   overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   border: 3px solid rgba(136,0,91,0.3);
@@ -1536,7 +1536,7 @@ body[data-theme="dark"] .rules-title {
   background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
   border-radius: 20px;
   padding: 2rem;
-  width: min(90vw, 500px);
+  width: min(94vw, 650px);
   box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   border: 3px solid rgba(136,0,91,0.3);
   text-align: center;
@@ -1950,8 +1950,8 @@ body[data-theme="dark"] .monster-name {
   background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
   border-radius: 24px;
   padding: 0;
-  width: min(95vw, 700px);
-  max-height: 90vh;
+  width: min(96vw, 900px);
+  max-height: 92vh;
   overflow: hidden;
   box-shadow: 0 25px 80px rgba(0,0,0,0.4);
   border: 3px solid rgba(136,0,91,0.3);
@@ -2365,8 +2365,23 @@ body[data-theme="dark"] .char-name-small {
 /* Mobile responsive adjustments for user menu */
 @media (max-width: 520px) {
   .user-menu-dialog {
-    width: 95vw;
-    max-height: 95vh;
+    width: 98vw;
+    max-height: 96vh;
+  }
+
+  .welcome-modal-dialog {
+    width: 98vw;
+    max-height: 94vh;
+    padding: 1.5rem;
+  }
+
+  .game-result-modal {
+    width: 96vw;
+    padding: 1.5rem;
+  }
+
+  .modal-dialog {
+    width: 96vw;
   }
 
   .user-menu-header {
