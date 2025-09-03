@@ -890,6 +890,8 @@ const app = Vue.createApp({
 		openUserMenu() {
 			this.editingName = this.playerName;
 			this.showUserMenu = true;
+			// Close settings panel on desktop
+			if (window.innerWidth > 520) this.showMobileSettings = false;
 		},
 		closeUserMenu() {
 			this.showUserMenu = false;
