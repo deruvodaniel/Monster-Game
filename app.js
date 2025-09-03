@@ -27,7 +27,7 @@ const app = Vue.createApp({
 			bgmAudio: null,
 			bgmVolume: 0.6,
 			bgmTracks: {
-				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F954cfa37a48c42f7aef11b0a5d690726?alt=media&token=a1f5ebc0-b3a7-4916-a4e6-9309f0b17b93&apiKey=eb9edba76d874a5385833a00b6be2b6e'
+				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e'
 			},
 			userInteracted: false,
 			slashMonster: false,
