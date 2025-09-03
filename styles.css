@@ -9,7 +9,8 @@ html, body { overflow-x: hidden; }
 
 body {
   margin: 0;
-  background: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8') center/cover fixed no-repeat;
+  /* lighter overlay so background rocks/green are more visible on landing */
+  background: linear-gradient(rgba(255,255,255,0.50), rgba(255,255,255,0.50)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8') center/cover fixed no-repeat;
 }
 
 /* Smooth theme transition */
@@ -21,7 +22,8 @@ body, header, .container, .healthbar, .healthbar__value, button {
 body[data-theme="dark"] {
   background-color: #0f1115;
   color: #e6e6e6;
-  background-image: linear-gradient(rgba(15,17,21,0.88), rgba(15,17,21,0.88)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8');
+  /* slightly lighter dark overlay so texture shows through */
+  background-image: linear-gradient(rgba(15,17,21,0.60), rgba(15,17,21,0.60)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8');
   background-attachment: fixed;
   background-size: cover;
   background-position: center;
@@ -165,6 +167,12 @@ section {
   border-radius: 12px;
   background: rgba(255,255,255,0.95);
 }
+
+/* Make containers on landing/congrats/credits more transparent so the backdrop shows through */
+body[data-stage="landing"] .container,
+body[data-stage="congrats"] .container,
+body[data-stage="credits"] .container,
+.landing-root .container { background: rgba(255,255,255,0.78); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
 
 #monster h2,
 #player h2 {
@@ -492,8 +500,8 @@ body[data-theme="dark"] .character-card.is-selected { box-shadow: 0 0 0 3px rgba
 
 /* Stage-specific backgrounds */
 body[data-stage="battle"] { background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F6fdd3fd3af164d4b9c495600e27e5586'); }
-body[data-stage="credits"] { background-image: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7'); }
-body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255,0.88), rgba(255,255,255,0.88)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8'); }
+body[data-stage="credits"] { background-image: linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.28)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F700dab89e83b47b6b1a80c6f00b5f2f7'); }
+body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255,0.48), rgba(255,255,255,0.48)), url('https://cdn.builder.io/api/v1/image/assets%2Feb9edba76d874a5385833a00b6be2b6e%2Ff097c38ba608493fafcdbec5186ac8d8'); }
 
 /* Center bubble */
 .center-bubble { position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; font-weight: 900; letter-spacing: 0.5px; color: #fff; padding: 0.4rem 1rem; border-radius: 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.35); animation: pop-center 900ms ease-out; font-size: clamp(2rem, 7vw, 4rem); text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
