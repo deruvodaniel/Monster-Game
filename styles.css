@@ -792,6 +792,13 @@ body[data-theme="dark"] .icon-button {
   border-color: rgba(255,255,255,0.45);
 }
 
+/* Hide mobile settings on desktop */
+.mobile-settings-toggle,
+.mobile-settings-panel,
+.mobile-settings-overlay {
+  display: none;
+}
+
 /* Enhanced lives badge */
 .lives-badge {
   display:inline-flex;
