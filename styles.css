@@ -158,28 +158,50 @@ header {
     display: none;
   }
 
-  /* Settings gear button */
+  /* Enhanced settings gear button */
   .mobile-settings-toggle {
-    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
-    border: 2px solid rgba(255,255,255,0.4);
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
+    border: 2px solid rgba(255,255,255,0.5);
     color: white;
-    padding: 0.6rem;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    min-width: 44px;
-    min-height: 44px;
+    padding: 0.7rem;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    min-width: 48px;
+    min-height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    backdrop-filter: blur(8px);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+    backdrop-filter: blur(10px);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    position: relative;
+  }
+
+  .mobile-settings-toggle::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .mobile-settings-toggle:hover::before {
+    opacity: 1;
   }
 
   .mobile-settings-toggle:hover {
-    transform: rotate(90deg) scale(1.05);
-    background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.25) 100%);
+    transform: rotate(180deg) scale(1.1);
+    background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.3) 100%);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+
+  .mobile-settings-toggle:active {
+    transform: rotate(180deg) scale(1.05);
   }
 
   /* Settings dropdown panel */
