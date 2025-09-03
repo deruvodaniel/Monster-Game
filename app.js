@@ -16,6 +16,7 @@ const app = Vue.createApp({
 			isMonsterHit: false,
 			isPlayerDefending: false,
 			isMonsterTurn: false,
+			hasAttackedThisTurn: false,
 			playerImg: 'https://images.pexels.com/photos/10068851/pexels-photo-10068851.jpeg',
 			monsterImg: 'https://www.cinemascomics.com/wp-content/uploads/2025/02/Tiamat-Dragon-mas-poderoso-de-toda-la-literatura-fantastica-poster.jpg',
 			started: false,
@@ -212,6 +213,12 @@ const app = Vue.createApp({
 			controlsDisabled() {
 				return this.isMonsterTurn;
 			},
+		canAttack() {
+			// Only elf can attack multiple times per turn
+			if (this.selectedCharacter && this.selectedCharacter.id === 'elf') return true;
+			// Other characters can only attack once per turn
+			return !this.hasAttackedThisTurn;
+		},
 		monsterBarStyles(){
 			if ( this.monsterHealth < 0) {
 				return { width: '0%' }
@@ -335,6 +342,7 @@ const app = Vue.createApp({
 		attackMonster () {
 			this.sound('attack');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let attackValue;
 			if (this.playerStats) attackValue = this.rollValue(this.playerStats.attack);
 			else attackValue = getRandomValue(5, 12);
@@ -372,12 +380,19 @@ const app = Vue.createApp({
 			this.showCenterBubble('-' + attackValue, 'bubble--to-player');
 			setTimeout(() => { this.damagePlayer = null; }, 1000);
 			this.isPlayerHit = true;
-			setTimeout(() => { this.isPlayerHit = false; this.isMonsterTurn = false; this.slashPlayer = false; }, 900);
+			setTimeout(() => {
+				this.isPlayerHit = false;
+				this.isMonsterTurn = false;
+				this.slashPlayer = false;
+				// Reset attack flag for next player turn
+				this.hasAttackedThisTurn = false;
+			}, 900);
 		},
 
 		specialAttackMonster() {
 			this.sound('special');
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let attackValue;
 			if (this.playerStats) attackValue = this.rollValue(this.playerStats.special, 0.18);
 			else attackValue = getRandomValue(10, 25);
@@ -394,6 +409,7 @@ const app = Vue.createApp({
 
 		healPLayer() {
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			let healValue;
 			if (this.playerStats) healValue = this.rollValue(this.playerStats.heal, 0.15);
 			else healValue = getRandomValue(8, 20);
@@ -491,6 +507,7 @@ const app = Vue.createApp({
 
 		defend() {
 			this.currentRound++;
+			this.hasAttackedThisTurn = true;
 			this.isPlayerDefending = true;
 			this.defenseReductionActive = this.playerStats ? this.getDefenseReduction(this.playerStats.defend) : 0.5;
 			this.addLogMessage('player', 'defend', 0);
