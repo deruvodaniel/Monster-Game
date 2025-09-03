@@ -482,13 +482,71 @@ const app = Vue.createApp({
 				clearTimeout(scrollTimeout);
 				scrollTimeout = setTimeout(() => {
 					this.updateCarouselFocus();
+					this.handleInfiniteScroll();
 				}, 50);
 			});
 
-			// Initial focus update
+			// Initial focus update and scroll to main characters
 			setTimeout(() => {
+				this.scrollToMainCharacters();
 				this.updateCarouselFocus();
-			}, 100);
+			}, 200);
+		},
+
+		carouselNext() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+		},
+
+		carouselPrev() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+		},
+
+		scrollToMainCharacters() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			// Scroll to the main characters section (skip the pre-duplicates)
+			const cardWidth = 260 + 24; // card width + gap
+			const offsetToMain = cardWidth * 2; // Skip 2 pre-duplicate cards
+			carousel.scrollLeft = offsetToMain;
+		},
+
+		handleInfiniteScroll() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cardWidth = 260 + 24; // card width + gap
+			const totalCards = this.infiniteCharacters.length;
+			const mainCardsCount = this.characters.length;
+			const duplicateOffset = cardWidth * 2; // 2 duplicate cards on each side
+
+			// If scrolled to the very beginning (at pre-duplicates)
+			if (carousel.scrollLeft <= 0) {
+				// Jump to the end main section
+				const jumpTo = cardWidth * (totalCards - 4); // Go to end of main chars
+				carousel.scrollLeft = jumpTo;
+			}
+			// If scrolled to the very end (at post-duplicates)
+			else if (carousel.scrollLeft >= carousel.scrollWidth - carousel.clientWidth) {
+				// Jump back to beginning of main section
+				carousel.scrollLeft = duplicateOffset;
+			}
 		},
 		rollValue(base, variance = 0.2) {
 			const min = Math.max(1, Math.floor(base * (1 - variance)));
