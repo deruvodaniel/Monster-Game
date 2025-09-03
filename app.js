@@ -682,6 +682,10 @@ const app = Vue.createApp({
 			// Only show welcome modal if no name is saved
 			this.showWelcomeModal = !this.playerName.trim();
 			this.updateStageBg();
+			// Refresh carousel when returning to character selection
+			this.$nextTick(() => {
+				setTimeout(() => this.setupCarouselListeners(), 200);
+			});
 		},
 
 		resetPlayerData() {
