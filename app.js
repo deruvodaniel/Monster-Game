@@ -315,6 +315,10 @@ const app = Vue.createApp({
 			const max = typeof this.getMonsterMaxHealth === 'function' ? this.getMonsterMaxHealth(this.currentLevel) : 100;
 			return (this.monsterHealth / max) * 100 <= 15;
 		},
+
+		isMobile() {
+			return typeof window !== 'undefined' && window.innerWidth <= 520;
+		},
 	},
 
 	watch: {
