@@ -209,6 +209,66 @@ body[data-theme="dark"] .landing-root .container {
   .container { padding: 0.5rem; }
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
+
+  /* Mobile diagonal layout for battle cards */
+  .board {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    height: 60vh;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .fighter.container {
+    min-height: 0;
+    height: 50%;
+    margin: 0;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+    padding: 0.5rem;
+  }
+
+  .fighter.monster {
+    transform: translateY(0);
+    z-index: 2;
+  }
+
+  .fighter.player {
+    transform: translateY(-30%);
+    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+    z-index: 1;
+  }
+
+  /* Smaller images and compact layout for mobile */
+  .avatar { margin: 0.25rem 0; }
+  .avatar-img { width: 80px; height: 80px; }
+
+  /* Icon-only buttons for mobile */
+  #controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    margin-top: 0;
+  }
+
+  #controls button {
+    width: auto;
+    margin: 0;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    min-width: 50px;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hide text, show only emojis on mobile */
+  #controls button .button-text { display: none; }
 }
 
 /* Sword slash effect */
