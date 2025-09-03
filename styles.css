@@ -1134,7 +1134,7 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
 .credits-img { width: min(92vw, 560px); border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.35); margin: 0.5rem auto 1rem; display:block; }
 
 /* Modal */
-.modal-overlay { position: fixed; inset: 0; background: transparent; display: flex; align-items: flex-start; justify-content: center; padding-top: 3.5rem; z-index: 1300; pointer-events: none; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1300; pointer-events: none; }
 .modal-dialog { pointer-events: auto; background: rgba(255,255,255,0.9); border-radius: 12px; padding: 1rem 1.25rem; width: min(90vw, 520px); box-shadow: 0 8px 28px rgba(0,0,0,0.12); border: 1px solid rgba(0,0,0,0.06); }
 body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); border: 1px solid rgba(255,255,255,0.08); color: #e6e6e6; }
 .modal-title { font-size: 1.15rem; font-family: 'Cinzel', serif; font-weight: 600; }
