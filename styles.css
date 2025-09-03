@@ -361,27 +361,17 @@ header {
     }
   }
 
-  /* Show lives badge separately in mobile battle view */
-  .app-header .lives-badge {
-    display: block;
-    position: fixed;
-    top: 1rem;
-    right: 1rem;
-    z-index: 1100;
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
+  /* Lives badge en header-main-content (no separado) */
+  .header-main-content .lives-badge {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
     background: linear-gradient(135deg, rgba(255,50,50,0.9) 0%, rgba(200,0,0,0.8) 100%);
-    border: 3px solid rgba(255,255,255,0.6);
-    border-radius: 16px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-    font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    font-weight: 700;
     animation: heartbeat-mobile 2s ease-in-out infinite;
-  }
-
-  /* Only show lives badge in battle */
-  body:not([data-stage="battle"]) .app-header .lives-badge {
-    display: none;
   }
 
   @keyframes heartbeat-mobile {
