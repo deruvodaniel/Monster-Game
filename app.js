@@ -537,6 +537,7 @@ const app = Vue.createApp({
 
 		openHelp() { this.showHelp = true; },
 		closeHelp() { this.showHelp = false; },
+		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
 		t(key) {
 			return (this.messages[this.lang] && this.messages[this.lang][key]) || key;
 		},
