@@ -47,6 +47,8 @@ const app = Vue.createApp({
 			showMobileSettings: false,
 			showWelcomeModal: true,
 			showMapScreen: false,
+			showUserMenu: false,
+			editingName: '',
 			slashMonster: false,
 			slashMonsterSpecial: false,
 			slashPlayer: false,
@@ -561,6 +563,28 @@ const app = Vue.createApp({
 		closeHelp() { this.showHelp = false; },
 		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
 		closeWelcomeModal() { this.showWelcomeModal = false; },
+		openUserMenu() {
+			this.editingName = this.playerName;
+			this.showUserMenu = true;
+		},
+		closeUserMenu() {
+			this.showUserMenu = false;
+			this.editingName = '';
+		},
+		saveName() {
+			if (this.editingName.trim() && this.editingName.trim() !== this.playerName) {
+				this.playerName = this.editingName.trim();
+				this.showCenterBubble(this.lang === 'es' ? 'Nombre actualizado!' : 'Name updated!', 'bubble--success', 1500);
+			}
+		},
+		selectNewCharacter(id) {
+			if (id !== this.selectedCharacterId) {
+				this.selectedCharacterId = id;
+				this.playerStats = { ...this.characters.find(c => c.id === id).stats };
+				this.playerImg = this.characters.find(c => c.id === id).image;
+				this.showCenterBubble(this.lang === 'es' ? 'Personaje cambiado!' : 'Character changed!', 'bubble--success', 1500);
+			}
+		},
 		showMapProgress() { this.showMapScreen = true; },
 		continueToNextLevel() {
 			this.showMapScreen = false;
