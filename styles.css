@@ -264,23 +264,23 @@ header {
   /* Enhanced settings gear button */
   .mobile-settings-toggle {
     background: linear-gradient(135deg, #CD853F 0%, #8B4513 100%);
-    border: 3px solid #DAA520;
+    border: 2px solid #DAA520; /* Thinner border */
     color: white;
-    padding: 0.6rem;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    min-width: 44px;
-    min-height: 44px;
+    padding: 0.4rem; /* Less padding */
+    border-radius: 10px;
+    font-size: 1rem; /* Smaller font */
+    min-width: 36px; /* Smaller size */
+    min-height: 36px; /* Smaller size */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow:
-      inset 0 2px 0 rgba(205,133,63,0.6),
-      inset 0 -2px 0 rgba(139,69,19,0.8),
-      0 4px 12px rgba(0,0,0,0.4);
-    backdrop-filter: blur(12px);
+      inset 0 1px 0 rgba(205,133,63,0.6),
+      inset 0 -1px 0 rgba(139,69,19,0.8),
+      0 2px 8px rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
     text-shadow: 0 1px 2px rgba(0,0,0,0.6);
     position: relative;
   }
