@@ -25,8 +25,11 @@ const app = Vue.createApp({
 			soundEnabled: true,
 			sfxEnabled: false,
 			// Background music (BGM)
-			bgmAudio: null,
+			bgmAudioA: null,
+			bgmAudioB: null,
+			bgmActive: 'A',
 			bgmVolume: 0.6,
+			bgmFadeTimer: null,
 			bgmTracks: {
 				landing: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F84bd54c61bf14dafa0e86116011e9010?alt=media&token=00db2d6f-6946-4a95-8869-24f51b640905&apiKey=eb9edba76d874a5385833a00b6be2b6e',
 				battle: 'https://cdn.builder.io/o/assets%2Feb9edba76d874a5385833a00b6be2b6e%2F9386db22b85a440b98e94a68f979d6b8?alt=media&token=36bbf65f-430f-4709-855e-80f83760a23f&apiKey=eb9edba76d874a5385833a00b6be2b6e',
@@ -287,8 +290,6 @@ const app = Vue.createApp({
 			this.updateStageBg();
 			this.$watch('winner', (value) => {
 				if (!value) { this.updateStageBg(); return; }
-				if (value === 'player') { this.sound('win'); this.playEndJingle('win'); }
-				else if (value === 'monster') { this.sound('lose'); this.playEndJingle('lose'); }
 				this.updateStageBg();
 			});
 			this.$watch(() => [this.playerHealth, this.monsterHealth, this.winner, this.started], ([p, m, w, s]) => {
@@ -666,28 +667,43 @@ const app = Vue.createApp({
 		// Stage BGM control using mp3 files
 		playBgmForStage(stage) {
 			const url = this.bgmTracks && this.bgmTracks[stage];
-			if (!url) { this.stopBgm(); return; }
-			if (!this.soundEnabled) { this.stopBgm(); return; }
-			if (!this.bgmAudio) {
-				this.bgmAudio = new Audio();
-				this.bgmAudio.loop = true;
-				this.bgmAudio.volume = this.bgmVolume;
-			}
-			if (this.bgmAudio.src !== url) {
-				try { this.bgmAudio.pause(); } catch(e) {}
-				this.bgmAudio.src = url;
-			}
-			this.bgmAudio.volume = this.bgmVolume;
-			this.bgmAudio.play().catch(() => {});
+			if (!url || !this.soundEnabled) { this.stopBgm(); return; }
+			const ensure = (which) => {
+				if (which === 'A' && !this.bgmAudioA) { this.bgmAudioA = new Audio(); this.bgmAudioA.loop = true; this.bgmAudioA.volume = 0; }
+				if (which === 'B' && !this.bgmAudioB) { this.bgmAudioB = new Audio(); this.bgmAudioB.loop = true; this.bgmAudioB.volume = 0; }
+			};
+			ensure('A'); ensure('B');
+			const from = this.bgmActive === 'A' ? this.bgmAudioA : this.bgmAudioB;
+			const to = this.bgmActive === 'A' ? this.bgmAudioB : this.bgmAudioA;
+			if (to.src !== url) { try { to.pause(); } catch(e) {} to.src = url; }
+			to.currentTime = 0;
+			to.volume = 0;
+			to.play().catch(() => {});
+			const duration = 600; // ms
+			const start = performance.now();
+			if (this.bgmFadeTimer) cancelAnimationFrame(this.bgmFadeTimer);
+			const step = (ts) => {
+				const t = Math.min(1, (ts - start) / duration);
+				to.volume = this.bgmVolume * t;
+				if (from) from.volume = this.bgmVolume * (1 - t);
+				if (t < 1) {
+					this.bgmFadeTimer = requestAnimationFrame(step);
+				} else {
+					if (from) { try { from.pause(); } catch(e) {} from.src = ''; from.currentTime = 0; }
+					this.bgmActive = this.bgmActive === 'A' ? 'B' : 'A';
+				}
+			};
+			this.bgmFadeTimer = requestAnimationFrame(step);
 		},
 		stopBgm() {
-			if (this.bgmAudio) {
-				try { this.bgmAudio.pause(); } catch(e) {}
-			}
+			if (this.bgmFadeTimer) { cancelAnimationFrame(this.bgmFadeTimer); this.bgmFadeTimer = null; }
+			if (this.bgmAudioA) { try { this.bgmAudioA.pause(); } catch(e) {} this.bgmAudioA.src=''; }
+			if (this.bgmAudioB) { try { this.bgmAudioB.pause(); } catch(e) {} this.bgmAudioB.src=''; }
 		},
 		setBgmVolume(vol) {
 			this.bgmVolume = Math.max(0, Math.min(1, vol));
-			if (this.bgmAudio) this.bgmAudio.volume = this.bgmVolume;
+			if (this.bgmAudioA) this.bgmAudioA.volume = Math.min(this.bgmAudioA.volume, this.bgmVolume);
+			if (this.bgmAudioB) this.bgmAudioB.volume = Math.min(this.bgmAudioB.volume, this.bgmVolume);
 		},
 
 		goToCredits() { this.showCredits = true; this.updateStageBg(); },
