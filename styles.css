@@ -184,22 +184,9 @@ header {
     opacity: 0.8;
   }
 
-  /* Settings dropdown panel */
+  /* Settings dropdown panel - hidden on desktop */
   .mobile-settings-panel {
-    position: absolute;
-    top: 100%;
-    right: 1rem;
-    background: rgba(0,0,0,0.95);
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 16px;
-    padding: 1rem;
-    backdrop-filter: blur(15px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.6);
     display: none;
-    flex-direction: column;
-    gap: 0.8rem;
-    min-width: 200px;
-    z-index: 1300;
   }
 
   .mobile-settings-panel.open {
