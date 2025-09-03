@@ -526,6 +526,7 @@ const app = Vue.createApp({
 			if (!this.selectedCharacter) return;
 			this.started = true;
 			this.showCredits = false;
+			this.showMapScreen = false;
 			this.playerStats = { ...this.selectedCharacter.stats };
 			this.playerImg = this.selectedCharacter.image;
 			this.playerHealth = 100;
