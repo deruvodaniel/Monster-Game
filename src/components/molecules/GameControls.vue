@@ -1,8 +1,7 @@
 @@ .. @@
  <style module>
  .gameControls {
--  padding: 2rem 1rem;
-+  padding: 1rem;
+   padding: 1rem;
    display: flex;
    flex-wrap: wrap;
    gap: 1rem;
@@ -10,28 +9,24 @@
    align-items: center;
    max-width: 600px;
    margin: 0 auto;
-+  background: var(--surface-color);
-+  border-radius: 16px;
-+  border: 1px solid var(--border-color);
+   background: var(--surface-color);
+   border-radius: 16px;
+   border: 1px solid var(--border-color);
  }
  
  .controlButton {
--  min-width: 100px;
--  height: 60px;
-+  min-width: 80px;
-+  height: 50px;
+   min-width: 80px;
+   height: 50px;
    display: flex;
    flex-direction: column;
    align-items: center;
    justify-content: center;
--  gap: 0.25rem;
-+  gap: 0.2rem;
+   gap: 0.2rem;
    border-radius: 12px;
    border: 2px solid var(--border-color);
    background: var(--button-bg);
    color: var(--text-primary);
--  font-size: 0.75rem;
-+  font-size: 0.7rem;
+   font-size: 0.7rem;
    font-weight: 600;
    text-transform: uppercase;
    letter-spacing: 0.5px;
@@ -42,13 +37,11 @@
  }
  
  .buttonIcon {
--  font-size: 1.5rem;
-+  font-size: 1.2rem;
+   font-size: 1.2rem;
  }
  
  .buttonText {
--  font-size: 0.7rem;
-+  font-size: 0.65rem;
+   font-size: 0.65rem;
    line-height: 1;
  }
  
@@ -74,29 +67,23 @@
  }
  
  /* Responsive Design */
--@media (max-width: 768px) {
-+@media (max-width: 480px) {
+ @media (max-width: 480px) {
    .gameControls {
--    padding: 1.5rem 0.5rem;
-+    padding: 0.75rem;
+     padding: 0.75rem;
      gap: 0.75rem;
    }
    
    .controlButton {
--    min-width: 80px;
--    height: 50px;
-+    min-width: 70px;
-+    height: 45px;
+     min-width: 70px;
+     height: 45px;
    }
    
    .buttonIcon {
--    font-size: 1.2rem;
-+    font-size: 1rem;
+     font-size: 1rem;
    }
    
    .buttonText {
--    font-size: 0.65rem;
-+    font-size: 0.6rem;
+     font-size: 0.6rem;
    }
  }
  </style>
