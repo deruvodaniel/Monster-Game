@@ -92,7 +92,7 @@
                       <ul class="char-stats">
                         <li>⚔️ {{ t('attack') }}: {{ char.stats.attack }}</li>
                         <li>🛡️ {{ t('defend') }}: {{ char.stats.defend }}</li>
-                        <li>💚 {{ t('heal') }}: {{ char.stats.heal }}</li>
+                        <li>��� {{ t('heal') }}: {{ char.stats.heal }}</li>
                         <li>💥 {{ t('special') }}: {{ char.stats.special }}</li>
                       </ul>
                     </div>
@@ -136,7 +136,7 @@
           </div>
 
           <!-- Dynamic Player Position -->
-          <div class="player-on-map" :style="{ transform: `translateY(${currentLevel * 120}px)` }">
+          <div class="player-on-map" :style="{ transform: `translateX(-50%) translateY(${currentLevel * 120}px)` }">
             <div class="player-avatar-map">
               <img :src="selectedCharacter?.image" :alt="selectedCharacter?.name[lang]" class="player-image-map" />
               <div class="player-level-map">{{ lang === 'es' ? 'Nivel' : 'Level' }} {{ currentLevel + 1 }}</div>
