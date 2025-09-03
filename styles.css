@@ -536,31 +536,33 @@ body[data-theme="dark"] .landing-root .container {
     backdrop-filter: blur(5px);
   }
 
-  .healthbar { margin: 0.5rem 0; height: 28px; border-radius: 14px; overflow: hidden; }
+  .healthbar { margin: 0.5rem 0; height: 24px; border-radius: 12px; overflow: hidden; }
 
-  /* Monster healthbar repositioned to top */
+  /* Monster healthbar */
   .fighter.monster .healthbar {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 70%;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
     margin: 0;
     z-index: 10;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.5);
-    border: 3px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
     backdrop-filter: blur(5px);
   }
 
-  /* Player healthbar stays at bottom */
+  /* Player healthbar */
   .fighter.player .healthbar {
     position: absolute;
-    bottom: 1rem;
-    right: 1rem;
-    width: 70%;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
     margin: 0;
     z-index: 10;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.5);
-    border: 3px solid rgba(255,255,255,0.4);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
     backdrop-filter: blur(5px);
   }
 
