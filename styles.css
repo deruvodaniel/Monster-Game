@@ -833,16 +833,33 @@ body[data-theme="dark"] .lives-badge {
   border-color: rgba(255,255,255,0.2);
 }
 
-/* Floating lives indicator for mobile */
+/* Enhanced floating lives indicator for mobile */
 @media (max-width: 520px) {
   .lives-badge {
     position: fixed;
-    top: 1rem;
+    top: 90px; /* Below header */
     left: 1rem;
     z-index: 1100;
-    padding: 0.6rem 1rem;
-    font-size: 1.1rem;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+    padding: 0.7rem 1.2rem;
+    font-size: 1.2rem;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.5);
+    background: linear-gradient(135deg, rgba(255,20,20,0.9) 0%, rgba(200,0,0,0.8) 100%);
+    border: 3px solid rgba(255,255,255,0.6);
+    backdrop-filter: blur(12px);
+    border-radius: 25px;
+    font-weight: 800;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+    animation: heartbeat 2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  body[data-theme="dark"] .lives-badge {
+    background: linear-gradient(135deg, rgba(255,100,100,0.9) 0%, rgba(255,50,50,0.8) 100%);
+    border-color: rgba(255,255,255,0.7);
   }
 }
 .lives-left { margin: 0.25rem 0; font-weight: 700; }
