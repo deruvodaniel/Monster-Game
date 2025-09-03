@@ -225,11 +225,137 @@ header {
       align-items: center;
     }
 
-    /* Hide mobile settings toggle on larger screens */
-    .mobile-settings-toggle,
-    .mobile-settings-panel,
-    .mobile-settings-overlay {
+    /* Hide individual controls on desktop - only show avatar and lives badge */
+    .app-header .header-actions .lang-group,
+    .app-header .header-actions .icon-button {
       display: none !important;
+    }
+
+    /* Show desktop settings toggle instead of mobile one */
+    .mobile-settings-toggle {
+      display: flex !important;
+      position: relative;
+      background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 100%);
+      border: 2px solid rgba(255,255,255,0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 12px;
+      min-width: 45px;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+
+    .mobile-settings-toggle:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+      filter: brightness(1.15);
+    }
+
+    .mobile-settings-toggle:active {
+      transform: translateY(0) scale(1.02);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    /* Desktop settings panel styling */
+    .mobile-settings-panel {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+      border: 2px solid rgba(0,0,0,0.1);
+      border-radius: 12px;
+      padding: 1rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      flex-direction: column;
+      gap: 0.8rem;
+      min-width: 200px;
+      z-index: 1300;
+      margin-top: 0.5rem;
+    }
+
+    .mobile-settings-panel.open {
+      display: flex;
+    }
+
+    .mobile-settings-panel .icon-button {
+      display: flex !important;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.8rem;
+      padding: 0.6rem 0.8rem;
+      margin: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      text-align: left;
+      width: 100%;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-settings-panel .icon-button:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
+      transform: none;
+    }
+
+    .mobile-settings-panel .icon-button::after {
+      content: attr(data-label);
+      font-size: 0.85rem;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+    }
+
+    .mobile-settings-panel .lang-group {
+      display: flex !important;
+      justify-self: center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 100%);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Dark theme for desktop settings */
+    body[data-theme="dark"] .mobile-settings-toggle {
+      background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.12) 100%);
+      border-color: rgba(255,255,255,0.45);
+    }
+
+    body[data-theme="dark"] .mobile-settings-panel {
+      background: linear-gradient(135deg, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.9) 100%);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    body[data-theme="dark"] .mobile-settings-panel .icon-button {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      border-color: rgba(255,255,255,0.1);
+      color: #e6e6e6;
+    }
+
+    body[data-theme="dark"] .mobile-settings-panel .icon-button:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.1) 100%);
+    }
+
+    body[data-theme="dark"] .mobile-settings-panel .lang-group {
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      border-color: rgba(255,255,255,0.1);
+    }
+
+    /* Close panel when clicking outside */
+    .mobile-settings-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1250;
+      background: transparent;
+      pointer-events: none;
+    }
+
+    .mobile-settings-overlay.open {
+      display: block;
+      pointer-events: auto;
     }
   }
 
