@@ -178,6 +178,16 @@ header {
   justify-content: space-between;
   padding: 0.5rem 0.75rem;
 }
+
+.header-main-content {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex: 1;
+  justify-content: flex-end;
+  margin-right: 0.8rem;
+}
+
 .app-header .header-actions {
   display: inline-flex;
   align-items: center;
