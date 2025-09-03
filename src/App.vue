@@ -69,6 +69,9 @@
         :sound="sound"
         :play-bgm-for-stage="playBgmForStage"
         :stop-bgm="stopBgm"
+        :revive-with-life="reviveWithLife"
+        :purchase-life="purchaseLife"
+        :show-congratulations="showCongratulations"
         @close-help="closeHelp"
         @close-user-menu="closeUserMenu"
         @update-player-name="updatePlayerName"
@@ -152,6 +155,31 @@ const updatePlayerName = (newName) => {
   } catch (e) {
     console.warn('Could not save player name to localStorage')
   }
+}
+
+const reviveWithLife = () => {
+  if (lives.value > 0) {
+    lives.value--
+    playerHealth.value = getPlayerMaxHealth(currentLevel.value)
+    winner.value = null
+    isMonsterTurn.value = false
+    isPlayerHit.value = false
+    isMonsterHit.value = false
+    hasAttackedThisTurn.value = false
+  }
+}
+
+const purchaseLife = () => {
+  const cost = 50
+  if (playerCoins.value >= cost) {
+    playerCoins.value -= cost
+    lives.value++
+  }
+}
+
+const showCongratulations = () => {
+  // Show congratulations screen
+  console.log('Congratulations! Game completed!')
 }
 
 // Methods

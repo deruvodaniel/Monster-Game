@@ -136,7 +136,37 @@
     </div>
 
     <!-- Game Over Screen -->
-    <div v-if="winner" class="game-over-screen">
+    <PostBattleScreen
+      v-if="winner"
+      :battle-result="winner === 'player' ? 'victory' : winner === 'monster' ? 'defeat' : 'draw'"
+      :current-level="currentLevel"
+      :exp-gained="winner === 'player' ? 50 + currentLevel * 10 : 0"
+      :current-exp="(currentLevel + 1) * 100"
+      :exp-required-for-next="(currentLevel + 2) * 100"
+      :monsters="monsters"
+      :current-lives="lives"
+      :max-lives="3"
+      :life-regen-time="winner === 'monster' ? 300 : 0"
+      :player-coins="playerCoins"
+      :lang="lang"
+      :t="t"
+      :has-next-level="currentLevel < monsters.length - 1"
+      :leveled-up="winner === 'player'"
+      :stat-bonuses="[
+        { name: 'attack', bonus: 3 },
+        { name: 'special', bonus: 5 },
+        { name: 'heal', bonus: 2 },
+        { name: 'defend', bonus: 1 }
+      ]"
+      @next-level="nextLevel"
+      @revive-with-life="reviveWithLife"
+      @purchase-life="purchaseLife"
+      @return-to-menu="goToLanding"
+      @show-congratulations="showCongratulations"
+    />
+
+    <!-- Legacy Game Over Screen (backup) -->
+    <div v-if="false && winner" class="game-over-screen">
       <div class="game-over-content">
         <h2 v-if="winner === 'player'">{{ t('youWon') }}</h2>
         <h2 v-else-if="winner === 'monster'">{{ t('youLost') }}</h2>
@@ -227,6 +257,7 @@ import BaseProgressBar from '../components/atoms/BaseProgressBar.vue'
 import BaseAvatar from '../components/atoms/BaseAvatar.vue'
 import GameControls from '../components/molecules/GameControls.vue'
 import CharacterSelection from '../components/organisms/CharacterSelection.vue'
+import PostBattleScreen from '../components/organisms/PostBattleScreen.vue'
 
 // Props from parent - all game state and functions
 const props = defineProps({
