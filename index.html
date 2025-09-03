@@ -160,6 +160,14 @@
             <li>💚 {{ t('heal') }} — {{ t('rule3') }}</li>
             <li>🛡️ {{ t('defend') }} — {{ t('rule4') }}</li>
           </ul>
+          <h3 class="modal-title">Controles</h3>
+          <ul class="modal-list">
+            <li>Turnos: actúa cuando diga “{{ t('turnPlayer') }}”.</li>
+            <li>Botones principales: {{ t('attack') }}, {{ t('special') }}, {{ t('heal') }}, {{ t('defend') }}, {{ t('surrender') }}.</li>
+            <li>Idioma/Tema/Sonido: usa los botones de la cabecera.</li>
+            <li>Vidas: tienes {{ maxLives }} intentos por partida.</li>
+            <li>Avance: derrota al monstruo para pasar de nivel.</li>
+          </ul>
           <button class="icon-button" @click="closeHelp">{{ t('close') }}</button>
         </div>
       </div>
