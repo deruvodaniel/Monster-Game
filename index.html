@@ -54,12 +54,12 @@
         <div class="character-select">
           <h3 class="select-title">{{ t('chooseCharacter') }}</h3>
           <div class="carousel-container">
-            <!-- Navigation arrows for mobile -->
-            <div class="carousel-nav carousel-nav-left" @click="carouselPrev" v-show="isMobile">‹</div>
-            <div class="carousel-nav carousel-nav-right" @click="carouselNext" v-show="isMobile">›</div>
+            <!-- Navigation arrows for mobile and tablet -->
+            <div class="carousel-nav carousel-nav-left" @click="carouselPrev" v-show="isTabletOrMobile">‹</div>
+            <div class="carousel-nav carousel-nav-right" @click="carouselNext" v-show="isTabletOrMobile">›</div>
 
             <!-- Carousel indicators -->
-            <div class="carousel-indicators" v-show="isMobile">
+            <div class="carousel-indicators" v-show="isTabletOrMobile">
               <div
                 v-for="(char, index) in characters"
                 :key="'dot-' + char.id"
