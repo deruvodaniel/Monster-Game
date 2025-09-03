@@ -24,7 +24,7 @@
     <div v-if="!started && !showWelcomeModal" class="character-selection-screen">
       <CharacterSelection
         :characters="characters"
-        :selected-character-id="selectedCharacterIdProp"
+        :selected-character-id="selectedCharacterId"
         :lang="lang"
         :t="t"
         @select-character="selectCharacterHandler"
@@ -34,32 +34,94 @@
 
     <!-- Game Battle Screen -->
     <div v-if="started && !winner" class="battle-screen">
-      <BattleArena
-        :player-health="playerHealth"
-        :monster-health="monsterHealth"
-        :player-stamina="playerStamina"
-        :monster-stamina="monsterStamina"
-        :max-stamina="maxStamina"
-        :current-level="currentLevel"
-        :current-monster="currentMonster"
-        :selected-character="selectedCharacter"
-        :is-player-hit="isPlayerHit"
-        :is-monster-hit="isMonsterHit"
-        :is-player-defending="isPlayerDefending"
-        :is-monster-turn="isMonsterTurn"
-        :is-healing="isHealing"
-        :slash-monster="slashMonster"
-        :slash-player="slashPlayer"
-        :burst-monster-special="burstMonsterSpecial"
-        :can-use-super-special="canUseSuperSpecial"
-        :is-player-critical="isPlayerCritical"
-        :is-monster-critical="isMonsterCritical"
-        :lang="lang"
-        :t="t"
-        :get-monster-max-health="getMonsterMaxHealth"
-        :get-player-max-health="getPlayerMaxHealth"
-      />
+      <!-- Battle Arena -->
+      <div class="battle-arena">
+        <div class="battle-layout">
+          <!-- Monster Section -->
+          <div class="fighter-section monster-section" :class="{ 
+            'is-hit': isMonsterHit, 
+            'is-active': isMonsterTurn, 
+            'is-critical': isMonsterCritical 
+          }">
+            <div class="fighter-info">
+              <h3 class="fighter-name">{{ currentMonster?.name[lang] || 'Monster' }}</h3>
+              <div class="health-info">
+                <span class="health-label">{{ t('monsterHealth') }}</span>
+                <BaseProgressBar
+                  :value="monsterHealth"
+                  :max="getMonsterMaxHealth(currentLevel)"
+                  type="health"
+                />
+              </div>
+              <div class="stamina-info">
+                <span class="stamina-label">{{ lang === 'es' ? 'CARGA' : 'CHARGE' }}</span>
+                <BaseProgressBar
+                  :value="monsterStamina"
+                  :max="maxStamina"
+                  type="stamina"
+                />
+              </div>
+            </div>
+            <div class="fighter-avatar">
+              <BaseAvatar
+                :src="currentMonster?.image || 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg'"
+                :alt="currentMonster?.name[lang] || 'Monster'"
+                :size="120"
+              />
+              <div v-if="slashMonster" class="slash-effect"></div>
+              <div v-if="burstMonsterSpecial" class="burst-effect"></div>
+            </div>
+          </div>
+
+          <!-- VS Indicator -->
+          <div class="vs-indicator">
+            <span class="vs-text">VS</span>
+            <div class="turn-indicator">
+              {{ isMonsterTurn ? t('turnMonster') : t('turnPlayer') }}
+            </div>
+          </div>
+
+          <!-- Player Section -->
+          <div class="fighter-section player-section" :class="{ 
+            'is-hit': isPlayerHit, 
+            'is-defending': isPlayerDefending, 
+            'is-healing': isHealing, 
+            'is-active': !isMonsterTurn, 
+            'is-critical': isPlayerCritical 
+          }">
+            <div class="fighter-avatar">
+              <BaseAvatar
+                :src="selectedCharacter?.image || 'https://i.pinimg.com/736x/26/b2/3a/26b23a08befd52566b5c42b566d1007a.jpg'"
+                :alt="selectedCharacter?.name[lang] || 'Player'"
+                :size="120"
+              />
+              <div v-if="slashPlayer" class="slash-effect"></div>
+              <div v-if="isHealing" class="heal-effect"></div>
+            </div>
+            <div class="fighter-info">
+              <h3 class="fighter-name">{{ selectedCharacter?.name[lang] || 'Player' }}</h3>
+              <div class="health-info">
+                <span class="health-label">{{ t('yourHealth') }}</span>
+                <BaseProgressBar
+                  :value="playerHealth"
+                  :max="getPlayerMaxHealth(currentLevel)"
+                  type="health"
+                />
+              </div>
+              <div class="stamina-info" :class="{ 'stamina-full': canUseSuperSpecial }">
+                <span class="stamina-label">{{ canUseSuperSpecial ? (lang === 'es' ? 'SUPER!' : 'SUPER!') : (lang === 'es' ? 'CARGA' : 'CHARGE') }}</span>
+                <BaseProgressBar
+                  :value="playerStamina"
+                  :max="maxStamina"
+                  type="stamina"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       
+      <!-- Game Controls -->
       <GameControls
         :can-attack="canAttack"
         :can-use-super-special="canUseSuperSpecial"
@@ -161,43 +223,44 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
-import BattleArena from '../components/organisms/BattleArena.vue'
+import BaseProgressBar from '../components/atoms/BaseProgressBar.vue'
+import BaseAvatar from '../components/atoms/BaseAvatar.vue'
 import GameControls from '../components/molecules/GameControls.vue'
 import CharacterSelection from '../components/organisms/CharacterSelection.vue'
 
 // Props from parent - all game state and functions
 const props = defineProps({
-  playerName: Object,
-  playerCoins: Object,
-  playerHealth: Object,
-  monsterHealth: Object,
-  playerStamina: Object,
-  monsterStamina: Object,
-  maxStamina: Object,
-  currentLevel: Object,
-  winner: Object,
-  lives: Object,
-  started: Object,
-  characters: Object,
-  monsters: Object,
-  selectedCharacterId: Object,
+  playerName: String,
+  playerCoins: Number,
+  playerHealth: Number,
+  monsterHealth: Number,
+  playerStamina: Number,
+  monsterStamina: Number,
+  maxStamina: Number,
+  currentLevel: Number,
+  winner: String,
+  lives: Number,
+  started: Boolean,
+  characters: Array,
+  monsters: Array,
+  selectedCharacterId: String,
   selectedCharacter: Object,
   currentMonster: Object,
-  isPlayerHit: Object,
-  isMonsterHit: Object,
-  isPlayerDefending: Object,
-  isMonsterTurn: Object,
-  isHealing: Object,
-  slashMonster: Object,
-  slashPlayer: Object,
-  burstMonsterSpecial: Object,
-  damageMonster: Object,
-  damagePlayer: Object,
-  canUseSuperSpecial: Object,
-  isPlayerCritical: Object,
-  isMonsterCritical: Object,
-  canAttack: Object,
-  controlsDisabled: Object,
+  isPlayerHit: Boolean,
+  isMonsterHit: Boolean,
+  isPlayerDefending: Boolean,
+  isMonsterTurn: Boolean,
+  isHealing: Boolean,
+  slashMonster: Boolean,
+  slashPlayer: Boolean,
+  burstMonsterSpecial: Boolean,
+  damageMonster: Number,
+  damagePlayer: Number,
+  canUseSuperSpecial: Boolean,
+  isPlayerCritical: Boolean,
+  isMonsterCritical: Boolean,
+  canAttack: Boolean,
+  controlsDisabled: Boolean,
   lang: String,
   theme: String,
   soundEnabled: Boolean,
@@ -232,11 +295,8 @@ const showWelcomeModal = ref(false)
 const localPlayerName = ref('')
 const localEditingName = ref('')
 
-// Computed properties to access reactive values
-const selectedCharacterIdProp = computed(() => props.selectedCharacterId?.value)
-
 // Initialize welcome modal based on player name
-watch(() => props.playerName?.value, (newName) => {
+watch(() => props.playerName, (newName) => {
   if (!newName || newName.trim() === '') {
     showWelcomeModal.value = true
     localPlayerName.value = ''
@@ -264,7 +324,7 @@ const selectCharacterHandler = (id) => {
 }
 
 const startGameHandler = () => {
-  if (!props.selectedCharacter?.value) return
+  if (!props.selectedCharacter) return
   
   props.sound('start')
   props.startGame()
@@ -299,7 +359,7 @@ const closeUserMenu = () => {
 }
 
 const saveName = () => {
-  if (localEditingName.value.trim() && localEditingName.value.trim() !== props.playerName?.value) {
+  if (localEditingName.value.trim() && localEditingName.value.trim() !== props.playerName) {
     emit('update-player-name', localEditingName.value.trim())
   }
 }
@@ -326,6 +386,186 @@ const saveName = () => {
 
 .battle-screen {
   gap: 2rem;
+}
+
+/* Battle Arena Styles */
+.battle-arena {
+  padding: 0.5rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.battle-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.fighter-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  padding: 1rem;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.monster-section {
+  flex-direction: row;
+  background: linear-gradient(135deg, rgba(220, 38, 127, 0.1), rgba(139, 69, 19, 0.1));
+  border-color: #dc267f;
+}
+
+.player-section {
+  flex-direction: row-reverse;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+  border-color: #3b82f6;
+}
+
+.fighter-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fighter-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  text-align: center;
+}
+
+.health-info,
+.stamina-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.health-label,
+.stamina-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.fighter-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.vs-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  padding: 1rem 0.5rem;
+}
+
+.vs-text {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent-color);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.turn-indicator {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--surface-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+/* States */
+.is-active {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+  transform: scale(1.02);
+}
+
+.is-hit {
+  animation: hitFlash 0.5s ease-out;
+}
+
+.is-critical {
+  border-color: var(--danger-color);
+  animation: criticalPulse 1s ease-in-out infinite;
+}
+
+.is-defending .fighter-avatar img {
+  border-color: var(--warning-color);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+}
+
+.is-healing .fighter-avatar img {
+  border-color: var(--success-color);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+}
+
+.stamina-full .stamina-label {
+  color: var(--accent-color);
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+/* Effects */
+.slash-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.8) 50%, transparent 60%);
+  animation: slash 0.5s ease-out;
+  pointer-events: none;
+}
+
+.burst-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: burst 0.6s ease-out;
+  pointer-events: none;
+}
+
+.heal-effect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.4) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  animation: heal 1s ease-out;
+  pointer-events: none;
 }
 
 .game-over-screen {
@@ -390,8 +630,8 @@ const saveName = () => {
 .congratulations {
   padding: 1rem;
   background: linear-gradient(135deg, 
-    rgba(var(--success-rgb), 0.1), 
-    rgba(var(--accent-rgb), 0.1));
+    rgba(34, 197, 94, 0.1), 
+    rgba(255, 193, 7, 0.1));
   border-radius: 12px;
   border: 1px solid var(--success-color);
 }
@@ -470,7 +710,7 @@ const saveName = () => {
 
 .modal-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
 }
 
 .help-content {
@@ -540,6 +780,37 @@ const saveName = () => {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Animations */
+@keyframes hitFlash {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(220, 38, 127, 0.2); }
+}
+
+@keyframes criticalPulse {
+  0%, 100% { border-color: var(--danger-color); }
+  50% { border-color: rgba(239, 68, 68, 0.5); }
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px var(--accent-color); }
+  to { text-shadow: 0 0 15px var(--accent-color), 0 0 25px var(--accent-color); }
+}
+
+@keyframes slash {
+  from { transform: translateX(-100%) rotate(45deg); }
+  to { transform: translateX(100%) rotate(45deg); }
+}
+
+@keyframes burst {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
+@keyframes heal {
+  from { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+
 @keyframes floatUp {
   0% {
     opacity: 1;
@@ -553,6 +824,39 @@ const saveName = () => {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .battle-layout {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+  
+  .fighter-section {
+    flex-direction: column;
+    text-align: center;
+    padding: 0.75rem;
+  }
+  
+  .player-section {
+    flex-direction: column;
+  }
+  
+  .fighter-info {
+    order: 2;
+  }
+  
+  .fighter-avatar {
+    order: 1;
+  }
+  
+  .vs-indicator {
+    order: 0;
+    padding: 0.5rem;
+  }
+  
+  .vs-text {
+    font-size: 1.2rem;
+  }
+  
   .game-over-content {
     padding: 1.5rem;
   }
@@ -582,6 +886,24 @@ const saveName = () => {
 }
 
 @media (max-width: 480px) {
+  .battle-arena {
+    padding: 0.25rem;
+  }
+  
+  .fighter-section {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .fighter-name {
+    font-size: 1rem;
+  }
+  
+  .health-label,
+  .stamina-label {
+    font-size: 0.7rem;
+  }
+  
   .user-actions {
     flex-direction: column;
   }

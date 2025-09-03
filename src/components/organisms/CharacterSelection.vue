@@ -40,9 +40,9 @@
       </button>
     </div>
     
-    <div v-if="selectedCharacter" :class="$style.selectionActions">
+    <div v-if="selectedCharacter" class="selection-actions">
       <button 
-        :class="$style.startButton"
+        class="start-button"
         @click="$emit('start-game')"
       >
         {{ t('start') }}
@@ -325,6 +325,36 @@ onMounted(() => {
 }
 
 .startButton:active {
+  transform: translateY(0);
+}
+
+.selection-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.start-button {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(var(--primary-rgb), 0.3);
+}
+
+.start-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+}
+
+.start-button:active {
   transform: translateY(0);
 }
 
