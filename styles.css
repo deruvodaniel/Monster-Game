@@ -1694,6 +1694,8 @@ body[data-theme="dark"] .log-list .log-entry + .log-entry { border-left: 0; }
     background: rgba(255,255,255,0.4);
     border: 2px solid #DAA520;
     transition: all 0.3s ease;
+    cursor: pointer;
+    pointer-events: auto;
   }
 
   .carousel-dot.active {
