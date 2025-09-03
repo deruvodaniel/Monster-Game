@@ -2660,10 +2660,11 @@ body[data-theme="dark"] .game-result-modal h3 {
 /* Dynamic Player Positioning on Map */
 .player-on-map {
   position: absolute;
-  right: 20px;
-  top: 100px;
-  z-index: 20;
-  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  left: 50%;
+  top: 80px;
+  transform: translateX(-50%);
+  z-index: 30;
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
 }
 
