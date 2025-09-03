@@ -548,6 +548,7 @@ const app = Vue.createApp({
 
 		goToLanding() {
 			this.stopBgm();
+			this.stopStaminaRegeneration();
 			this.started = false;
 			this.currentLevel = 0;
 			this.winner = null;
@@ -562,6 +563,7 @@ const app = Vue.createApp({
 			// Reset player data for new game
 			this.playerName = '';
 			this.playerCoins = 0;
+			this.resetStamina();
 			this.showWelcomeModal = true;
 			this.updateStageBg();
 		},
@@ -595,6 +597,9 @@ const app = Vue.createApp({
 			this.playerHealth = 100;
 			this.lives = this.maxLives;
 			this.currentLevel = 0;
+			// Initialize stamina system
+			this.resetStamina();
+			this.startStaminaRegeneration();
 			this.loadLevel(0);
 			this.sound('start');
 			this.updateStageBg();
