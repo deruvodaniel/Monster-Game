@@ -428,6 +428,11 @@ const app = Vue.createApp({
 		},
 
 		specialAttackMonster() {
+			if (!this.canUseAction()('special')) {
+				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para ataque especial!' : 'Not enough energy for special attack!', 'bubble--warning', 1200);
+				return;
+			}
+			this.consumeStamina('player', 'special');
 			this.sound('special');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
@@ -446,6 +451,11 @@ const app = Vue.createApp({
 		},
 
 		healPLayer() {
+			if (!this.canUseAction()('heal')) {
+				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para curar!' : 'Not enough energy to heal!', 'bubble--warning', 1200);
+				return;
+			}
+			this.consumeStamina('player', 'heal');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
 			let healValue;
@@ -561,6 +571,11 @@ const app = Vue.createApp({
 		},
 
 		defend() {
+			if (!this.canUseAction()('defend')) {
+				this.showCenterBubble(this.lang === 'es' ? '¡Sin energía para defenderse!' : 'Not enough energy to defend!', 'bubble--warning', 1200);
+				return;
+			}
+			this.consumeStamina('player', 'defend');
 			this.currentRound++;
 			this.hasAttackedThisTurn = true;
 			this.isPlayerDefending = true;
