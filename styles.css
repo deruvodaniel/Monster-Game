@@ -253,8 +253,19 @@ body[data-theme="dark"] .landing-root .container {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: top center;
     border-radius: 0;
+  }
+
+  /* Better positioning for player to show head */
+  .fighter.player .avatar-img {
+    object-position: top center;
+    transform: translateY(-10%);
+  }
+
+  /* Monster image positioning */
+  .fighter.monster .avatar-img {
+    object-position: center center;
   }
 
   /* Fixed controls at bottom for mobile */
@@ -294,8 +305,23 @@ body[data-theme="dark"] .landing-root .container {
     font-size: 2.2rem;
   }
 
-  /* Hide text, show only emojis on mobile */
+  /* Hide text, show only emojis on mobile but add small labels */
   #controls button .button-text { display: none; }
+
+  /* Add small action labels below buttons */
+  #controls button::after {
+    content: attr(data-action);
+    position: absolute;
+    bottom: -18px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.8);
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    white-space: nowrap;
+  }
 
   /* Compact healthbar and text for diagonal layout */
   .fighter h2 {
