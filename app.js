@@ -640,59 +640,7 @@ const app = Vue.createApp({
 			this.goToLanding();
 		},
 
-		playEndJingle(type) { if (!this.sfxEnabled || !this.soundEnabled) return;
-			this.initAudio();
-			const ctx = this.audioCtx;
-			if (type === 'win') {
-				// Trumpet-like fanfare
-				const chords = [
-					[392.0, 523.25], // G4 + C5
-					[440.0, 587.33], // A4 + D5
-					[523.25, 659.25], // C5 + E5
-					[587.33, 784.0]  // D5 + G5
-				];
-				let t = 0;
-				const trumpet = (freq, start) => {
-					const o = ctx.createOscillator();
-					const f = ctx.createBiquadFilter();
-					const g = ctx.createGain();
-					o.type = 'sawtooth';
-					o.frequency.setValueAtTime(freq, start);
-					f.type = 'bandpass';
-					f.frequency.setValueAtTime(1200, start);
-					f.Q.value = 6;
-					g.gain.setValueAtTime(0, start);
-					g.gain.linearRampToValueAtTime(0.12, start + 0.04);
-					g.gain.exponentialRampToValueAtTime(0.0001, start + 0.35);
-					o.connect(f); f.connect(g); g.connect(ctx.destination);
-					o.start(start);
-					o.stop(start + 0.4);
-				};
-				chords.forEach(([a,b]) => {
-					const start = ctx.currentTime + t;
-					trumpet(a, start);
-					trumpet(b, start);
-					t += 0.28;
-				});
-				return;
-			}
-			// Lose jingle
-			const notes = [392.0, 349.23, 261.63, 174.61];
-			let t = 0;
-			notes.forEach((f) => {
-				const o = ctx.createOscillator();
-				const g = ctx.createGain();
-				o.type = 'square';
-				o.frequency.setValueAtTime(f, ctx.currentTime + t);
-				g.gain.setValueAtTime(0, ctx.currentTime + t);
-				g.gain.linearRampToValueAtTime(0.1, ctx.currentTime + t + 0.02);
-				g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + t + 0.25);
-				o.connect(g); g.connect(ctx.destination);
-				o.start(ctx.currentTime + t);
-				o.stop(ctx.currentTime + t + 0.3);
-				t += 0.25;
-			});
-		}
+		playEndJingle(type) { /* disabled */ return; }
 	},
 });
 
