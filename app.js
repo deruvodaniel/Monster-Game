@@ -562,12 +562,23 @@ const app = Vue.createApp({
 			this.lastLeveledTo = -1;
 			this.showCredits = false;
 			this.showMapScreen = false;
-			// Reset player data for new game
-			this.playerName = '';
+			// Reset game data but keep player name and coins for session
 			this.playerCoins = 0;
 			this.resetStamina();
-			this.showWelcomeModal = true;
+			// Only show welcome modal if no name is saved
+			this.showWelcomeModal = !this.playerName.trim();
 			this.updateStageBg();
+		},
+
+		resetPlayerData() {
+			// Complete reset including localStorage
+			this.playerName = '';
+			this.playerCoins = 0;
+			try {
+				localStorage.removeItem('playerName');
+			} catch(e) {}
+			this.showWelcomeModal = true;
+			this.showCenterBubble(this.lang === 'es' ? 'Datos borrados' : 'Data cleared', 'bubble--warning', 1500);
 		},
 
 		addLogMessage() {
