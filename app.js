@@ -867,6 +867,7 @@ const app = Vue.createApp({
 		openHelp() { this.showHelp = true; },
 		closeHelp() { this.showHelp = false; },
 		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
+		closeMobileSettings() { this.showMobileSettings = false; },
 		closeWelcomeModal() {
 			this.showWelcomeModal = false;
 			// Save player name to localStorage
