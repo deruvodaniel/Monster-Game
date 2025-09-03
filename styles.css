@@ -394,10 +394,12 @@ header {
     z-index: 1250;
     background: transparent;
     display: none;
+    pointer-events: none;
   }
 
   .mobile-settings-overlay.open {
     display: block;
+    pointer-events: auto;
   }
 
   /* Show mobile settings on mobile */
