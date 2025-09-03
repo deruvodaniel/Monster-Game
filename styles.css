@@ -568,7 +568,7 @@ body[data-theme="dark"] .landing-root .container {
 
   .fighter.container {
     flex: 0 0 auto;
-    min-height: 240px; /* Increased height for better character visibility */
+    min-height: 280px; /* Increased height for better character visibility */
     margin: 0;
     position: relative;
     padding: 0.8rem;
@@ -602,7 +602,7 @@ body[data-theme="dark"] .landing-root .container {
   .avatar {
     margin: 0.5rem 0 1rem 0;
     position: relative;
-    height: 160px; /* Increased height significantly */
+    height: 200px; /* Increased height significantly */
     overflow: hidden;
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0,0,0,0.6);
@@ -638,13 +638,13 @@ body[data-theme="dark"] .landing-root .container {
   /* Player image positioning - focus on face/upper body */
   .fighter.player .avatar-img {
     object-position: center 20%;
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 
   /* Monster image positioning - focus on face/head area */
   .fighter.monster .avatar-img {
     object-position: center 25%;
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 
   /* Ultra compact controls for mobile */
