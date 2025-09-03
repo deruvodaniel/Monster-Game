@@ -5,6 +5,7 @@
 html {
   font-family: 'Jost', sans-serif;
 }
+html, body { overflow-x: hidden; }
 
 body {
   margin: 0;
@@ -550,6 +551,14 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
 .winner-name { margin: 0.25rem 0; }
 .credits-screen { text-align:center; }
 .credits-img { width: min(92vw, 560px); border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.35); margin: 0.5rem auto 1rem; display:block; }
+
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1300; }
+.modal-dialog { background: rgba(255,255,255,0.98); border-radius: 12px; padding: 1rem; width: min(92vw, 560px); box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+.modal-title { margin: 0 0 0.5rem; }
+.modal-intro { margin: 0 0 0.5rem; opacity: 0.9; }
+.modal-list { margin: 0 0 0.75rem; padding-left: 1rem; text-align: left; }
+body[data-theme="dark"] .modal-dialog { background: rgba(0,0,0,0.85); color: #e6e6e6; border: 1px solid rgba(255,255,255,0.12); }
 
 /* Win trumpet fanfare overlay */
 .win-fanfare { position: fixed; z-index: 1100; left: 50%; top: 18%; transform: translateX(-50%); pointer-events: none; }
