@@ -762,6 +762,19 @@ body[data-theme="dark"] .lives-badge {
   background: linear-gradient(135deg, rgba(255,100,100,0.2) 0%, rgba(255,50,50,0.1) 100%);
   border-color: rgba(255,255,255,0.2);
 }
+
+/* Floating lives indicator for mobile */
+@media (max-width: 520px) {
+  .lives-badge {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1100;
+    padding: 0.6rem 1rem;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+}
 .lives-left { margin: 0.25rem 0; font-weight: 700; }
 
 /* Damage numbers */
