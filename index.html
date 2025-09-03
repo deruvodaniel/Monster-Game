@@ -136,31 +136,37 @@
           <h2>{{ t('monsterHealth') }}</h2>
           <p class="monster-name" v-if="currentMonster">{{ currentMonster.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
-            <img :src="monsterImg" alt="monster" class="avatar-img" />
+            <div class="avatar-ornate-frame">
+              <img :src="monsterImg" alt="monster" class="avatar-img" />
+            </div>
             <span class="slash" v-if="slashMonster"></span>
             <span class="slash slash--special" v-if="slashMonsterSpecial"></span>
             <span class="burst burst--special" v-if="burstMonsterSpecial"></span>
             <span class="shockwave" v-if="burstMonsterSpecial"></span>
           </div>
-          <div class="healthbar">
+          <div class="healthbar-container">
             <div class="healthbar__value" :style="monsterBarStyles"></div>
           </div>
-          <div class="staminabar">
+          <div class="staminabar-container">
             <div class="staminabar__value" :style="{ width: monsterStaminaPercentage + '%' }"></div>
+            <div class="stamina-label">{{ lang === 'es' ? 'CARGA' : 'CHARGE' }}</div>
           </div>
         </section>
         <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-healing': isHealing, 'is-active': !isMonsterTurn, 'is-critical': isPlayerCritical}">
           <h2>{{ t('yourHealth') }}</h2>
           <p class="player-name" v-if="selectedCharacter">{{ selectedCharacter.name[lang] }}</p>
           <div class="avatar" aria-hidden="true">
-            <img :src="playerImg" alt="player" class="avatar-img" />
+            <div class="avatar-ornate-frame">
+              <img :src="playerImg" alt="player" class="avatar-img" />
+            </div>
             <span class="slash slash--enemy" v-if="slashPlayer"></span>
           </div>
-          <div class="healthbar">
+          <div class="healthbar-container">
             <div class="healthbar__value" :style="playerBarStyles"></div>
           </div>
-          <div class="staminabar">
+          <div class="staminabar-container" :class="{ 'stamina-full': canUseSuperSpecial }">
             <div class="staminabar__value" :style="{ width: playerStaminaPercentage + '%' }"></div>
+            <div class="stamina-label">{{ canUseSuperSpecial ? (lang === 'es' ? 'SUPER!' : 'SUPER!') : (lang === 'es' ? 'CARGA' : 'CHARGE') }}</div>
           </div>
         </section>
       </section>
