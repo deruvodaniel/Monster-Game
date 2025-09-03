@@ -10,6 +10,12 @@ const app = Vue.createApp({
 			playerCoins: 0,
 			playerHealth: 100,
 			monsterHealth: 100,
+			// Stamina system
+			playerStamina: 100,
+			monsterStamina: 100,
+			maxStamina: 100,
+			staminaRegenRate: 5, // stamina points per second
+			staminaRegenTimer: null,
 			currentRound: 0,
 			fullHealth: null,
 			winner: null,
@@ -101,6 +107,14 @@ const app = Vue.createApp({
 			selectedCharacterId: null,
 			playerStats: null,
 			defenseReductionActive: 0,
+			// Stamina costs for actions
+			staminaCosts: {
+				attack: 20,
+				special: 35,
+				heal: 25,
+				defend: 15,
+				monsterAttack: 15
+			},
 			// Levels / monsters
 			monsters: [
 				{ id: 'ghost-entity', name: { es: 'Ente Fantasmal', en: 'Ghost Entity' }, image: 'https://i.pinimg.com/1200x/c3/df/cc/c3dfcc2627727ba491a3c5147e640cf8.jpg', stats: { attack: 10 } },
@@ -244,6 +258,22 @@ const app = Vue.createApp({
 			const pmax = typeof this.getPlayerMaxHealth === 'function' ? this.getPlayerMaxHealth(this.currentLevel) : 100;
 			this.fullHealth = this.playerHealth >= pmax;
 			return this.fullHealth;
+		},
+
+		// Stamina system computed properties
+		canUseAction() {
+			return (action) => {
+				const cost = this.staminaCosts[action] || 0;
+				return this.playerStamina >= cost;
+			};
+		},
+
+		playerStaminaPercentage() {
+			return Math.max(0, Math.min(100, (this.playerStamina / this.maxStamina) * 100));
+		},
+
+		monsterStaminaPercentage() {
+			return Math.max(0, Math.min(100, (this.monsterStamina / this.maxStamina) * 100));
 		},
 
 		selectedCharacter() {
