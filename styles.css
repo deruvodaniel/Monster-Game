@@ -839,7 +839,7 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Stamina bars also thinner */
   .staminabar-container {
-    height: 10px;
+    height: 8px;
     margin: 0.2rem 0;
   }
 
