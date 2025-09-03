@@ -177,7 +177,7 @@ const app = Vue.createApp({
 					gameOver: '¡Fin del Juego!',
 					youLost: '¡Perdiste!',
 					youWon: '¡Ganaste!',
-					levelCleared: '��Nivel superado!',
+					levelCleared: '¡Nivel superado!',
 					draw: '¡Empate!',
 					startNew: 'Comenzar de Nuevo',
 					attack: 'ATACAR',
@@ -431,7 +431,7 @@ const app = Vue.createApp({
 				// Double damage if super special
 				if (isSuperSpecial) {
 					attackValue *= 2;
-					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!!' : 'SUPER SPECIAL!!', 'bubble--level', 1800);
+					this.showCenterBubble(this.lang === 'es' ? '¡¡SUPER ESPECIAL!! x2' : 'SUPER SPECIAL!! x2', 'bubble--level', 2000);
 				}
 			} else {
 				attackValue = getRandomValue(10, 25);
