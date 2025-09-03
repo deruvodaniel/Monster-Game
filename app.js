@@ -6,6 +6,8 @@ const app = Vue.createApp({
 
 	data() {
 		return {
+			playerName: '',
+			playerCoins: 0,
 			playerHealth: 100,
 			monsterHealth: 100,
 			currentRound: 0,
@@ -275,7 +277,9 @@ const app = Vue.createApp({
 				// Draw
 				this.winner = 'draw';
 			} else if (value <= 0) {
-				// Player win
+				// Player win - award coins
+				this.playerCoins += 10;
+				this.showCenterBubble('+10 🪙', 'bubble--coins', 1500);
 				this.winner = 'player';
 			}
 		},
