@@ -10,12 +10,11 @@ const app = Vue.createApp({
 			playerCoins: 0,
 			playerHealth: 100,
 			monsterHealth: 100,
-			// Stamina system
-			playerStamina: 100,
-			monsterStamina: 100,
+			// Stamina system - now charges up with actions
+			playerStamina: 0,
+			monsterStamina: 0,
 			maxStamina: 100,
-			staminaRegenRate: 5, // stamina points per second
-			staminaRegenTimer: null,
+			staminaChargeRate: 20, // stamina gained per action
 			currentRound: 0,
 			fullHealth: null,
 			winner: null,
@@ -107,10 +106,10 @@ const app = Vue.createApp({
 			selectedCharacterId: null,
 			playerStats: null,
 			defenseReductionActive: 0,
-			// Stamina costs for actions
-			staminaCosts: {
+			// Stamina charges for actions
+			staminaCharges: {
 				attack: 20,
-				special: 35,
+				special: 0, // Special attack doesn't charge stamina, it consumes it
 				heal: 25,
 				defend: 15,
 				monsterAttack: 15
@@ -261,11 +260,8 @@ const app = Vue.createApp({
 		},
 
 		// Stamina system computed properties
-		canUseAction() {
-			return (action) => {
-				const cost = this.staminaCosts[action] || 0;
-				return this.playerStamina >= cost;
-			};
+		canUseSuperSpecial() {
+			return this.playerStamina >= this.maxStamina;
 		},
 
 		playerStaminaPercentage() {
