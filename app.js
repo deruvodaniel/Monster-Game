@@ -80,7 +80,7 @@ const app = Vue.createApp({
 					id: 'mage',
 					icon: '🔮',
 					name: { es: 'Mago', en: 'Wizard' },
-					image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS3F5j9KRQOC1I-BAQPiqrmkUN0OcT5bS0zeCuRbAyIuw&s',
+					image: 'https://i.pinimg.com/736x/2e/92/22/2e9222960f3e54399cd2cedbd9f62105.jpg',
 					stats: { attack: 15, defend: 8, heal: 25, special: 45 }
 				},
 				{
