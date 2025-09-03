@@ -751,6 +751,10 @@ const app = Vue.createApp({
 			if (this.playerName.trim()) {
 				try { localStorage.setItem('playerName', this.playerName.trim()); } catch(e) {}
 			}
+			// Setup carousel after modal closes
+			this.$nextTick(() => {
+				setTimeout(() => this.setupCarouselListeners(), 100);
+			});
 		},
 		openUserMenu() {
 			this.editingName = this.playerName;
