@@ -43,7 +43,7 @@
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
           <button v-if="playerName && started" class="icon-button" @click="openUserMenu" data-label="Perfil">👤</button>
-          <button class="icon-button" @click="toggleSound" data-label="Sonido">{{ soundEnabled ? '🔊' : '��' }}</button>
+          <button class="icon-button" @click="toggleSound" data-label="Sonido">{{ soundEnabled ? '🔊' : '🔇' }}</button>
           <button class="icon-button theme-icon" @click="toggleTheme" data-label="Tema">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
           <button class="icon-button" @click="openHelp" data-label="Ayuda">ℹ️</button>
         </div>
@@ -55,8 +55,8 @@
           <h3 class="select-title">{{ t('chooseCharacter') }}</h3>
           <div class="carousel-container">
             <!-- Navigation arrows for mobile -->
-            <div class="carousel-nav carousel-nav-left" @click="carouselPrev" v-show="window.innerWidth <= 520">‹</div>
-            <div class="carousel-nav carousel-nav-right" @click="carouselNext" v-show="window.innerWidth <= 520">›</div>
+            <div class="carousel-nav carousel-nav-left" @click="carouselPrev" v-show="isMobile">‹</div>
+            <div class="carousel-nav carousel-nav-right" @click="carouselNext" v-show="isMobile">›</div>
 
             <div class="characters-grid" ref="charactersGrid">
               <!-- Duplicate last characters at beginning for infinite scroll -->
