@@ -438,8 +438,10 @@ header {
 /* Desktop header - funciona como mobile pero con avatar y vidas visibles */
 @media (min-width: 521px) {
   /* Ocultar header-actions completamente en desktop */
-  .app-header .header-actions {
+  .app-header .header-actions,
+  .app-header .header-actions * {
     display: none !important;
+    visibility: hidden !important;
   }
 
   /* header-main-content siempre visible en desktop */
@@ -1014,7 +1016,7 @@ body[data-theme="dark"] .landing-root .container {
 .slash--enemy { transform: rotate(200deg) translateX(-120%); }
 .slash--special { border-top-width: 6px; border-top-color: rgba(255, 20, 147, 0.9); filter: drop-shadow(0 0 10px rgba(255,20,147,0.8)); }
 .slash--special::after {
-  content: '✷';
+  content: '���';
   position: absolute;
   right: -6px;
   top: -6px;
