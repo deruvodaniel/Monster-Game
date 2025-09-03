@@ -964,25 +964,19 @@ body[data-theme="dark"] .landing-root .container {
   body[data-theme="dark"] #controls button {
     background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
     border-color: #4A5568;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
   }
 
-  body[data-theme="dark"] #controls button::before {
-    background: linear-gradient(45deg, #718096, #4A5568, #2D3748, #1A202C);
-    box-shadow: 0 0 0 1px rgba(113,128,150,0.3);
-  }
-
-  body[data-theme="dark"] #controls button:hover {
-    background: linear-gradient(135deg, #718096 0%, #4A5568 100%);
+  body[data-theme="dark"] #controls button:hover,
+  body[data-theme="dark"] #controls button:active {
+    background: linear-gradient(135deg, #4A5568 0%, #2D3748 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
   }
 
   body[data-theme="dark"] #controls button:disabled {
     background: linear-gradient(135deg, #2b2b2f 0%, #3a3a3f 100%);
     border-color: #3a3a3f;
-  }
-
-  body[data-theme="dark"] #controls button:disabled::before {
-    background: linear-gradient(45deg, #3a3a3f, #2b2b2f, #1a1a1a, #0f0f0f);
-    box-shadow: 0 0 0 1px rgba(58,58,63,0.2);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
   }
 }
 
