@@ -350,7 +350,106 @@ const app = Vue.createApp({
 	methods: {
 		// Character selection helpers
 		selectCharacter(id) {
-			this.selectedCharacterId = id;
+			// In mobile carousel, only allow selection of center-focused character
+			if (window.innerWidth <= 520) {
+				const centerChar = this.getCenterCharacterInCarousel();
+				if (centerChar && centerChar.id === id) {
+					this.selectedCharacterId = id;
+				}
+			} else {
+				// Desktop behavior - allow any selection
+				this.selectedCharacterId = id;
+			}
+		},
+
+		getCenterCharacterInCarousel() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return null;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return null;
+
+			const cards = carousel.querySelectorAll('.character-card');
+			if (!cards.length) return null;
+
+			const carouselRect = carousel.getBoundingClientRect();
+			const carouselCenter = carouselRect.left + carouselRect.width / 2;
+
+			let centerCard = null;
+			let minDistance = Infinity;
+
+			cards.forEach(card => {
+				const cardRect = card.getBoundingClientRect();
+				const cardCenter = cardRect.left + cardRect.width / 2;
+				const distance = Math.abs(carouselCenter - cardCenter);
+
+				if (distance < minDistance) {
+					minDistance = distance;
+					centerCard = card;
+				}
+			});
+
+			if (centerCard) {
+				const charId = centerCard.getAttribute('data-char-id');
+				return this.characters.find(c => c.id === charId);
+			}
+
+			return null;
+		},
+
+		updateCarouselFocus() {
+			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			const cards = carousel.querySelectorAll('.character-card');
+			if (!cards.length) return;
+
+			const carouselRect = carousel.getBoundingClientRect();
+			const carouselCenter = carouselRect.left + carouselRect.width / 2;
+
+			let centerCard = null;
+			let minDistance = Infinity;
+
+			cards.forEach(card => {
+				const cardRect = card.getBoundingClientRect();
+				const cardCenter = cardRect.left + cardRect.width / 2;
+				const distance = Math.abs(carouselCenter - cardCenter);
+
+				// Remove focus class from all cards
+				card.classList.remove('center-focused');
+
+				if (distance < minDistance) {
+					minDistance = distance;
+					centerCard = card;
+				}
+			});
+
+			// Add focus class to center card
+			if (centerCard) {
+				centerCard.classList.add('center-focused');
+			}
+		},
+
+		setupCarouselListeners() {
+			if (typeof window === 'undefined') return;
+
+			const carousel = document.querySelector('.characters-grid');
+			if (!carousel) return;
+
+			// Handle scroll events with throttling
+			let scrollTimeout;
+			carousel.addEventListener('scroll', () => {
+				clearTimeout(scrollTimeout);
+				scrollTimeout = setTimeout(() => {
+					this.updateCarouselFocus();
+				}, 50);
+			});
+
+			// Initial focus update
+			setTimeout(() => {
+				this.updateCarouselFocus();
+			}, 100);
 		},
 		rollValue(base, variance = 0.2) {
 			const min = Math.max(1, Math.floor(base * (1 - variance)));
