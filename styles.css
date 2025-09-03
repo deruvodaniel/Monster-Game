@@ -298,7 +298,29 @@ body[data-theme="dark"] .landing-root .container {
   #controls button .button-text { display: none; }
 
   /* Compact healthbar and text for diagonal layout */
-  .fighter h2 { font-size: 0.9rem; margin: 0.1rem; }
+  .fighter h2 {
+    font-size: 0.75rem;
+    margin: 0;
+    position: absolute;
+    z-index: 10;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  /* Monster health title above healthbar */
+  .fighter.monster h2 {
+    top: 0.2rem;
+    right: 0.5rem;
+  }
+
+  /* Player health title above healthbar */
+  .fighter.player h2 {
+    bottom: 2.2rem;
+    right: 0.5rem;
+  }
   .fighter .monster-name,
   .fighter .player-name {
     font-size: 0.85rem;
