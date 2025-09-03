@@ -2028,7 +2028,7 @@ body[data-stage="congrats"] { background-image: linear-gradient(rgba(255,255,255
 /* Enhanced Center Bubble Notifications */
 .center-bubble {
   position: fixed;
-  z-index: 1200;
+  z-index: 99999;
   left: 50%;
   top: 35%;
   transform: translate(-50%, -50%);
