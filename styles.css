@@ -456,26 +456,40 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Monster name at top-left */
   .fighter.monster .monster-name {
-    top: 0.5rem;
-    left: 0.5rem;
+    top: 0.7rem;
+    left: 0.7rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(255,0,0,0.9) 0%, rgba(180,0,0,0.8) 100%);
+    border: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
 
   /* Player name at bottom-left */
   .fighter.player .player-name {
-    bottom: 0.5rem;
-    left: 0.5rem;
+    bottom: 0.7rem;
+    left: 0.7rem;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(0,100,255,0.9) 0%, rgba(0,80,200,0.8) 100%);
+    border: 2px solid rgba(255,255,255,0.3);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
   }
 
-  .healthbar { margin: 0.5rem 0; height: 20px; }
+  .healthbar { margin: 0.5rem 0; height: 24px; border-radius: 12px; overflow: hidden; }
 
   /* Monster healthbar repositioned to top */
   .fighter.monster .healthbar {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 60%;
+    top: 0.7rem;
+    right: 0.7rem;
+    width: 65%;
     margin: 0;
     z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
   }
 
   /* Player healthbar stays at bottom */
