@@ -18,7 +18,7 @@
         <h1>Monster Slayer</h1>
         <div class="header-actions">
           <!-- Player Info -->
-          <div v-if="playerName && started" class="player-info">
+          <div v-if="playerName && started" class="player-info" @click="openUserMenu" role="button" :aria-label="lang === 'es' ? 'Abrir menú de usuario' : 'Open user menu'">
             <img v-if="selectedCharacter" :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="player-avatar-header" />
             <div class="player-details">
               <span class="player-name-header">{{ playerName }}</span>
@@ -42,6 +42,7 @@
             <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
             <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
           </div>
+          <button v-if="playerName && started" class="icon-button" @click="openUserMenu" data-label="Perfil">👤</button>
           <button class="icon-button" @click="toggleSound" data-label="Sonido">{{ soundEnabled ? '🔊' : '🔇' }}</button>
           <button class="icon-button theme-icon" @click="toggleTheme" data-label="Tema">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
           <button class="icon-button" @click="openHelp" data-label="Ayuda">ℹ️</button>
@@ -245,6 +246,84 @@
             <li>Avance: derrota al monstruo para pasar de nivel.</li>
           </ul>
           <button class="icon-button" @click="closeHelp">{{ t('close') }}</button>
+        </div>
+      </div>
+
+      <!-- User Menu Modal -->
+      <div v-if="showUserMenu" class="modal-overlay" @click.self="closeUserMenu">
+        <div class="user-menu-dialog" role="dialog" aria-modal="true">
+          <div class="user-menu-header">
+            <h2 class="user-menu-title">{{ lang === 'es' ? 'Perfil de Usuario' : 'User Profile' }}</h2>
+            <button class="close-button" @click="closeUserMenu" :aria-label="lang === 'es' ? 'Cerrar' : 'Close'">×</button>
+          </div>
+
+          <div class="user-menu-content">
+            <!-- Avatar and Stats -->
+            <div class="user-stats-section">
+              <div class="user-avatar-large">
+                <img v-if="selectedCharacter" :src="selectedCharacter.image" :alt="selectedCharacter.name[lang]" class="user-avatar-img" />
+                <div class="user-level-badge">{{ lang === 'es' ? 'Nivel' : 'Level' }} {{ currentLevel + 1 }}</div>
+              </div>
+
+              <div class="user-stats">
+                <div class="stat-item">
+                  <span class="stat-label">{{ lang === 'es' ? 'Monedas:' : 'Coins:' }}</span>
+                  <span class="stat-value numeric">🪙 {{ playerCoins }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">{{ lang === 'es' ? 'Monstruos derrotados:' : 'Monsters defeated:' }}</span>
+                  <span class="stat-value numeric">{{ currentLevel }}</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-label">{{ lang === 'es' ? 'Vidas restantes:' : 'Lives remaining:' }}</span>
+                  <span class="stat-value numeric">❤️ {{ lives }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Name Editor -->
+            <div class="name-editor-section">
+              <h3 class="section-title">{{ lang === 'es' ? 'Editar Nombre' : 'Edit Name' }}</h3>
+              <div class="name-editor">
+                <input
+                  type="text"
+                  v-model="editingName"
+                  maxlength="10"
+                  class="edit-name-input"
+                  :placeholder="lang === 'es' ? 'Nuevo nombre...' : 'New name...'"
+                />
+                <button class="save-name-button" @click="saveName" :disabled="!editingName.trim() || editingName.trim() === playerName">
+                  {{ lang === 'es' ? 'Guardar' : 'Save' }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Character Selector -->
+            <div class="character-editor-section">
+              <h3 class="section-title">{{ lang === 'es' ? 'Cambiar Personaje' : 'Change Character' }}</h3>
+              <div class="characters-grid-small">
+                <button
+                  v-for="char in characters"
+                  :key="char.id"
+                  type="button"
+                  class="character-card-small"
+                  :class="{ 'is-selected': selectedCharacterId === char.id }"
+                  @click="selectNewCharacter(char.id)"
+                >
+                  <img :src="char.image" :alt="char.name[lang]" class="char-img-small" />
+                  <div class="char-info-small">
+                    <div class="char-name-small">{{ char.icon }} {{ char.name[lang] }}</div>
+                    <div class="char-stats-small">
+                      <span>⚔️ {{ char.stats.attack }}</span>
+                      <span>🛡️ {{ char.stats.defend }}</span>
+                      <span>💚 {{ char.stats.heal }}</span>
+                      <span>💥 {{ char.stats.special }}</span>
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
