@@ -26,6 +26,17 @@
           <button class="icon-button theme-icon" @click="toggleTheme" :aria-label="t('themeToggle')">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
           <button class="icon-button" @click="openHelp" :aria-label="t('howToPlay')">ℹ️</button>
         </div>
+        <!-- Mobile settings toggle and panel -->
+        <button class="mobile-settings-toggle" @click="toggleMobileSettings" aria-label="Settings">⚙️</button>
+        <div class="mobile-settings-panel" :class="{ open: showMobileSettings }">
+          <div class="lang-group">
+            <button class="lang-btn" :class="{ active: lang==='es' }" @click="setLang('es')">ES</button>
+            <button class="lang-btn" :class="{ active: lang==='en' }" @click="setLang('en')">EN</button>
+          </div>
+          <button class="icon-button" @click="toggleSound" data-label="Sonido">{{ soundEnabled ? '🔊' : '🔇' }}</button>
+          <button class="icon-button theme-icon" @click="toggleTheme" data-label="Tema">{{ theme === 'dark' ? '☀️' : '🌙' }}</button>
+          <button class="icon-button" @click="openHelp" data-label="Ayuda">ℹ️</button>
+        </div>
       </header>
       <section v-if="!started" id="landing" class="landing-root">
         <h2>{{ t('welcome') }}</h2>
