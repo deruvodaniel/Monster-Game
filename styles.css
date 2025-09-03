@@ -416,8 +416,7 @@ header {
 
   /* Show mobile settings on mobile */
   .mobile-settings-toggle,
-  .mobile-settings-panel,
-  .mobile-settings-overlay {
+  .mobile-settings-panel {
     display: initial;
   }
 
