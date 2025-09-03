@@ -505,11 +505,13 @@ body[data-theme="dark"] .landing-root .container {
   /* Player healthbar stays at bottom */
   .fighter.player .healthbar {
     position: absolute;
-    bottom: 0.5rem;
-    right: 0.5rem;
-    width: 60%;
+    bottom: 0.7rem;
+    right: 0.7rem;
+    width: 65%;
     margin: 0;
     z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    border: 2px solid rgba(255,255,255,0.3);
   }
 
   /* Turn indicator positioning - above fixed controls */
