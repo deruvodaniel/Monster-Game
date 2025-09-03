@@ -227,6 +227,14 @@ header {
     display: none;
   }
 
+  /* header-main-content en mobile */
+  .header-main-content {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
   /* Desktop header - funciona como mobile pero con avatar y vidas visibles */
   @media (min-width: 521px) {
     /* Ocultar header-actions completamente en desktop */
