@@ -437,6 +437,7 @@ const app = Vue.createApp({
 			this.isMonsterHit = false;
 			this.isPlayerDefending = false;
 			this.isMonsterTurn = false;
+			this.hasAttackedThisTurn = false;
 		},
 
 		getMonsterMaxHealth(level) {
@@ -459,6 +460,7 @@ const app = Vue.createApp({
 			this.isMonsterHit = false;
 			this.isPlayerHit = false;
 			this.isLevelTransitioning = false;
+			this.hasAttackedThisTurn = false;
 		},
 
 		nextLevel() {
@@ -649,6 +651,7 @@ const app = Vue.createApp({
 				this.isMonsterTurn = false;
 				this.isPlayerHit = false;
 				this.isMonsterHit = false;
+				this.hasAttackedThisTurn = false;
 				return;
 			}
 			this.goToLanding();
