@@ -431,14 +431,24 @@ body[data-theme="dark"] .landing-root .container {
 
   /* Monster health title above healthbar */
   .fighter.monster h2 {
-    top: 0.2rem;
-    right: 0.5rem;
+    top: 3.2rem;
+    right: 0.7rem;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(255,0,0,0.8) 0%, rgba(180,0,0,0.7) 100%);
+    border: 1px solid rgba(255,255,255,0.2);
   }
 
   /* Player health title above healthbar */
   .fighter.player h2 {
-    bottom: 2.2rem;
-    right: 0.5rem;
+    bottom: 3.8rem;
+    right: 0.7rem;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, rgba(0,100,255,0.8) 0%, rgba(0,80,200,0.7) 100%);
+    border: 1px solid rgba(255,255,255,0.2);
   }
   .fighter .monster-name,
   .fighter .player-name {
