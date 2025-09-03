@@ -389,7 +389,7 @@ const app = Vue.createApp({
 				window.addEventListener('resize', () => {
 					// Force reactivity update
 					this.$forceUpdate();
-					if (window.innerWidth <= 520) {
+					if (window.innerWidth <= 900) {
 						setTimeout(() => {
 							this.scrollToMainCharacters();
 							this.updateCarouselFocus();
