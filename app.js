@@ -177,7 +177,7 @@ const app = Vue.createApp({
 					gameOver: '¡Fin del Juego!',
 					youLost: '¡Perdiste!',
 					youWon: '¡Ganaste!',
-					levelCleared: '¡Nivel superado!',
+					levelCleared: '��Nivel superado!',
 					draw: '¡Empate!',
 					startNew: 'Comenzar de Nuevo',
 					attack: 'ATACAR',
@@ -545,7 +545,6 @@ const app = Vue.createApp({
 
 		goToLanding() {
 			this.stopBgm();
-			this.stopStaminaRegeneration();
 			this.started = false;
 			this.currentLevel = 0;
 			this.winner = null;
@@ -592,7 +591,6 @@ const app = Vue.createApp({
 			this.currentLevel = 0;
 			// Initialize stamina system
 			this.resetStamina();
-			this.startStaminaRegeneration();
 			this.loadLevel(0);
 			this.sound('start');
 			this.updateStageBg();
