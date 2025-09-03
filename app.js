@@ -23,6 +23,7 @@ const app = Vue.createApp({
 			theme: 'light',
 			audioCtx: null,
 			soundEnabled: true,
+			sfxEnabled: false,
 			// Background music (BGM)
 			bgmAudio: null,
 			bgmVolume: 0.6,
@@ -538,7 +539,7 @@ const app = Vue.createApp({
 		},
 
 		sound(name) {
-			if (!this.soundEnabled) return;
+			if (!this.sfxEnabled || !this.soundEnabled) return;
 			this.initAudio();
 			const ctx = this.audioCtx;
 			if (ctx.state === 'suspended') ctx.resume();
@@ -734,7 +735,7 @@ const app = Vue.createApp({
 			this.goToLanding();
 		},
 
-		playEndJingle(type) {
+		playEndJingle(type) { if (!this.sfxEnabled || !this.soundEnabled) return;
 			this.initAudio();
 			const ctx = this.audioCtx;
 			if (type === 'win') {
