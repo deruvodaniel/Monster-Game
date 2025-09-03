@@ -105,6 +105,7 @@ const app = Vue.createApp({
 			],
 			selectedCharacterId: null,
 			playerStats: null,
+			currentCarouselIndex: 0,
 			defenseReductionActive: 0,
 			// Stamina charges for actions
 			staminaCharges: {
@@ -458,8 +459,9 @@ const app = Vue.createApp({
 
 			let centerCard = null;
 			let minDistance = Infinity;
+			let centerIndex = 0;
 
-			cards.forEach(card => {
+			cards.forEach((card, index) => {
 				const cardRect = card.getBoundingClientRect();
 				const cardCenter = cardRect.left + cardRect.width / 2;
 				const distance = Math.abs(carouselCenter - cardCenter);
@@ -470,12 +472,16 @@ const app = Vue.createApp({
 				if (distance < minDistance) {
 					minDistance = distance;
 					centerCard = card;
+					centerIndex = index;
 				}
 			});
 
-			// Add focus class to center card
+			// Add focus class to center card and update index
 			if (centerCard) {
 				centerCard.classList.add('center-focused');
+				// Calculate real character index (accounting for infinite scroll)
+				const realIndex = (centerIndex - 2 + this.characters.length) % this.characters.length;
+				this.currentCarouselIndex = Math.max(0, Math.min(this.characters.length - 1, realIndex));
 			}
 		},
 
