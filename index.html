@@ -145,6 +145,9 @@
           <div class="healthbar">
             <div class="healthbar__value" :style="monsterBarStyles"></div>
           </div>
+          <div class="staminabar">
+            <div class="staminabar__value" :style="{ width: monsterStaminaPercentage + '%' }"></div>
+          </div>
         </section>
         <section id="player" class="container fighter player" :class="{'is-hit': isPlayerHit, 'is-defending': isPlayerDefending, 'is-healing': isHealing, 'is-active': !isMonsterTurn, 'is-critical': isPlayerCritical}">
           <h2>{{ t('yourHealth') }}</h2>
@@ -155,6 +158,9 @@
           </div>
           <div class="healthbar">
             <div class="healthbar__value" :style="playerBarStyles"></div>
+          </div>
+          <div class="staminabar">
+            <div class="staminabar__value" :style="{ width: playerStaminaPercentage + '%' }"></div>
           </div>
         </section>
       </section>
