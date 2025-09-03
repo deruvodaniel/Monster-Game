@@ -212,9 +212,25 @@ header {
     text-align: center;
   }
 
-  /* Hide original header actions but keep lives badge visible */
+  /* Hide original header actions in mobile only */
   .app-header .header-actions {
     display: none;
+  }
+
+  /* Show header actions on tablet and desktop */
+  @media (min-width: 521px) {
+    .app-header .header-actions {
+      display: inline-flex !important;
+      gap: 0.8rem;
+      align-items: center;
+    }
+
+    /* Hide mobile settings toggle on larger screens */
+    .mobile-settings-toggle,
+    .mobile-settings-panel,
+    .mobile-settings-overlay {
+      display: none !important;
+    }
   }
 
   /* Show lives badge separately in mobile battle view */
@@ -1086,12 +1102,7 @@ body[data-theme="dark"] .icon-button {
   border-color: rgba(255,255,255,0.45);
 }
 
-/* Hide mobile settings on desktop */
-.mobile-settings-toggle,
-.mobile-settings-panel,
-.mobile-settings-overlay {
-  display: none;
-}
+/* Hide mobile settings on desktop - moved to responsive section above */
 
 /* Enhanced lives badge */
 .lives-badge {
