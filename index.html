@@ -60,6 +60,7 @@
               type="button"
               class="character-card"
               :class="{ 'is-selected': selectedCharacterId === char.id }"
+              :data-char-id="char.id"
               @click="selectCharacter(char.id)"
             >
               <div class="flip-inner">
