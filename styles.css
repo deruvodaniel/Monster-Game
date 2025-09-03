@@ -377,25 +377,27 @@ body[data-theme="dark"] .landing-root .container {
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
 
-  /* Optimized mobile layout for maximum card visibility */
+  /* Scrollable mobile layout for battle cards */
   .board {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     height: calc(100vh - 160px); /* Optimized space for header and ultra compact controls */
     position: relative;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 0.4rem;
     margin-top: 0;
+    scroll-behavior: smooth;
   }
 
   .fighter.container {
-    height: calc(50% - 0.2rem);
-    min-height: 180px;
+    flex: 0 0 auto;
+    min-height: 200px;
     margin: 0;
     position: relative;
     padding: 0.5rem;
-    overflow: hidden;
+    overflow: visible;
     width: 100%;
     border-radius: 14px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.5);
