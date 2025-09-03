@@ -311,12 +311,12 @@ body[data-theme="dark"] .landing-root .container {
   .board { gap: 0.75rem; }
   .avatar-img { width: 96px; height: 96px; }
 
-  /* Mobile diagonal layout for battle cards - true 45° angle */
+  /* Mobile diagonal layout for battle cards - optimized for visibility */
   .board {
     display: flex;
     flex-direction: column;
     gap: 0;
-    height: calc(100vh - 200px); /* Reserve space for fixed controls */
+    height: calc(100vh - 170px); /* Reserve space for fixed controls */
     position: relative;
     overflow: hidden;
   }
@@ -326,20 +326,22 @@ body[data-theme="dark"] .landing-root .container {
     height: 50%;
     margin: 0;
     position: relative;
-    padding: 0;
+    padding: 0.5rem;
     overflow: hidden;
   }
 
   .fighter.monster {
-    clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%);
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
     transform: translateY(0);
     z-index: 2;
+    padding-top: 1rem;
   }
 
   .fighter.player {
-    clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 100%);
-    transform: translateY(-20%);
+    clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+    transform: translateY(-15%);
     z-index: 1;
+    padding-bottom: 1rem;
   }
 
   /* Full-size background images for mobile diagonal layout */
