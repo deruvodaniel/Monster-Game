@@ -233,6 +233,26 @@ header {
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
+    gap: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Player info compacto en mobile */
+  .header-main-content .player-info {
+    gap: 0.4rem;
+  }
+
+  .header-main-content .player-avatar-header {
+    width: 32px;
+    height: 32px;
+  }
+
+  .header-main-content .player-details {
+    font-size: 0.75rem;
+  }
+
+  .header-main-content .player-name-header {
+    font-weight: 600;
   }
 
   /* Desktop header - funciona como mobile pero con avatar y vidas visibles */
