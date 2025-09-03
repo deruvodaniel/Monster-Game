@@ -46,10 +46,6 @@ const app = Vue.createApp({
 			slashPlayer: false,
 			isHealing: false,
 			burstMonsterSpecial: false,
-			musicTimer: null,
-			musicOsc: null,
-			musicGain: null,
-			musicMode: 'off',
 			centerBubbleText: null,
 			centerBubbleClass: '',
 			centerBubbleTimer: null,
@@ -514,7 +510,6 @@ const app = Vue.createApp({
 			this.currentLevel = 0;
 			this.loadLevel(0);
 			this.sound('start');
-			if (this.soundEnabled) this.startMusic('danger');
 			this.updateStageBg();
 		},
 
@@ -638,34 +633,6 @@ const app = Vue.createApp({
 			}
 		},
 
-		startMusic(mode = 'normal') {
-			this.initAudio();
-			const ctx = this.audioCtx;
-			if (this.musicOsc) return;
-			this.musicOsc = ctx.createOscillator();
-			this.musicGain = ctx.createGain();
-			let cfg;
-			if (mode === 'danger') {
-				cfg = { type: 'sawtooth', gain: 0.05, step: 160, pattern: [220.0, 246.94, 261.63, 246.94] };
-			} else if (mode === 'medieval') {
-				cfg = { type: 'triangle', gain: 0.035, step: 220, pattern: [392.0, 440.0, 523.25, 587.33, 659.25, 587.33, 523.25, 440.0] };
-			} else {
-				cfg = { type: 'square', gain: 0.035, step: 160, pattern: [392.0, 523.25, 659.25, 784.0, 659.25, 523.25, 440.0, 523.25, 392.0, 440.0, 523.25, 659.25] };
-			}
-			this.musicOsc.type = cfg.type;
-			this.musicGain.gain.value = cfg.gain;
-			this.musicOsc.connect(this.musicGain);
-			this.musicGain.connect(ctx.destination);
-			this.musicOsc.start();
-			const pattern = cfg.pattern;
-			let step = 0;
-			this.musicTimer = setInterval(() => {
-				if (!this.musicOsc) return;
-				this.musicOsc.frequency.setValueAtTime(pattern[step % pattern.length], ctx.currentTime);
-				step++;
-			}, cfg.step);
-			this.musicMode = mode;
-		},
 
 		// Stage BGM control using mp3 files
 		playBgmForStage(stage) {
@@ -735,20 +702,8 @@ const app = Vue.createApp({
 			}
 		},
 
-		stopMusic() {
-			if (this.musicTimer) { clearInterval(this.musicTimer); this.musicTimer = null; }
-			if (this.musicOsc) { try { this.musicOsc.stop(); } catch(e) {} this.musicOsc.disconnect(); this.musicOsc = null; }
-			if (this.musicGain) { try { this.musicGain.disconnect(); } catch(e) {} this.musicGain = null; }
-			this.musicMode = 'off';
-		},
 
 
-		setMusicMode(mode) {
-			if (!this.soundEnabled) { this.musicMode = mode; return; }
-			if (this.musicMode === mode) return;
-			this.stopMusic();
-			this.startMusic(mode);
-		},
 
 		loseLifeAndRetry() {
 			if (this.lives > 0) this.lives -= 1;
