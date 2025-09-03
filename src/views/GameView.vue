@@ -7,7 +7,7 @@
         <p>{{ t('welcomeMsg') }}</p>
         <div class="name-input">
           <input 
-            v-model="playerName" 
+            v-model="localPlayerName" 
             type="text" 
             :placeholder="lang === 'es' ? 'Tu nombre' : 'Your name'"
             maxlength="20"
@@ -24,11 +24,11 @@
     <div v-if="!started && !showWelcomeModal" class="character-selection-screen">
       <CharacterSelection
         :characters="characters"
-        :selected-character-id="selectedCharacterId"
+        :selected-character-id="selectedCharacterIdProp"
         :lang="lang"
         :t="t"
-        @select-character="selectCharacter"
-        @start-game="startGame"
+        @select-character="selectCharacterHandler"
+        @start-game="startGameHandler"
       />
     </div>
 
@@ -65,10 +65,10 @@
         :can-use-super-special="canUseSuperSpecial"
         :controls-disabled="controlsDisabled"
         :t="t"
-        @attack="attackMonster"
-        @special="specialAttackMonster"
-        @heal="healPlayer"
-        @defend="defend"
+        @attack="attackMonsterHandler"
+        @special="specialAttackMonsterHandler"
+        @heal="healPlayerHandler"
+        @defend="defendHandler"
         @surrender="goToLanding"
       />
     </div>
@@ -135,7 +135,7 @@
           <div class="name-edit">
             <label>{{ lang === 'es' ? 'Nombre:' : 'Name:' }}</label>
             <input 
-              v-model="editingName" 
+              v-model="localEditingName" 
               type="text" 
               maxlength="20"
               @keydown.enter="saveName"
@@ -160,109 +160,134 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useGame } from '../composables/useGame.js'
-import { useAudio } from '../composables/useAudio.js'
-import { useMessages } from '../composables/useMessages.js'
+import { ref, watch, computed } from 'vue'
 import BattleArena from '../components/organisms/BattleArena.vue'
 import GameControls from '../components/molecules/GameControls.vue'
 import CharacterSelection from '../components/organisms/CharacterSelection.vue'
 
-// Props from parent
+// Props from parent - all game state and functions
 const props = defineProps({
+  playerName: Object,
+  playerCoins: Object,
+  playerHealth: Object,
+  monsterHealth: Object,
+  playerStamina: Object,
+  monsterStamina: Object,
+  maxStamina: Object,
+  currentLevel: Object,
+  winner: Object,
+  lives: Object,
+  started: Object,
+  characters: Object,
+  monsters: Object,
+  selectedCharacterId: Object,
+  selectedCharacter: Object,
+  currentMonster: Object,
+  isPlayerHit: Object,
+  isMonsterHit: Object,
+  isPlayerDefending: Object,
+  isMonsterTurn: Object,
+  isHealing: Object,
+  slashMonster: Object,
+  slashPlayer: Object,
+  burstMonsterSpecial: Object,
+  damageMonster: Object,
+  damagePlayer: Object,
+  canUseSuperSpecial: Object,
+  isPlayerCritical: Object,
+  isMonsterCritical: Object,
+  canAttack: Object,
+  controlsDisabled: Object,
   lang: String,
   theme: String,
   soundEnabled: Boolean,
   showHelp: Boolean,
   showUserMenu: Boolean,
-  editingName: String
+  editingName: String,
+  t: Function,
+  getMonsterMaxHealth: Function,
+  getPlayerMaxHealth: Function,
+  attackMonster: Function,
+  specialAttackMonster: Function,
+  healPlayer: Function,
+  defend: Function,
+  startGame: Function,
+  nextLevel: Function,
+  goToLanding: Function,
+  selectCharacter: Function,
+  sound: Function,
+  playBgmForStage: Function,
+  stopBgm: Function
 })
 
 // Emits
 const emit = defineEmits([
   'close-help',
-  'close-user-menu'
+  'close-user-menu',
+  'update-player-name'
 ])
 
-// Composables
-const gameState = useGame()
-const audioState = useAudio()
-const { t, setLang } = useMessages()
-
 // Local state
-const showWelcomeModal = ref(true)
-const editingName = ref('')
+const showWelcomeModal = ref(false)
+const localPlayerName = ref('')
+const localEditingName = ref('')
 
-// Destructure game state
-const {
-  playerName,
-  playerCoins,
-  playerHealth,
-  monsterHealth,
-  playerStamina,
-  monsterStamina,
-  maxStamina,
-  currentLevel,
-  winner,
-  lives,
-  started,
-  characters,
-  monsters,
-  selectedCharacterId,
-  selectedCharacter,
-  currentMonster,
-  isPlayerHit,
-  isMonsterHit,
-  isPlayerDefending,
-  isMonsterTurn,
-  isHealing,
-  slashMonster,
-  slashPlayer,
-  burstMonsterSpecial,
-  damageMonster,
-  damagePlayer,
-  canUseSuperSpecial,
-  isPlayerCritical,
-  isMonsterCritical,
-  canAttack,
-  controlsDisabled,
-  getMonsterMaxHealth,
-  getPlayerMaxHealth,
-  attackMonster,
-  specialAttackMonster,
-  healPlayer,
-  defend,
-  startGame: gameStartGame,
-  nextLevel,
-  goToLanding,
-  selectCharacter: gameSelectCharacter
-} = gameState
+// Computed properties to access reactive values
+const selectedCharacterIdProp = computed(() => props.selectedCharacterId?.value)
 
-// Destructure audio state
-const { sound, playBgmForStage, stopBgm, toggleSound } = audioState
+// Initialize welcome modal based on player name
+watch(() => props.playerName?.value, (newName) => {
+  if (!newName || newName.trim() === '') {
+    showWelcomeModal.value = true
+    localPlayerName.value = ''
+  } else {
+    showWelcomeModal.value = false
+    localPlayerName.value = newName
+  }
+}, { immediate: true })
+
+// Watch for editing name changes
+watch(() => props.editingName, (name) => {
+  localEditingName.value = name || ''
+}, { immediate: true })
 
 // Methods
 const closeWelcomeModal = () => {
   showWelcomeModal.value = false
-  if (playerName.value.trim()) {
-    try {
-      localStorage.setItem('playerName', playerName.value.trim())
-    } catch (e) {
-      console.warn('Could not save player name to localStorage')
-    }
+  if (localPlayerName.value.trim()) {
+    emit('update-player-name', localPlayerName.value.trim())
   }
 }
 
-const selectCharacter = (id) => {
-  gameSelectCharacter(id)
+const selectCharacterHandler = (id) => {
+  props.selectCharacter(id)
 }
 
-const startGame = () => {
-  if (!selectedCharacter.value) return
+const startGameHandler = () => {
+  if (!props.selectedCharacter?.value) return
   
-  sound('start')
-  gameStartGame()
-  playBgmForStage('battle')
+  props.sound('start')
+  props.startGame()
+}
+
+const attackMonsterHandler = () => {
+  props.sound('attack')
+  props.attackMonster()
+}
+
+const specialAttackMonsterHandler = () => {
+  props.sound('special')
+  props.specialAttackMonster()
+}
+
+const healPlayerHandler = () => {
+  props.sound('heal')
+  props.healPlayer()
+}
+
+const defendHandler = () => {
+  props.sound('defend')
+  props.defend()
 }
 
 const closeHelp = () => {
@@ -274,95 +299,10 @@ const closeUserMenu = () => {
 }
 
 const saveName = () => {
-  if (editingName.value.trim() && editingName.value.trim() !== playerName.value) {
-    playerName.value = editingName.value.trim()
-    try {
-      localStorage.setItem('playerName', playerName.value)
-    } catch (e) {
-      console.warn('Could not save player name to localStorage')
-    }
+  if (localEditingName.value.trim() && localEditingName.value.trim() !== props.playerName?.value) {
+    emit('update-player-name', localEditingName.value.trim())
   }
 }
-
-// Enhanced game actions with sound
-const attackMonsterWithSound = () => {
-  sound('attack')
-  attackMonster()
-}
-
-const specialAttackMonsterWithSound = () => {
-  sound('special')
-  specialAttackMonster()
-}
-
-const healPlayerWithSound = () => {
-  sound('heal')
-  healPlayer()
-}
-
-const defendWithSound = () => {
-  sound('defend')
-  defend()
-}
-
-// Initialize
-onMounted(() => {
-  try {
-    // Load saved settings
-    const savedPlayerName = localStorage.getItem('playerName')
-    if (savedPlayerName) {
-      playerName.value = savedPlayerName
-      showWelcomeModal.value = false
-    }
-  } catch (e) {
-    console.warn('Could not load settings from localStorage')
-  }
-  
-  // Set initial background music
-  playBgmForStage('landing')
-})
-
-// Watch for game state changes
-watch(winner, (newWinner) => {
-  if (newWinner === 'player') {
-    sound('win')
-    if (currentLevel.value === monsters.value.length - 1) {
-      playBgmForStage('congrats')
-    }
-  } else if (newWinner === 'monster') {
-    sound('lose')
-  }
-})
-
-watch(started, (isStarted) => {
-  if (isStarted) {
-    playBgmForStage('battle')
-  } else {
-    playBgmForStage('landing')
-  }
-})
-
-// Watch for language changes
-watch(() => props.lang, (newLang) => {
-  setLang(newLang)
-})
-
-// Watch for sound setting changes
-watch(() => props.soundEnabled, (enabled) => {
-  audioState.soundEnabled.value = enabled
-  if (!enabled) {
-    stopBgm()
-  } else if (started.value) {
-    playBgmForStage('battle')
-  } else {
-    playBgmForStage('landing')
-  }
-})
-
-// Watch for editing name changes
-watch(() => props.editingName, (name) => {
-  editingName.value = name
-})
 </script>
 
 <style scoped>
