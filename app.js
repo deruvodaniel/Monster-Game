@@ -66,7 +66,7 @@ const app = Vue.createApp({
 					id: 'warrior',
 					icon: '⚔️',
 					name: { es: 'Guerrero', en: 'Warrior' },
-					image: 'https://guerrerosdelahistoria.com/wp-content/uploads/2017/07/guerrero-medieval.jpeg',
+					image: 'https://i.pinimg.com/736x/26/b2/3a/26b23a08befd52566b5c42b566d1007a.jpg',
 					stats: { attack: 25, defend: 20, heal: 5, special: 40 }
 				},
 				{
