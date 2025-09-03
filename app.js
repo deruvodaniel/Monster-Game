@@ -616,7 +616,13 @@ const app = Vue.createApp({
 		openHelp() { this.showHelp = true; },
 		closeHelp() { this.showHelp = false; },
 		toggleMobileSettings() { this.showMobileSettings = !this.showMobileSettings; },
-		closeWelcomeModal() { this.showWelcomeModal = false; },
+		closeWelcomeModal() {
+			this.showWelcomeModal = false;
+			// Save player name to localStorage
+			if (this.playerName.trim()) {
+				try { localStorage.setItem('playerName', this.playerName.trim()); } catch(e) {}
+			}
+		},
 		openUserMenu() {
 			this.editingName = this.playerName;
 			this.showUserMenu = true;
