@@ -551,12 +551,18 @@ header {
     border-color: rgba(255,255,255,0.1);
   }
 
-  /* Close panel when clicking outside */
+  /* Close panel when clicking outside - mismo comportamiento que mobile */
   .mobile-settings-overlay {
     position: fixed;
     inset: 0;
     z-index: 1250;
     background: transparent;
+    display: none;
+    pointer-events: none;
+  }
+
+  .mobile-settings-overlay.open {
+    display: block;
     pointer-events: auto;
   }
 }
