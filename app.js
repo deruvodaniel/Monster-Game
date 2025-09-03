@@ -531,10 +531,8 @@ const app = Vue.createApp({
 		},
 
 		initAudio() {
-			if (!this.audioCtx) {
-				const AC = window.AudioContext || window.webkitAudioContext;
-				this.audioCtx = new AC();
-			}
+			// WebAudio synth disabled — no-op to prevent legacy MIDI/synth sounds
+			return;
 		},
 
 		sound(name) {
