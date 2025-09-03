@@ -279,11 +279,11 @@ const app = Vue.createApp({
 
 		// Infinite carousel characters
 		infiniteCharacters() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) {
-				// Desktop - return normal characters
+			if (typeof window === 'undefined' || window.innerWidth > 900) {
+				// Large desktop - return normal characters
 				return this.characters.map((char, index) => ({ ...char, index }));
 			}
-			// Mobile - create infinite carousel by duplicating characters
+			// Mobile and Tablet - create infinite carousel by duplicating characters
 			const chars = this.characters;
 			const infiniteArray = [];
 
@@ -319,6 +319,10 @@ const app = Vue.createApp({
 
 		isMobile() {
 			return typeof window !== 'undefined' && window.innerWidth <= 520;
+		},
+
+		isTabletOrMobile() {
+			return typeof window !== 'undefined' && window.innerWidth <= 900;
 		},
 	},
 
@@ -399,20 +403,20 @@ const app = Vue.createApp({
 	methods: {
 		// Character selection helpers
 		selectCharacter(id) {
-			// In mobile carousel, only allow selection of center-focused character
-			if (window.innerWidth <= 520) {
+			// In carousel (mobile/tablet), only allow selection of center-focused character
+			if (window.innerWidth <= 900) {
 				const centerChar = this.getCenterCharacterInCarousel();
 				if (centerChar && centerChar.id === id) {
 					this.selectedCharacterId = id;
 				}
 			} else {
-				// Desktop behavior - allow any selection
+				// Large desktop behavior - allow any selection
 				this.selectedCharacterId = id;
 			}
 		},
 
 		getCenterCharacterInCarousel() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return null;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return null;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return null;
@@ -446,7 +450,7 @@ const app = Vue.createApp({
 		},
 
 		updateCarouselFocus() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
@@ -509,7 +513,7 @@ const app = Vue.createApp({
 		},
 
 		carouselNext() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
@@ -519,7 +523,7 @@ const app = Vue.createApp({
 		},
 
 		carouselPrev() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
@@ -529,7 +533,7 @@ const app = Vue.createApp({
 		},
 
 		scrollToMainCharacters() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
@@ -541,7 +545,7 @@ const app = Vue.createApp({
 		},
 
 		handleInfiniteScroll() {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
@@ -565,7 +569,7 @@ const app = Vue.createApp({
 		},
 
 		scrollToCharacter(index) {
-			if (typeof window === 'undefined' || window.innerWidth > 520) return;
+			if (typeof window === 'undefined' || window.innerWidth > 900) return;
 
 			const carousel = document.querySelector('.characters-grid');
 			if (!carousel) return;
