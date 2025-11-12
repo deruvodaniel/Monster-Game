@@ -506,12 +506,16 @@ header {
     text-align: left;
     width: 100%;
     transition: all 0.2s ease;
+    color: #222;
+    text-shadow: none;
   }
 
   .mobile-settings-panel .icon-button:hover {
     background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.2) 100%);
     transform: none;
   }
+
+  .mobile-settings-panel .lang-btn { color: #222; }
 
   .mobile-settings-panel .icon-button::after {
     content: attr(data-label);
